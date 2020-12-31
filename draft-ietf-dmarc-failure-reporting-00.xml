@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- name="GENERATOR" content="github.com/mmarkdown/mmark Mmark Markdown Processor - mmark.miek.nl" -->
-<rfc version="3" ipr="trust200902" docName="draft-ietf-dmarc-failure-reporting-00" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="7489" consensus="true">
+<rfc version="3" ipr="trust200902" docName="draft-ietf-dmarc-failure-reporting-01" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="7489" consensus="true">
 
 <front>
-<title abbrev="DMARC Failure Reporting">Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting</title><seriesInfo value="draft-ietf-dmarc-failure-reporting-00" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
+<title abbrev="DMARC Failure Reporting">Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting</title><seriesInfo value="draft-ietf-dmarc-failure-reporting-01" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
 <author role="editor" surname="Jones" fullname="Steven M Jones"><organization>DMARC.org</organization><address><postal><street></street>
 </postal><email>smj@dmarc.org</email>
 </address></author>
 <author role="editor" initials="A." surname="Vesely" fullname="Alessandro Vesely"><organization>Tana</organization><address><postal><street></street>
 </postal><email>vesely@tana.it</email>
 </address></author>
-<date year="2020" month="December" day="24"></date>
+<date year="2020" month="December" day="31"></date>
 <area>Application</area>
 <workgroup>DMARC Working Group</workgroup>
 
@@ -29,7 +29,7 @@ to authenticate according to the DMARC mechanism.</t>
 
 <section anchor="introduction"><name>Introduction</name>
 <t>Domain-based Message Authentication, Reporting, and Conformance
-(DMARC) <xref target="RFC7489"></xref> is a scalable mechanism by which a
+(DMARC) <xref target="I-D.ietf-dmarc-dmarcbis"></xref> is a scalable mechanism by which a
 mail-originating organization can express domain-level policies and
 preferences for message validation, disposition, and reporting, that a
 mail-receiving organization can use to improve mail handling. This
@@ -54,15 +54,12 @@ generate such reports.</t>
 &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;NOT RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this
 document are to be interpreted as described in BCP 14 <xref target="RFC2119"></xref> <xref target="RFC8174"></xref>
 when, and only when, they appear in all capitals, as shown here.</t>
-<t>Readers are expected to be familiar with the contents of <xref target="RFC7489"></xref>,
+<t>Readers are expected to be familiar with the contents of <xref target="I-D.ietf-dmarc-dmarcbis"></xref>,
 specifically the terminology and definitions section.</t>
 </section>
 
 <section anchor="failure-reports"><name>Failure Reports</name>
-<t>Providing Domain Owners with visibility into how Mail Receivers
-implement and enforce the DMARC mechanism in the form of feedback is
-critical to establishing and maintaining accurate authentication
-deployments. Failure reports can supply more detailed information
+<t>Failure reports can supply more detailed information
 about messages that failed to authenticate, enabling the Domain Owner
 to determine exactly what might be causing those specific failures.</t>
 <t>Failure reports are normally generated and sent almost immediately
@@ -83,9 +80,12 @@ reports, the Mail Receiver generates and sends a message using the
 format described in <xref target="RFC6591"></xref>; this document updates that reporting
 format, as described in <xref target="reporting-format-update"></xref>.</t>
 <t>The destination(s) and nature of the reports are defined by the &quot;ruf&quot;
-and &quot;fo&quot; tags as defined in (<xref target="RFC7489"></xref> general-record-format).</t>
+and &quot;fo&quot; tags as defined in
+<xref target="I-D.ietf-dmarc-dmarcbis" sectionFormat="of" section="6.3"/>.</t>
+
 <t>Where multiple URIs are selected to receive failure reports, the
 report generator MUST make an attempt to deliver to each of them.</t>
+
 <t>An obvious consideration is the denial-of-service attack that can be
 perpetrated by an attacker who sends numerous messages purporting to
 be from the intended victim Domain Owner but that fail both SPF and
@@ -156,90 +156,9 @@ underlying authentication methods.</li>
 </section>
 
 <section anchor="verifying-external-destinations"><name>Verifying External Destinations</name>
-<t>It is possible to specify destinations for the different reports that
-are outside the authority of the Domain Owner making the request.
-This allows domains that do not operate mail servers to request
-reports and have them go someplace that is able to receive and
-process them.</t>
-<t>Without checks, this would allow a bad actor to publish a DMARC
-policy record that requests that reports be sent to a victim address,
-and then send a large volume of mail that will fail both DKIM and SPF
-checks to a wide variety of destinations; the victim will in turn be
-flooded with unwanted reports.  Therefore, a verification mechanism
-is included.</t>
-<t>When a Mail Receiver discovers a DMARC policy in the DNS, and the
-Organizational Domain at which that record was discovered is not
-identical to the Organizational Domain of the host part of the
-authority component of a <xref target="RFC3986"></xref> specified in the &quot;rua&quot; or &quot;ruf&quot; tag,
-the following verification steps are to be taken:</t>
-
-<ol>
-<li><t>Extract the host portion of the authority component of the URI.
-Call this the &quot;destination host&quot;, as it refers to a Report
-Receiver.</t>
-</li>
-<li><t>Prepend the string &quot;_report._dmarc&quot;.</t>
-</li>
-<li><t>Prepend the domain name from which the policy was retrieved,
-after conversion to an A-label if needed.</t>
-</li>
-<li><t>Query the DNS for a TXT record at the constructed name.  If the
-result of this request is a temporary DNS error of some kind
-(e.g., a timeout), the Mail Receiver MAY elect to temporarily
-fail the delivery so the verification test can be repeated later.</t>
-</li>
-<li><t>For each record returned, parse the result as a series of
-&quot;tag=value&quot; pairs, i.e., the same overall format as the policy
-record (see (<xref target="RFC7489"></xref> formal-definition)).  In particular, the &quot;v=DMARC1;&quot; tag is
-mandatory and MUST appear first in the list.  Discard any that do
-not pass this test.</t>
-</li>
-<li><t>If the result includes no TXT resource records that pass basic
-parsing, a positive determination of the external reporting
-relationship cannot be made; stop.</t>
-</li>
-<li><t>If at least one TXT resource record remains in the set after
-parsing, then the external reporting arrangement was authorized
-by the Report Receiver.</t>
-</li>
-<li><t>If a &quot;rua&quot; or &quot;ruf&quot; tag is thus discovered, replace the
-corresponding value extracted from the domain's DMARC policy
-record with the one found in this record.  This permits the
-Report Receiver to override the report destination.  However, to
-prevent loops or indirect abuse, the overriding URI MUST use the
-same destination host from the first step.</t>
-</li>
-</ol>
-<t>For example, if a DMARC policy query for &quot;blue.example.com&quot; contained
-&quot;rua=mailto:reports@red.example.net&quot;, the host extracted from the
-latter (&quot;red.example.net&quot;) does not match &quot;blue.example.com&quot;, so this
-procedure is enacted.  A TXT query for
-&quot;blue.example.com._report._dmarc.red.example.net&quot; is issued.  If a
-single reply comes back containing a tag of &quot;v=DMARC1;&quot;, then the
-relationship between the two is confirmed.  Moreover,
-&quot;red.example.net&quot; has the opportunity to override the report
-destination requested by &quot;blue.example.com&quot; if needed.</t>
-<t>Where the above algorithm fails to confirm that the external
-reporting was authorized by the Report Receiver, the URI MUST be
-ignored by the Mail Receiver generating the report.  Further, if the
-confirming record includes a URI whose host is again different than
-the domain publishing that override, the Mail Receiver generating the
-report MUST NOT generate a report to either the original or the
-override URI.</t>
-<t>A Report Receiver publishes such a record in its DNS if it wishes to
-receive reports for other domains.</t>
-<t>A Report Receiver that is willing to receive reports for any domain
-can use a wildcard DNS record.  For example, a TXT resource record at
-&quot;*._report._dmarc.example.com&quot; containing at least &quot;v=DMARC1;&quot;
-confirms that example.com is willing to receive DMARC reports for any
-domain.</t>
-<t>If the Report Receiver is overcome by volume, it can simply remove
-the confirming DNS record.  However, due to positive caching, the
-change could take as long as the time-to-live (TTL) on the record to
-go into effect.</t>
-<t>A Mail Receiver might decide not to enact this procedure if, for
-example, it relies on a local list of domains for which external
-reporting addresses are permitted.</t>
+<t>The procedure described for aggragate reports
+<xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="2.1"/>
+applies to failure reports as well.</t>
 </section>
 </section>
 
@@ -300,97 +219,25 @@ party.</t>
 </section>
 
 <section anchor="security-considerations"><name>Security Considerations</name>
-<t>This section discusses security issues related to DMARC reporting, and
-possible remediations.</t>
+<t>Considerations discussed in <xref target="I-D.ietf-dmarc-dmarcbis" sectionFormat="of" section="11"/> apply.</t>
 
-<section anchor="attacks-on-reporting-uris"><name>Attacks on Reporting URIs</name>
-<t>URIs published in DNS TXT records are well-understood possible
-targets for attack.  Specifications such as <xref target="RFC1035"></xref> and <xref target="RFC2142"></xref> either
-expose or cause the exposure of email addresses that could be flooded
-by an attacker, for example; MX, NS, and other records found in the
-DNS advertise potential attack destinations; common DNS names such as
-&quot;www&quot; plainly identify the locations at which particular services can
-be found, providing destinations for targeted denial-of-service or
-penetration attacks.</t>
-<t>Thus, Domain Owners will need to harden these addresses against
-various attacks, including but not limited to:</t>
-
-<ul>
-<li><t>high-volume denial-of-service attacks;</t>
-</li>
-<li><t>deliberate construction of malformed reports intended to identify
-or exploit parsing or processing vulnerabilities;</t>
-</li>
-<li><t>deliberate construction of reports containing false claims for the
-Submitter or Reported-Domain fields, including the possibility of
-false data from compromised but known Mail Receivers.</t>
-</li>
-</ul>
-</section>
-
-<section anchor="dns-security"><name>DNS Security</name>
-<t>The DMARC mechanism and its underlying technologies (SPF, DKIM)
-depend on the security of the DNS.  To reduce the risk of subversion
-of the DMARC mechanism due to DNS-based exploits, serious
-consideration should be given to the deployment of DNSSEC in parallel
-with the deployment of DMARC by both Domain Owners and Mail
-Receivers.</t>
-<t>Publication of data using DNSSEC is relevant to Domain Owners and
-third-party Report Receivers.  DNSSEC-aware resolution is relevant to
-Mail Receivers and Report Receivers.</t>
-</section>
-
-<section anchor="external-report-addresses"><name>External Reporting Addresses</name>
-<t>To avoid abuse by bad actors, reporting addresses generally have to
-be inside the domains about which reports are requested.  In order to
-accommodate special cases such as a need to get reports about domains
-that cannot actually receive mail, <xref target="verifying-external-destinations"></xref> describes a DNS-based
-mechanism for verifying approved external reporting.</t>
-<t>The obvious consideration here is an increased DNS load against
-domains that are claimed as external recipients.  Negative caching
-will mitigate this problem, but only to a limited extent, mostly
-dependent on the default TTL in the domain's SOA record.</t>
-<t>Where possible, external reporting is best achieved by having the
-report be directed to domains that can receive mail and simply having
-it automatically forwarded to the desired external destination.</t>
-<t>Note that the addresses shown in the &quot;ruf&quot; tag receive more
-information that might be considered private data, since it is
-possible for actual email content to appear in the failure reports.
-The URIs identified there are thus more attractive targets for
-intrusion attempts than those found in the &quot;rua&quot; tag.  Moreover,
-attacking the DNS of the subject domain to cause failure data to be
-routed fraudulently to an attacker's systems may be an attractive
-prospect.  Deployment of <xref target="RFC4033"></xref> is advisable if this is a concern.</t>
-<t>The verification mechanism presented in <xref target="verifying-external-destinations"></xref> is currently not
-mandatory (&quot;MUST&quot;) but strongly recommended (&quot;SHOULD&quot;).  It is
-possible that it would be elevated to a &quot;MUST&quot; by later security
-review.</t>
-</section>
-
-<section anchor="secure-protocols"><name>Secure Protocols</name>
-<t>This document encourages use of secure transport mechanisms to
-prevent loss of private data to third parties that may be able to
-monitor such transmissions.  Unencrypted mechanisms should be
-avoided.</t>
-<t>In particular, a message that was originally encrypted or otherwise
-secured might appear in a report that is not sent securely, which
-could reveal private information.</t>
-</section>
 </section>
 
 </middle>
 
 <back>
 <references><name>Normative References</name>
-<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/ -->
 <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
-<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/ -->
 <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6591.xml"/>
-<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/ -->
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dmarc-dmarcbis.xml"/>
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dmarc-aggregate-reporting.xml"/>
 </references>
 <references><name>Informative References</name>
-<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2142.xml"/>
-<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml"/>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2142.xml"/ -->
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml"/ -->
 <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5965.xml"/>
 <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 </references>
@@ -400,9 +247,12 @@ could reveal private information.</t>
 reporting functions.</t>
 
 <section anchor="entire-domain-monitoring-only-per-message-reports"><name>Entire Domain, Monitoring Only, Per-Message Reports</name>
-<t>The Domain Owner from the previous example has used the aggregate
+<t>The owners of the domain "example.com" have deployed SPF and DKIM on
+their messaging infrastructure.  As described in,
+<xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="B.2.1"/>
+they have used the aggregate
 reporting to discover some messaging systems that had not yet
-implemented DKIM correctly, but they are still seeing periodic
+implemented DKIM correctly.  However, they are still seeing periodic
 authentication failures.  In order to diagnose these intermittent
 problems, they wish to request per-message failure reports when
 authentication failures occur.</t>
@@ -411,14 +261,14 @@ feels that any reports it does receive will be helpful enough to
 justify publishing this record.  The default per-message report
 format (<xref target="RFC6591"></xref>) meets the Domain Owner's needs in this scenario.</t>
 <t>The Domain Owner accomplishes this by adding the following to its
-policy record from (<xref target="RFC7489"></xref> domain-owner-example):</t>
+policy record:</t>
 
 <ul>
 <li>Per-message failure reports should be sent via email to the
 address &quot;auth-reports@example.com&quot;
 (&quot;ruf=mailto:auth-reports@example.com&quot;)</li>
 </ul>
-<t>The DMARC policy record might look like this when retrieved using a
+<t>The updated DMARC policy record might look like this when retrieved using a
 common command-line tool (the output shown would appear on a single
 line but is wrapped here for publication):</t>
 
