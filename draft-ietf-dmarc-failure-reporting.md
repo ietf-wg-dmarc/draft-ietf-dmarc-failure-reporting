@@ -2,11 +2,11 @@ Internet-Draft
 
 DMARC Failure Reporting
 
-December 2020
+January 2021
 
 Jones & Vesely
 
-Expires 4 July 2021
+Expires 28 July 2021
 
 \[Page\]
 
@@ -26,13 +26,13 @@ Expires 4 July 2021
     [7489](https://www.rfc-editor.org/rfc/rfc7489) (if approved)
 
   - Published:  
-    31 December 2020
+    24 January 2021
 
   - Intended Status:  
     Standards Track
 
   - Expires:  
-    4 July 2021
+    28 July 2021
 
   - Authors:
     
@@ -106,7 +106,7 @@ time. It is inappropriate to use Internet-Drafts as reference material
 or to cite them other than as "work in
 progress."[¶](#section-boilerplate.1-3)
 
-This Internet-Draft will expire on 4 July
+This Internet-Draft will expire on 28 July
 2021.[¶](#section-boilerplate.1-4)
 
 </div>
@@ -119,7 +119,7 @@ This Internet-Draft will expire on 4 July
 
 ## [Copyright Notice](#name-copyright-notice)
 
-Copyright (c) 2020 IETF Trust and the persons identified as the document
+Copyright (c) 2021 IETF Trust and the persons identified as the document
 authors. All rights reserved.[¶](#section-boilerplate.2-1)
 
 This document is subject to BCP 78 and the IETF Trust's Legal Provisions
@@ -276,7 +276,8 @@ Simplified BSD
     
     <div id="section-toc.1-1.9">
     
-    [](#section-appendix.b)[Acknowledgements](#name-acknowledgements)[¶](#section-toc.1-1.9.1)
+    [Appendix B](#section-appendix.b).  [Change
+    Log](#name-change-log)[¶](#section-toc.1-1.9.1)
     
     </div>
 
@@ -284,8 +285,16 @@ Simplified BSD
     
     <div id="section-toc.1-1.10">
     
-    [](#section-appendix.c)[Authors'
-    Addresses](#name-authors-addresses)[¶](#section-toc.1-1.10.1)
+    [](#section-appendix.c)[Acknowledgements](#name-acknowledgements)[¶](#section-toc.1-1.10.1)
+    
+    </div>
+
+  - 
+    
+    <div id="section-toc.1-1.11">
+    
+    [](#section-appendix.d)[Authors'
+    Addresses](#name-authors-addresses)[¶](#section-toc.1-1.11.1)
     
     </div>
 
@@ -901,9 +910,50 @@ mechanism.[¶](#section-a.2-14)
 
 </div>
 
-<div id="acknowledgements">
+<div id="change-log">
 
 <div id="section-appendix.b" class="section">
+
+## [Appendix B.](#section-appendix.b)[Change Log](#name-change-log)
+
+\[RFC Editor: Please remove this section prior to
+publication.\][¶](#section-appendix.b-1)
+
+<span class="break"></span>
+
+  - 00 to 01
+    
+      - <span id="section-appendix.b-2.2.1.1">Replace references to
+        RFC7489 with references to
+        I-D.ietf-dmarc-dmarcbis.[¶](#section-appendix.b-2.2.1.1)</span>
+      - <span id="section-appendix.b-2.2.1.2">Replace the 2nd paragraph
+        in the Introduction with the text proposed by Ned for Ticket
+        \#55, which enjoys some
+        consensus:  
+        https://mailarchive.ietf.org/arch/msg/dmarc/HptVyJ9SgrfxWRbeGwORagPrhCw[¶](#section-appendix.b-2.2.1.2)</span>
+      - <span id="section-appendix.b-2.2.1.3">Strike a spurious sentence
+        about criticality of feedback, which was meant for feedback in
+        general, not failure reports. In fact, failure reports are not
+        critical to establishing and maintaining accurate authentication
+        deployments. Still attributable to Ticket
+        \#55.[¶](#section-appendix.b-2.2.1.3)</span>
+      - <span id="section-appendix.b-2.2.1.4">Remove the content of
+        section "Verifying External Destinations" and refer to
+        I-D.ietf-dmarc-aggregate-reporting.[¶](#section-appendix.b-2.2.1.4)</span>
+      - <span id="section-appendix.b-2.2.1.5">Remove the content of
+        section "Security Considerations" and refer to
+        I-D.ietf-dmarc-dmarcbis.[¶](#section-appendix.b-2.2.1.5)</span>
+      - <span id="section-appendix.b-2.2.1.6">Slightly tweak the wording
+        of the example in Appendix A.1 so that it makes sense standing
+        alone.[¶](#section-appendix.b-2.2.1.6)</span>
+
+</div>
+
+</div>
+
+<div id="acknowledgements">
+
+<div id="section-appendix.c" class="section">
 
 ## [Acknowledgements](#name-acknowledgements)
 
@@ -919,13 +969,13 @@ individual contributions were made by J. Trent Adams, Michael Adkins,
 Monica Chew, Dave Crocker, Tim Draegen, Steve Jones, Franck Martin,
 Brett McDowell, and Paul Midgen. The contributors would also like to
 recognize the invaluable input and guidance that was provided early on
-by J.D. Falk.[¶](#section-appendix.b-1)
+by J.D. Falk.[¶](#section-appendix.c-1)
 
 Additional contributions within the IETF context were made by Kurt
 Anderson, Michael Jack Assels, Les Barstow, Anne Bennett, Jim Fenton, J.
 Gomez, Mike Jones, Scott Kitterman, Eliot Lear, John Levine, S.
 Moonesamy, Rolf Sonneveld, Henry Timmes, and Stephen J.
-Turnbull.[¶](#section-appendix.b-2)
+Turnbull.[¶](#section-appendix.c-2)
 
 </div>
 
@@ -933,7 +983,7 @@ Turnbull.[¶](#section-appendix.b-2)
 
 <div id="authors-addresses">
 
-<div id="section-appendix.c" class="section">
+<div id="section-appendix.d" class="section">
 
 ## [Authors' Addresses](#name-authors-addresses)
 

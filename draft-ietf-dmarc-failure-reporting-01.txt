@@ -6,7 +6,7 @@ DMARC Working Group                                     S. M. Jones, Ed.
 Internet-Draft                                                 DMARC.org
 Obsoletes: 7489 (if approved)                             A. Vesely, Ed.
 Intended status: Standards Track                                    Tana
-Expires: 4 July 2021                                    31 December 2020
+Expires: 28 July 2021                                    24 January 2021
 
 
 Domain-based Message Authentication, Reporting, and Conformance (DMARC)
@@ -37,11 +37,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 July 2021.
+   This Internet-Draft will expire on 28 July 2021.
 
 Copyright Notice
 
-   Copyright (c) 2020 IETF Trust and the persons identified as the
+   Copyright (c) 2021 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 1]
+Jones & Vesely            Expires 28 July 2021                  [Page 1]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -83,8 +83,9 @@ Table of Contents
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   7
      A.1.  Entire Domain, Monitoring Only, Per-Message Reports . . .   7
      A.2.  Per-Message Failure Reports Directed to Third Party . . .   8
+   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  10
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  10
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
@@ -108,10 +109,9 @@ Table of Contents
 
 
 
-
-Jones & Vesely             Expires 4 July 2021                  [Page 2]
+Jones & Vesely            Expires 28 July 2021                  [Page 2]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
 2.  Terminology and Definitions
@@ -165,9 +165,9 @@ Internet-Draft           DMARC Failure Reporting           December 2020
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 3]
+Jones & Vesely            Expires 28 July 2021                  [Page 3]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    An obvious consideration is the denial-of-service attack that can be
@@ -221,9 +221,9 @@ Internet-Draft           DMARC Failure Reporting           December 2020
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 4]
+Jones & Vesely            Expires 28 July 2021                  [Page 4]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
      id-align     = "Identity-Alignment:" [CFWS]
@@ -277,9 +277,9 @@ Internet-Draft           DMARC Failure Reporting           December 2020
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 5]
+Jones & Vesely            Expires 28 July 2021                  [Page 5]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    When message-forwarding arrangements exist, Domain Owners requesting
@@ -333,9 +333,9 @@ Internet-Draft           DMARC Failure Reporting           December 2020
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 6]
+Jones & Vesely            Expires 28 July 2021                  [Page 6]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    [RFC6591]  Fontana, H., "Authentication Failure Reporting Using the
@@ -389,9 +389,9 @@ A.1.  Entire Domain, Monitoring Only, Per-Message Reports
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 7]
+Jones & Vesely            Expires 28 July 2021                  [Page 7]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    Not all Receivers will honor such a request, but the Domain Owner
@@ -445,9 +445,9 @@ A.2.  Per-Message Failure Reports Directed to Third Party
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 8]
+Jones & Vesely            Expires 28 July 2021                  [Page 8]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    The DMARC policy record might look like this when retrieved using a
@@ -501,13 +501,41 @@ Internet-Draft           DMARC Failure Reporting           December 2020
 
 
 
-Jones & Vesely             Expires 4 July 2021                  [Page 9]
+Jones & Vesely            Expires 28 July 2021                  [Page 9]
 
-Internet-Draft           DMARC Failure Reporting           December 2020
+Internet-Draft           DMARC Failure Reporting            January 2021
 
 
    Intermediaries and other third parties should refer to Section 3.2
    for the full details of this mechanism.
+
+Appendix B.  Change Log
+
+   [RFC Editor: Please remove this section prior to publication.]
+
+   00 to 01
+       *  Replace references to RFC7489 with references to I-D.ietf-
+          dmarc-dmarcbis.
+
+       *  Replace the 2nd paragraph in the Introduction with the text
+          proposed by Ned for Ticket #55, which enjoys some consensus:
+          https://mailarchive.ietf.org/arch/msg/dmarc/
+          HptVyJ9SgrfxWRbeGwORagPrhCw
+
+       *  Strike a spurious sentence about criticality of feedback,
+          which was meant for feedback in general, not failure reports.
+          In fact, failure reports are not critical to establishing and
+          maintaining accurate authentication deployments.  Still
+          attributable to Ticket #55.
+
+       *  Remove the content of section "Verifying External
+          Destinations" and refer to I-D.ietf-dmarc-aggregate-reporting.
+
+       *  Remove the content of section "Security Considerations" and
+          refer to I-D.ietf-dmarc-dmarcbis.
+
+       *  Slightly tweak the wording of the example in Appendix A.1 so
+          that it makes sense standing alone.
 
 Acknowledgements
 
@@ -524,6 +552,15 @@ Acknowledgements
    Draegen, Steve Jones, Franck Martin, Brett McDowell, and Paul Midgen.
    The contributors would also like to recognize the invaluable input
    and guidance that was provided early on by J.D.  Falk.
+
+
+
+
+
+Jones & Vesely            Expires 28 July 2021                 [Page 10]
+
+Internet-Draft           DMARC Failure Reporting            January 2021
+
 
    Additional contributions within the IETF context were made by Kurt
    Anderson, Michael Jack Assels, Les Barstow, Anne Bennett, Jim Fenton,
@@ -557,4 +594,23 @@ Authors' Addresses
 
 
 
-Jones & Vesely             Expires 4 July 2021                 [Page 10]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jones & Vesely            Expires 28 July 2021                 [Page 11]

@@ -10,7 +10,7 @@
 <author role="editor" initials="A." surname="Vesely" fullname="Alessandro Vesely"><organization>Tana</organization><address><postal><street></street>
 </postal><email>vesely@tana.it</email>
 </address></author>
-<date year="2020" month="December" day="31"></date>
+<date year="2021" month="January" day="24"></date>
 <area>Application</area>
 <workgroup>DMARC Working Group</workgroup>
 
@@ -288,7 +288,8 @@ might create an entry like the following in the appropriate zone file
 </artwork>
 </section>
 
-<section anchor="per-message-failure-reports-directed-to-third-party"><name>Per-Message Failure Reports Directed to Third Party</name>
+<section anchor="per-message-failure-reports-directed-to-third-party">
+<name>Per-Message Failure Reports Directed to Third Party</name>
 <t>The Domain Owner from the previous example is maintaining the same
 policy but now wishes to have a third party receive and process the
 per-message failure reports.  Again, not all Receivers will honor
@@ -355,6 +356,33 @@ create an entry like the following in the appropriate zone file
 <xref target="verifying-external-destinations"></xref> for the full details of this
 mechanism.</t>
 </section>
+</section>
+
+<section anchor="change-log">
+<name>Change Log</name>
+<t>[RFC Editor: Please remove this section prior to publication.]</t>
+
+<dl newline="false" indent="4">
+	<dt>00 to 01</dt>
+	<dd>
+		<ul>
+			<li>Replace references to RFC7489 with references to I-D.ietf-dmarc-dmarcbis.</li>
+			<li>Replace the 2nd paragraph in the Introduction with the text proposed by Ned
+				for Ticket #55, which enjoys some consensus:<br/>
+				https://mailarchive.ietf.org/arch/msg/dmarc/HptVyJ9SgrfxWRbeGwORagPrhCw</li>
+			<li>Strike a spurious sentence about criticality of feedback, which was
+				meant for feedback in general, not failure reports.  In fact, failure
+				reports are not critical to establishing and maintaining accurate authentication
+				deployments.  Still attributable to Ticket #55.</li>
+			<li>Remove the content of section "Verifying External Destinations"
+				and refer to I-D.ietf-dmarc-aggregate-reporting.</li>
+			<li>Remove the content of section "Security Considerations"
+				and refer to I-D.ietf-dmarc-dmarcbis.</li>
+			<li>Slightly tweak the wording of the example in Appendix A.1
+				so that it makes sense standing alone.</li>
+		</ul>
+	</dd>
+</dl>
 </section>
 
 <section anchor="acknowledgements" numbered="false"><name>Acknowledgements</name>
