@@ -373,11 +373,10 @@ inauthentic, failure reports also provide more information about the
 failed message than is available in an aggregate
 report.[¶](#section-3-2)
 
-These reports SHOULD include any URI(s) from the message that failed
-authentication. These reports SHOULD include as much of the message and
-message header as is reasonable to support the Domain Owner's
-investigation into what caused the message to fail authentication and
-track down the sender.[¶](#section-3-3)
+These reports SHOULD include as much of the message and message header
+as is reasonable to support the Domain Owner's investigation into what
+caused the message to fail authentication and track down the sender,
+unless privacy reasons suggest otherwise.[¶](#section-3-3)
 
 When a Domain Owner requests failure reports for the purpose of forensic
 analysis, and the Mail Receiver is willing to provide such reports, the
@@ -655,6 +654,12 @@ Considerations discussed in
 <span>[Section 11](https://tools.ietf.org/html/draft-ietf-dmarc-dmarcbis-00#section-11)
 of \[[I-D.ietf-dmarc-dmarcbis](#I-D.ietf-dmarc-dmarcbis)\]</span>
 apply.[¶](#section-5-1)
+
+In addition, note that Organizational Domains are only an approximation
+to actual domain ownership. Therefore, reports may be sent to someone
+unrelated to the actual sender or domain owner. That makes
+considerations in [Section 4.1](#data-exposure-considerations) all the
+more relevant.[¶](#section-5-2)
 
 </div>
 
@@ -946,6 +951,12 @@ publication.\][¶](#section-appendix.b-1)
       - <span id="section-appendix.b-2.2.1.6">Slightly tweak the wording
         of the example in Appendix A.1 so that it makes sense standing
         alone.[¶](#section-appendix.b-2.2.1.6)</span>
+      - <span id="section-appendix.b-2.2.1.7">Remove the sentence
+        containing "must include any URI(s)", as the issue arose
+        <span><https://mailarchive.ietf.org/arch/msg/dmarc/mFk0qiTCy8tzghRvcxus01W_Blw></span>.[¶](#section-appendix.b-2.2.1.7)</span>
+      - <span id="section-appendix.b-2.2.1.8">Add paragraph in Security
+        Considerations, noting that note that Organizational Domains are
+        only an approximation...[¶](#section-appendix.b-2.2.1.8)</span>
 
 </div>
 

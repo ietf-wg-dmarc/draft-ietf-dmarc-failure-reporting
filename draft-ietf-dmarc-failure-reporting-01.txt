@@ -83,7 +83,7 @@ Table of Contents
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   7
      A.1.  Entire Domain, Monitoring Only, Per-Message Reports . . .   7
      A.2.  Per-Message Failure Reports Directed to Third Party . . .   8
-   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  10
+   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .   9
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  10
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
@@ -142,11 +142,10 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    message is inauthentic, failure reports also provide more information
    about the failed message than is available in an aggregate report.
 
-   These reports SHOULD include any URI(s) from the message that failed
-   authentication.  These reports SHOULD include as much of the message
-   and message header as is reasonable to support the Domain Owner's
-   investigation into what caused the message to fail authentication and
-   track down the sender.
+   These reports SHOULD include as much of the message and message
+   header as is reasonable to support the Domain Owner's investigation
+   into what caused the message to fail authentication and track down
+   the sender, unless privacy reasons suggest otherwise.
 
    When a Domain Owner requests failure reports for the purpose of
    forensic analysis, and the Mail Receiver is willing to provide such
@@ -160,8 +159,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    Where multiple URIs are selected to receive failure reports, the
    report generator MUST make an attempt to deliver to each of them.
 
-
-
+   An obvious consideration is the denial-of-service attack that can be
+   perpetrated by an attacker who sends numerous messages purporting to
+   be from the intended victim Domain Owner but that fail both SPF and
 
 
 
@@ -170,9 +170,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 3]
 Internet-Draft           DMARC Failure Reporting            January 2021
 
 
-   An obvious consideration is the denial-of-service attack that can be
-   perpetrated by an attacker who sends numerous messages purporting to
-   be from the intended victim Domain Owner but that fail both SPF and
    DKIM; this would cause participating Mail Receivers to send failure
    reports to the Domain Owner or its delegate in potentially huge
    volumes.  Accordingly, participating Mail Receivers are encouraged to
@@ -213,10 +210,13 @@ Internet-Draft           DMARC Failure Reporting            January 2021
        separated list of authentication mechanism names that produced an
        aligned identity, or the keyword "none" if none did.  ABNF:
 
+     id-align     = "Identity-Alignment:" [CFWS]
+                    ( "none" /
+                      dmarc-method *( [CFWS] "," [CFWS] dmarc-method ) )
+                    [CFWS]
 
-
-
-
+     dmarc-method = ( "dkim" / "spf" )
+                    ; each may appear at most once in an id-align
 
 
 
@@ -225,14 +225,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 4]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
-
-     id-align     = "Identity-Alignment:" [CFWS]
-                    ( "none" /
-                      dmarc-method *( [CFWS] "," [CFWS] dmarc-method ) )
-                    [CFWS]
-
-     dmarc-method = ( "dkim" / "spf" )
-                    ; each may appear at most once in an id-align
 
    3.  Authentication Failure Type "dmarc" is defined, which is to be
        used when a failure report is generated because some or all of
@@ -274,6 +266,14 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    might otherwise be obscured by intermediate systems will therefore be
    exposed.
 
+   When message-forwarding arrangements exist, Domain Owners requesting
+   reports will also receive information about mail forwarded to domains
+   that were not originally part of their messages' recipient lists.
+   This means that destination domains previously unknown to the Domain
+   Owner may now become visible.
+
+
+
 
 
 
@@ -281,12 +281,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 5]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
-
-   When message-forwarding arrangements exist, Domain Owners requesting
-   reports will also receive information about mail forwarded to domains
-   that were not originally part of their messages' recipient lists.
-   This means that destination domains previously unknown to the Domain
-   Owner may now become visible.
 
    Disclosure of information about the messages is being requested by
    the entity generating the email in the first place, i.e., the Domain
@@ -321,6 +315,11 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    Considerations discussed in Section 11 of [I-D.ietf-dmarc-dmarcbis]
    apply.
 
+   In addition, note that Organizational Domains are only an
+   approximation to actual domain ownership.  Therefore, reports may be
+   sent to someone unrelated to the actual sender or domain owner.  That
+   makes considerations in Section 4.1 all the more relevant.
+
 6.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -328,8 +327,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-
-
+   [RFC6591]  Fontana, H., "Authentication Failure Reporting Using the
+              Abuse Reporting Format", RFC 6591, DOI 10.17487/RFC6591,
+              April 2012, <https://www.rfc-editor.org/info/rfc6591>.
 
 
 
@@ -337,10 +337,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 6]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
-
-   [RFC6591]  Fontana, H., "Authentication Failure Reporting Using the
-              Abuse Reporting Format", RFC 6591, DOI 10.17487/RFC6591,
-              April 2012, <https://www.rfc-editor.org/info/rfc6591>.
 
    [I-D.ietf-dmarc-dmarcbis]
               Gustafsson, E., Herr, T., and J. Levine, "Domain-based
@@ -384,6 +380,10 @@ A.1.  Entire Domain, Monitoring Only, Per-Message Reports
    problems, they wish to request per-message failure reports when
    authentication failures occur.
 
+   Not all Receivers will honor such a request, but the Domain Owner
+   feels that any reports it does receive will be helpful enough to
+   justify publishing this record.  The default per-message report
+   format ([RFC6591]) meets the Domain Owner's needs in this scenario.
 
 
 
@@ -393,11 +393,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 7]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
-
-   Not all Receivers will honor such a request, but the Domain Owner
-   feels that any reports it does receive will be helpful enough to
-   justify publishing this record.  The default per-message report
-   format ([RFC6591]) meets the Domain Owner's needs in this scenario.
 
    The Domain Owner accomplishes this by adding the following to its
    policy record:
@@ -440,16 +435,6 @@ A.2.  Per-Message Failure Reports Directed to Third Party
       address "auth-reports@thirdparty.example.net" ("ruf=mailto:auth-
       reports@thirdparty.example.net")
 
-
-
-
-
-
-Jones & Vesely            Expires 28 July 2021                  [Page 8]
-
-Internet-Draft           DMARC Failure Reporting            January 2021
-
-
    The DMARC policy record might look like this when retrieved using a
    common command-line tool (the output shown would appear on a single
    line but is wrapped here for publication):
@@ -457,6 +442,13 @@ Internet-Draft           DMARC Failure Reporting            January 2021
      % dig +short TXT _dmarc.example.com.
      "v=DMARC1; p=none; rua=mailto:dmarc-feedback@example.com;
       ruf=mailto:auth-reports@thirdparty.example.net"
+
+
+
+Jones & Vesely            Expires 28 July 2021                  [Page 8]
+
+Internet-Draft           DMARC Failure Reporting            January 2021
+
 
    To publish such a record, the DNS administrator for the Domain Owner
    might create an entry like the following in the appropriate zone file
@@ -497,6 +489,14 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
      example.com._report._dmarc   IN   TXT    "v=DMARC1;"
 
+   Intermediaries and other third parties should refer to Section 3.2
+   for the full details of this mechanism.
+
+Appendix B.  Change Log
+
+   [RFC Editor: Please remove this section prior to publication.]
+
+
 
 
 
@@ -505,13 +505,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 9]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
-
-   Intermediaries and other third parties should refer to Section 3.2
-   for the full details of this mechanism.
-
-Appendix B.  Change Log
-
-   [RFC Editor: Please remove this section prior to publication.]
 
    00 to 01
        *  Replace references to RFC7489 with references to I-D.ietf-
@@ -536,6 +529,13 @@ Appendix B.  Change Log
 
        *  Slightly tweak the wording of the example in Appendix A.1 so
           that it makes sense standing alone.
+
+       *  Remove the sentence containing "must include any URI(s)", as
+          the issue arose https://mailarchive.ietf.org/arch/msg/dmarc/
+          mFk0qiTCy8tzghRvcxus01W_Blw.
+
+       *  Add paragraph in Security Considerations, noting that note
+          that Organizational Domains are only an approximation...
 
 Acknowledgements
 

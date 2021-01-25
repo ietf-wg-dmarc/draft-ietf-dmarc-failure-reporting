@@ -69,11 +69,10 @@ notifying the Domain Owners when there is an authentication failure.
 Whether the failure is due to an infrastructure problem or the
 message is inauthentic, failure reports also provide more information
 about the failed message than is available in an aggregate report.</t>
-<t>These reports SHOULD include any URI(s) from the message that failed
-authentication.  These reports SHOULD include as much of the message
+<t>These reports SHOULD include as much of the message
 and message header as is reasonable to support the Domain Owner's
 investigation into what caused the message to fail authentication and
-track down the sender.</t>
+track down the sender, unless privacy reasons suggest otherwise.</t>
 <t>When a Domain Owner requests failure reports for the purpose of
 forensic analysis, and the Mail Receiver is willing to provide such
 reports, the Mail Receiver generates and sends a message using the
@@ -220,6 +219,11 @@ party.</t>
 
 <section anchor="security-considerations"><name>Security Considerations</name>
 <t>Considerations discussed in <xref target="I-D.ietf-dmarc-dmarcbis" sectionFormat="of" section="11"/> apply.</t>
+
+<t>In addition, note that Organizational Domains are only an approximation
+to actual domain ownership.  Therefore, reports may be sent to someone
+unrelated to the actual sender or domain owner.  That makes considerations
+in <xref target="data-exposure-considerations"/> all the more relevant.</t>
 
 </section>
 
@@ -380,6 +384,10 @@ mechanism.</t>
 				and refer to I-D.ietf-dmarc-dmarcbis.</li>
 			<li>Slightly tweak the wording of the example in Appendix A.1
 				so that it makes sense standing alone.</li>
+			<li>Remove the sentence containing "must include any URI(s)",
+				as the issue arose <eref target="https://mailarchive.ietf.org/arch/msg/dmarc/mFk0qiTCy8tzghRvcxus01W_Blw"/>.</li>
+			<li>Add paragraph in Security Considerations, noting that
+				note that Organizational Domains are only an approximation...</li>
 		</ul>
 	</dd>
 </dl>
