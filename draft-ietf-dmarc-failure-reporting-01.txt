@@ -142,10 +142,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    message is inauthentic, failure reports also provide more information
    about the failed message than is available in an aggregate report.
 
-   These reports SHOULD include as much of the message and message
-   header as is reasonable to support the Domain Owner's investigation
-   into what caused the message to fail authentication and track down
-   the sender, unless privacy reasons suggest otherwise.
+   These reports should include as much of the message header and body
+   as possible, consistent with the reporting party's privacy policies,
+   to enable the Domain Owner to diagnose the authentication failure.
 
    When a Domain Owner requests failure reports for the purpose of
    forensic analysis, and the Mail Receiver is willing to provide such
@@ -162,6 +161,7 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    An obvious consideration is the denial-of-service attack that can be
    perpetrated by an attacker who sends numerous messages purporting to
    be from the intended victim Domain Owner but that fail both SPF and
+   DKIM; this would cause participating Mail Receivers to send failure
 
 
 
@@ -170,7 +170,6 @@ Jones & Vesely            Expires 28 July 2021                  [Page 3]
 Internet-Draft           DMARC Failure Reporting            January 2021
 
 
-   DKIM; this would cause participating Mail Receivers to send failure
    reports to the Domain Owner or its delegate in potentially huge
    volumes.  Accordingly, participating Mail Receivers are encouraged to
    aggregate these reports as much as is practical, using the Incidents
@@ -217,6 +216,7 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
      dmarc-method = ( "dkim" / "spf" )
                     ; each may appear at most once in an id-align
+
 
 
 

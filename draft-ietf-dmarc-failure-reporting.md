@@ -373,10 +373,10 @@ inauthentic, failure reports also provide more information about the
 failed message than is available in an aggregate
 report.[¶](#section-3-2)
 
-These reports SHOULD include as much of the message and message header
-as is reasonable to support the Domain Owner's investigation into what
-caused the message to fail authentication and track down the sender,
-unless privacy reasons suggest otherwise.[¶](#section-3-3)
+These reports should include as much of the message header and body as
+possible, consistent with the reporting party's privacy policies, to
+enable the Domain Owner to diagnose the authentication
+failure.[¶](#section-3-3)
 
 When a Domain Owner requests failure reports for the purpose of forensic
 analysis, and the Mail Receiver is willing to provide such reports, the
