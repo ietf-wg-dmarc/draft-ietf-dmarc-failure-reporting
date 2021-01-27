@@ -187,6 +187,14 @@ Simplified BSD
         
         </div>
     
+      - 
+        
+        <div id="section-toc.1-1.3.2.3">
+        
+        [3.3](#section-3.3).  [Transport](#name-transport)[¶](#section-toc.1-1.3.2.3.1)
+        
+        </div>
+    
     </div>
 
   - 
@@ -547,8 +555,24 @@ The procedure described for aggragate reports
 <span>[Section 2.1](https://tools.ietf.org/html/draft-ietf-dmarc-aggregate-reporting-00#section-2.1)
 of
 \[[I-D.ietf-dmarc-aggregate-reporting](#I-D.ietf-dmarc-aggregate-reporting)\]</span>
-applies to failure reports as
-well.[¶](#section-3.2-1)
+applies to failure reports as well.[¶](#section-3.2-1)
+
+</div>
+
+</div>
+
+<div id="transport">
+
+<div id="section-3.3" class="section">
+
+### [3.3.](#section-3.3)[Transport](#name-transport)
+
+Email streams carrying DMARC failure reports MUST conform to the DMARC
+mechanism, thereby resulting in an aligned "pass". Special care must be
+taken for authentication, as failure to authenticate failure reports may
+result in mail loops. Besides rate limiting, such loops can also be
+avoided by sending reports from a domain that doesn't get reports
+back.[¶](#section-3.3-1)
 
 </div>
 
@@ -957,6 +981,9 @@ publication.\][¶](#section-appendix.b-1)
       - <span id="section-appendix.b-2.2.1.8">Add paragraph in Security
         Considerations, noting that note that Organizational Domains are
         only an approximation...[¶](#section-appendix.b-2.2.1.8)</span>
+      - <span id="section-appendix.b-2.2.1.9">Add a Transport section,
+        mentioning DMARC conformance and failure report mail loops
+        (Ticket \#28).[¶](#section-appendix.b-2.2.1.9)</span>
 
 </div>
 

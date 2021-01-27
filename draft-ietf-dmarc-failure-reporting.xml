@@ -161,6 +161,17 @@ underlying authentication methods.</li>
 <xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="2.1"/>
 applies to failure reports as well.</t>
 </section>
+
+<section anchor="transport"><name>Transport</name>
+<t>Email streams carrying DMARC failure reports MUST conform to the DMARC
+mechanism, thereby resulting in an aligned "pass".
+Special care must be taken for authentication, as failure to authenticate
+failure reports may result in mail loops.  Besides rate limiting,
+such loops can also be avoided by sending reports from a domain that
+doesn't get reports back.</t>
+
+</section>
+
 </section>
 
 <section anchor="privacy-considerations"><name>Privacy Considerations</name>
@@ -390,6 +401,8 @@ mechanism.</t>
 				as the issue arose <eref target="https://mailarchive.ietf.org/arch/msg/dmarc/mFk0qiTCy8tzghRvcxus01W_Blw"/>.</li>
 			<li>Add paragraph in Security Considerations, noting that
 				note that Organizational Domains are only an approximation...</li>
+			<li>Add a Transport section, mentioning DMARC conformance and
+				failure report mail loops (Ticket #28).</li>
 		</ul>
 	</dd>
 </dl>
