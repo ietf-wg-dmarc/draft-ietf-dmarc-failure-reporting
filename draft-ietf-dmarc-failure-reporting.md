@@ -569,10 +569,12 @@ applies to failure reports as well.[¶](#section-3.2-1)
 
 Email streams carrying DMARC failure reports MUST conform to the DMARC
 mechanism, thereby resulting in an aligned "pass". Special care must be
-taken for authentication, as failure to authenticate failure reports may
-result in mail loops. Besides rate limiting, such loops can also be
-avoided by sending reports from a domain that doesn't get reports
-back.[¶](#section-3.3-1)
+taken of authentication, as failure to authenticate failure reports may
+result in mail loops. These loops can be mitigated by sending reports
+from a domain or subdomain that doesn't request reports, or by
+performing rate limiting especially for failures related to messages
+received at addresses published in a ruf=
+tag.[¶](#section-3.3-1)
 
 </div>
 

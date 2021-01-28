@@ -79,11 +79,11 @@ Table of Contents
      4.1.  Data Exposure Considerations  . . . . . . . . . . . . . .   5
      4.2.  Report Recipients . . . . . . . . . . . . . . . . . . . .   6
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
-   6.  Normative References  . . . . . . . . . . . . . . . . . . . .   6
+   6.  Normative References  . . . . . . . . . . . . . . . . . . . .   7
    7.  Informative References  . . . . . . . . . . . . . . . . . . .   7
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   7
-     A.1.  Entire Domain, Monitoring Only, Per-Message Reports . . .   7
-     A.2.  Per-Message Failure Reports Directed to Third Party . . .   8
+     A.1.  Entire Domain, Monitoring Only, Per-Message Reports . . .   8
+     A.2.  Per-Message Failure Reports Directed to Third Party . . .   9
    Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  10
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  11
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
@@ -243,10 +243,12 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
    Email streams carrying DMARC failure reports MUST conform to the
    DMARC mechanism, thereby resulting in an aligned "pass".  Special
-   care must be taken for authentication, as failure to authenticate
-   failure reports may result in mail loops.  Besides rate limiting,
-   such loops can also be avoided by sending reports from a domain that
-   doesn't get reports back.
+   care must be taken of authentication, as failure to authenticate
+   failure reports may result in mail loops.  These loops can be
+   mitigated by sending reports from a domain or subdomain that doesn't
+   request reports, or by performing rate limiting especially for
+   failures related to messages received at addresses published in a
+   ruf= tag.
 
 4.  Privacy Considerations
 
@@ -269,11 +271,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    failed-message reporting supports redaction, failed-message reporting
    is capable of exposing the entire message to the report recipient.
 
-   Domain Owners requesting reports will receive information about mail
-   claiming to be from them, which includes mail that was not, in fact,
-   from them.  Information about the final destination of mail where it
-   might otherwise be obscured by intermediate systems will therefore be
-   exposed.
+
+
+
 
 
 
@@ -281,6 +281,12 @@ Jones & Vesely            Expires 28 July 2021                  [Page 5]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
+
+   Domain Owners requesting reports will receive information about mail
+   claiming to be from them, which includes mail that was not, in fact,
+   from them.  Information about the final destination of mail where it
+   might otherwise be obscured by intermediate systems will therefore be
+   exposed.
 
    When message-forwarding arrangements exist, Domain Owners requesting
    reports will also receive information about mail forwarded to domains
@@ -321,12 +327,6 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    Considerations discussed in Section 11 of [I-D.ietf-dmarc-dmarcbis]
    apply.
 
-   In addition, note that Organizational Domains are only an
-   approximation to actual domain ownership.  Therefore, reports may be
-   sent to someone unrelated to the actual sender or domain owner.  That
-   makes considerations in Section 4.1 all the more relevant.
-
-6.  Normative References
 
 
 
@@ -337,6 +337,13 @@ Jones & Vesely            Expires 28 July 2021                  [Page 6]
 
 Internet-Draft           DMARC Failure Reporting            January 2021
 
+
+   In addition, note that Organizational Domains are only an
+   approximation to actual domain ownership.  Therefore, reports may be
+   sent to someone unrelated to the actual sender or domain owner.  That
+   makes considerations in Section 4.1 all the more relevant.
+
+6.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -378,14 +385,7 @@ Appendix A.  Examples
    This section presents some examples related to the use of DMARC
    reporting functions.
 
-A.1.  Entire Domain, Monitoring Only, Per-Message Reports
 
-   The owners of the domain "example.com" have deployed SPF and DKIM on
-   their messaging infrastructure.  As described in, Appendix B.2.1 of
-   [I-D.ietf-dmarc-aggregate-reporting] they have used the aggregate
-   reporting to discover some messaging systems that had not yet
-   implemented DKIM correctly.  However, they are still seeing periodic
-   authentication failures.  In order to diagnose these intermittent
 
 
 
@@ -394,6 +394,14 @@ Jones & Vesely            Expires 28 July 2021                  [Page 7]
 Internet-Draft           DMARC Failure Reporting            January 2021
 
 
+A.1.  Entire Domain, Monitoring Only, Per-Message Reports
+
+   The owners of the domain "example.com" have deployed SPF and DKIM on
+   their messaging infrastructure.  As described in, Appendix B.2.1 of
+   [I-D.ietf-dmarc-aggregate-reporting] they have used the aggregate
+   reporting to discover some messaging systems that had not yet
+   implemented DKIM correctly.  However, they are still seeing periodic
+   authentication failures.  In order to diagnose these intermittent
    problems, they wish to request per-message failure reports when
    authentication failures occur.
 
@@ -427,6 +435,21 @@ Internet-Draft           DMARC Failure Reporting            January 2021
                        "rua=mailto:dmarc-feedback@example.com; "
                        "ruf=mailto:auth-reports@example.com" )
 
+
+
+
+
+
+
+
+
+
+
+Jones & Vesely            Expires 28 July 2021                  [Page 8]
+
+Internet-Draft           DMARC Failure Reporting            January 2021
+
+
 A.2.  Per-Message Failure Reports Directed to Third Party
 
    The Domain Owner from the previous example is maintaining the same
@@ -442,13 +465,6 @@ A.2.  Per-Message Failure Reports Directed to Third Party
    *  Per-message failure reports should be sent via email to the
       address "auth-reports@thirdparty.example.net" ("ruf=mailto:auth-
       reports@thirdparty.example.net")
-
-
-
-Jones & Vesely            Expires 28 July 2021                  [Page 8]
-
-Internet-Draft           DMARC Failure Reporting            January 2021
-
 
    The DMARC policy record might look like this when retrieved using a
    common command-line tool (the output shown would appear on a single
@@ -481,6 +497,15 @@ Internet-Draft           DMARC Failure Reporting            January 2021
       "example.com._report._dmarc.thirdparty.example.net" with the value
       "v=DMARC1;".
 
+
+
+
+
+Jones & Vesely            Expires 28 July 2021                  [Page 9]
+
+Internet-Draft           DMARC Failure Reporting            January 2021
+
+
    The resulting DNS record might look like this when retrieved using a
    common command-line tool (the output shown would appear on a single
    line but is wrapped here for publication):
@@ -496,15 +521,6 @@ Internet-Draft           DMARC Failure Reporting            January 2021
      ; Accept DMARC failure reports on behalf of example.com
 
      example.com._report._dmarc   IN   TXT    "v=DMARC1;"
-
-
-
-
-
-Jones & Vesely            Expires 28 July 2021                  [Page 9]
-
-Internet-Draft           DMARC Failure Reporting            January 2021
-
 
    Intermediaries and other third parties should refer to Section 3.2
    for the full details of this mechanism.
@@ -537,6 +553,15 @@ Appendix B.  Change Log
        *  Slightly tweak the wording of the example in Appendix A.1 so
           that it makes sense standing alone.
 
+
+
+
+
+Jones & Vesely            Expires 28 July 2021                 [Page 10]
+
+Internet-Draft           DMARC Failure Reporting            January 2021
+
+
        *  Remove the sentence containing "must include any URI(s)", as
           the issue arose https://mailarchive.ietf.org/arch/msg/dmarc/
           mFk0qiTCy8tzghRvcxus01W_Blw.
@@ -546,21 +571,6 @@ Appendix B.  Change Log
 
        *  Add a Transport section, mentioning DMARC conformance and
           failure report mail loops (Ticket #28).
-
-
-
-
-
-
-
-
-
-
-
-Jones & Vesely            Expires 28 July 2021                 [Page 10]
-
-Internet-Draft           DMARC Failure Reporting            January 2021
-
 
 Acknowledgements
 
@@ -595,16 +605,6 @@ Authors' Addresses
    Tana
 
    Email: vesely@tana.it
-
-
-
-
-
-
-
-
-
-
 
 
 
