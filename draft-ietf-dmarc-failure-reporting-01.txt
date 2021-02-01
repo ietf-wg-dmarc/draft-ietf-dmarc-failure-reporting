@@ -6,7 +6,7 @@ DMARC Working Group                                     S. M. Jones, Ed.
 Internet-Draft                                                 DMARC.org
 Obsoletes: 7489 (if approved)                             A. Vesely, Ed.
 Intended status: Standards Track                                    Tana
-Expires: 28 July 2021                                    24 January 2021
+Expires: 5 August 2021                                   1 February 2021
 
 
 Domain-based Message Authentication, Reporting, and Conformance (DMARC)
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 July 2021.
+   This Internet-Draft will expire on 5 August 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 1]
+Jones & Vesely            Expires 5 August 2021                 [Page 1]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 2]
+Jones & Vesely            Expires 5 August 2021                 [Page 2]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 2.  Terminology and Definitions
@@ -165,9 +165,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 3]
+Jones & Vesely            Expires 5 August 2021                 [Page 3]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
    reports to the Domain Owner or its delegate in potentially huge
@@ -221,9 +221,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 4]
+Jones & Vesely            Expires 5 August 2021                 [Page 4]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
    3.  Authentication Failure Type "dmarc" is defined, which is to be
@@ -244,11 +244,10 @@ Internet-Draft           DMARC Failure Reporting            January 2021
    Email streams carrying DMARC failure reports MUST conform to the
    DMARC mechanism, thereby resulting in an aligned "pass".  Special
    care must be taken of authentication, as failure to authenticate
-   failure reports may result in mail loops.  These loops can be
-   mitigated by sending reports from a domain or subdomain that doesn't
-   request reports, or by performing rate limiting especially for
-   failures related to messages received at addresses published in a
-   ruf= tag.
+   failure reports may result in mail loops.
+
+   Reporters SHOULD rate limit the number of failure reports sent to any
+   recipient to avoid overloading recipient systems.
 
 4.  Privacy Considerations
 
@@ -277,9 +276,10 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 5]
+
+Jones & Vesely            Expires 5 August 2021                 [Page 5]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
    Domain Owners requesting reports will receive information about mail
@@ -333,9 +333,9 @@ Internet-Draft           DMARC Failure Reporting            January 2021
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 6]
+Jones & Vesely            Expires 5 August 2021                 [Page 6]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
    In addition, note that Organizational Domains are only an
@@ -389,9 +389,9 @@ Appendix A.  Examples
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 7]
+Jones & Vesely            Expires 5 August 2021                 [Page 7]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 A.1.  Entire Domain, Monitoring Only, Per-Message Reports
@@ -445,9 +445,9 @@ A.1.  Entire Domain, Monitoring Only, Per-Message Reports
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 8]
+Jones & Vesely            Expires 5 August 2021                 [Page 8]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 A.2.  Per-Message Failure Reports Directed to Third Party
@@ -501,9 +501,9 @@ A.2.  Per-Message Failure Reports Directed to Third Party
 
 
 
-Jones & Vesely            Expires 28 July 2021                  [Page 9]
+Jones & Vesely            Expires 5 August 2021                 [Page 9]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
    The resulting DNS record might look like this when retrieved using a
@@ -557,9 +557,9 @@ Appendix B.  Change Log
 
 
 
-Jones & Vesely            Expires 28 July 2021                 [Page 10]
+Jones & Vesely            Expires 5 August 2021                [Page 10]
 
-Internet-Draft           DMARC Failure Reporting            January 2021
+Internet-Draft           DMARC Failure Reporting           February 2021
 
 
        *  Remove the sentence containing "must include any URI(s)", as
@@ -613,4 +613,4 @@ Authors' Addresses
 
 
 
-Jones & Vesely            Expires 28 July 2021                 [Page 11]
+Jones & Vesely            Expires 5 August 2021                [Page 11]

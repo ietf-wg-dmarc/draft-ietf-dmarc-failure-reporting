@@ -2,11 +2,11 @@ Internet-Draft
 
 DMARC Failure Reporting
 
-January 2021
+February 2021
 
 Jones & Vesely
 
-Expires 28 July 2021
+Expires 5 August 2021
 
 \[Page\]
 
@@ -26,13 +26,13 @@ Expires 28 July 2021
     [7489](https://www.rfc-editor.org/rfc/rfc7489) (if approved)
 
   - Published:  
-    24 January 2021
+    1 February 2021
 
   - Intended Status:  
     Standards Track
 
   - Expires:  
-    28 July 2021
+    5 August 2021
 
   - Authors:
     
@@ -106,7 +106,7 @@ time. It is inappropriate to use Internet-Drafts as reference material
 or to cite them other than as "work in
 progress."[¶](#section-boilerplate.1-3)
 
-This Internet-Draft will expire on 28 July
+This Internet-Draft will expire on 5 August
 2021.[¶](#section-boilerplate.1-4)
 
 </div>
@@ -570,11 +570,11 @@ applies to failure reports as well.[¶](#section-3.2-1)
 Email streams carrying DMARC failure reports MUST conform to the DMARC
 mechanism, thereby resulting in an aligned "pass". Special care must be
 taken of authentication, as failure to authenticate failure reports may
-result in mail loops. These loops can be mitigated by sending reports
-from a domain or subdomain that doesn't request reports, or by
-performing rate limiting especially for failures related to messages
-received at addresses published in a ruf=
-tag.[¶](#section-3.3-1)
+result in mail loops.[¶](#section-3.3-1)
+
+Reporters SHOULD rate limit the number of failure reports sent to any
+recipient to avoid overloading recipient
+systems.[¶](#section-3.3-2)
 
 </div>
 
