@@ -567,11 +567,11 @@ applies to failure reports as well.[¶](#section-3.2-1)
 
 ### [3.3.](#section-3.3)[Transport](#name-transport)
 
-Email streams carrying DMARC failure reports SHOULD conform to the DMARC
-mechanism, thereby resulting in an aligned "pass". This requirement is a
-MUST in case the sending host has a DMARC record featuring a ruf= tag.
-Indeed, special care must be taken of authentication in that case, as
-failure to authenticate failure reports may result in mail
+Email streams carrying DMARC failure reports SHOULD provide DMARC-based
+authentication, so as to produce "dmarc=pass". This requirement is a
+MUST in case the report is sent through a host having a DMARC record
+with a ruf= tag. Indeed, special care must be taken of authentication in
+that case, as failure to authenticate failure reports may result in mail
 loops.[¶](#section-3.3-1)
 
 Reporters SHOULD rate limit the number of failure reports sent to any

@@ -241,12 +241,12 @@ Internet-Draft           DMARC Failure Reporting           February 2021
 
 3.3.  Transport
 
-   Email streams carrying DMARC failure reports SHOULD conform to the
-   DMARC mechanism, thereby resulting in an aligned "pass".  This
-   requirement is a MUST in case the sending host has a DMARC record
-   featuring a ruf= tag.  Indeed, special care must be taken of
-   authentication in that case, as failure to authenticate failure
-   reports may result in mail loops.
+   Email streams carrying DMARC failure reports SHOULD provide DMARC-
+   based authentication, so as to produce "dmarc=pass".  This
+   requirement is a MUST in case the report is sent through a host
+   having a DMARC record with a ruf= tag.  Indeed, special care must be
+   taken of authentication in that case, as failure to authenticate
+   failure reports may result in mail loops.
 
    Reporters SHOULD rate limit the number of failure reports sent to any
    recipient to avoid overloading recipient systems.  Again, in case the
