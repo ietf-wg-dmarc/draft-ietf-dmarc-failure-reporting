@@ -6,7 +6,7 @@ DMARC Working Group                                     S. M. Jones, Ed.
 Internet-Draft                                                 DMARC.org
 Obsoletes: 7489 (if approved)                             A. Vesely, Ed.
 Intended status: Standards Track                                    Tana
-Expires: 5 August 2021                                   1 February 2021
+Expires: 22 August 2021                                 18 February 2021
 
 
 Domain-based Message Authentication, Reporting, and Conformance (DMARC)
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 August 2021.
+   This Internet-Draft will expire on 22 August 2021.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 1]
+Jones & Vesely           Expires 22 August 2021                 [Page 1]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 2]
+Jones & Vesely           Expires 22 August 2021                 [Page 2]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -165,7 +165,7 @@ Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 3]
+Jones & Vesely           Expires 22 August 2021                 [Page 3]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -221,7 +221,7 @@ Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 4]
+Jones & Vesely           Expires 22 August 2021                 [Page 4]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -277,7 +277,7 @@ Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 5]
+Jones & Vesely           Expires 22 August 2021                 [Page 5]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -333,7 +333,7 @@ Internet-Draft           DMARC Failure Reporting           February 2021
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 6]
+Jones & Vesely           Expires 22 August 2021                 [Page 6]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -389,7 +389,7 @@ Appendix A.  Examples
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 7]
+Jones & Vesely           Expires 22 August 2021                 [Page 7]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -445,7 +445,7 @@ A.1.  Entire Domain, Monitoring Only, Per-Message Reports
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 8]
+Jones & Vesely           Expires 22 August 2021                 [Page 8]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -501,7 +501,7 @@ A.2.  Per-Message Failure Reports Directed to Third Party
 
 
 
-Jones & Vesely            Expires 5 August 2021                 [Page 9]
+Jones & Vesely           Expires 22 August 2021                 [Page 9]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -557,7 +557,7 @@ Appendix B.  Change Log
 
 
 
-Jones & Vesely            Expires 5 August 2021                [Page 10]
+Jones & Vesely           Expires 22 August 2021                [Page 10]
 
 Internet-Draft           DMARC Failure Reporting           February 2021
 
@@ -613,4 +613,4 @@ Authors' Addresses
 
 
 
-Jones & Vesely            Expires 5 August 2021                [Page 11]
+Jones & Vesely           Expires 22 August 2021                [Page 11]
