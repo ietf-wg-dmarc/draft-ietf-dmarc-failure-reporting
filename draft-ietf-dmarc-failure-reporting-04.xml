@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rfc version="3" ipr="trust200902" docName="draft-ietf-dmarc-failure-reporting-04" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="7489" consensus="true">
+
+<front>
+<title abbrev="DMARC Failure Reporting">Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting</title><seriesInfo value="draft-ietf-dmarc-failure-reporting-02" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
+<author role="editor" surname="Jones" fullname="Steven M Jones"><organization>DMARC.org</organization><address><postal><street></street>
+</postal><email>smj@dmarc.org</email>
+</address></author>
+<author role="editor" initials="A." surname="Vesely" fullname="Alessandro Vesely"><organization>Tana</organization><address><postal><street></street>
+</postal><email>vesely@tana.it</email>
+</address></author>
+<date year="2022" month="August" day="11"></date>
+<area>Application</area>
+<workgroup>DMARC Working Group</workgroup>
+
+<abstract>
+<t>Domain-based Message Authentication, Reporting, and Conformance
+(DMARC) is a scalable mechanism by which a domain owner can request
+feedback about email messages using their domain in the From: address
+field. This document describes &quot;failure reports,&quot; or &quot;failed message
+reports,&quot; which provide details about individual messages that failed
+to authenticate according to the DMARC mechanism.</t>
+</abstract>
+
+</front>
+
+<middle>
+
+<section anchor="introduction"><name>Introduction</name>
+<t>Domain-based Message Authentication, Reporting, and Conformance
+(DMARC) <xref target="I-D.ietf-dmarc-dmarcbis"></xref> is a scalable mechanism by which a
+mail-originating organization can express domain-level policies and
+preferences for message validation, disposition, and reporting, that a
+mail-receiving organization can use to improve mail handling. This
+document focuses on one type of reporting that can be requested under
+DMARC.</t>
+
+<t>
+Failure reports provide detailed information about the failure of a single
+message or a group of similar messages failing for the same reason. They
+are meant to aid in cases where a domain owner is unable to detect why
+failures reported in aggregate form did occur. It is important to note
+these reports can contain either the header or the entire content of a
+failed message, which in turn may contain personally identifiable
+information, which should be considered when deciding whether to
+generate such reports.</t>
+
+</section>
+
+<section anchor="terminology"><name>Terminology and Definitions</name>
+<t>This section defines terms used in the rest of the document.</t>
+<t>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;,
+&quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;NOT RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this
+document are to be interpreted as described in BCP 14 <xref target="RFC2119"></xref> <xref target="RFC8174"></xref>
+when, and only when, they appear in all capitals, as shown here.</t>
+<t>Readers are expected to be familiar with the contents of <xref target="I-D.ietf-dmarc-dmarcbis"></xref>,
+specifically the terminology and definitions section.</t>
+</section>
+
+<section anchor="failure-reports"><name>Failure Reports</name>
+<t>Failure reports can supply more detailed information
+about messages that failed to authenticate, enabling the Domain Owner
+to determine exactly what might be causing those specific failures.</t>
+<t>Failure reports are normally generated and sent almost immediately
+after the Mail Receiver detects a DMARC failure.  Rather than waiting
+for an aggregate report, these reports are useful for quickly
+notifying the Domain Owners when there is an authentication failure.
+Whether the failure is due to an infrastructure problem or the
+message is inauthentic, failure reports also provide more information
+about the failed message than is available in an aggregate report.</t>
+
+<t>These reports should include as much of the message header and body as
+possible, consistent with the reporting party's privacy policies, to
+enable the Domain Owner to diagnose the authentication failure.
+</t>
+
+<t>When a Domain Owner requests failure reports for the purpose of
+forensic analysis, and the Mail Receiver is willing to provide such
+reports, the Mail Receiver generates and sends a message using the
+format described in <xref target="RFC6591"></xref>; this document updates that reporting
+format, as described in <xref target="reporting-format-update"></xref>.</t>
+<t>The destination(s) and nature of the reports are defined by the &quot;ruf&quot;
+and &quot;fo&quot; tags as defined in
+<xref target="I-D.ietf-dmarc-dmarcbis" sectionFormat="of" section="6.3"/>.</t>
+
+<t>Where multiple URIs are selected to receive failure reports, the
+report generator MUST make an attempt to deliver to each of them.</t>
+
+<t>An obvious consideration is the denial-of-service attack that can be
+perpetrated by an attacker who sends numerous messages purporting to
+be from the intended victim Domain Owner but that fail both SPF and
+DKIM; this would cause participating Mail Receivers to send failure
+reports to the Domain Owner or its delegate in potentially huge
+volumes.  Accordingly, participating Mail Receivers are encouraged to
+aggregate these reports as much as is practical, using the Incidents
+field of the Abuse Reporting Format (<xref target="RFC5965"></xref>).
+Indeed, the aim is not to count each and every failure, but rather to
+report different failure paths.
+Various aggregation techniques are possible, including the following:</t>
+
+<ul>
+<li><t>only send a report to the first recipient of multi-recipient
+messages;</t>
+</li>
+<li><t>store reports for a period of time before sending them, allowing
+detection, collection, and reporting of like incidents;</t>
+</li>
+<li><t>apply rate limiting, such as a maximum number of reports per
+minute that will be generated (and the remainder discarded).</t>
+</li>
+</ul>
+
+<section anchor="reporting-format-update"><name>Reporting Format Update</name>
+<t>Operators implementing this specification also implement an augmented
+version of <xref target="RFC6591"></xref> as follows:</t>
+
+<ol>
+<li><t>A DMARC failure report includes the following ARF header fields,
+with the indicated normative requirement levels:</t>
+
+<ul>
+<li><t>Identity-Alignment (REQUIRED; defined below)</t>
+</li>
+<li><t>Delivery-Result (OPTIONAL)</t>
+</li>
+<li><t>DKIM-Domain, DKIM-Identity, DKIM-Selector (REQUIRED if the
+message was signed by DKIM)</t>
+</li>
+<li><t>DKIM-Canonicalized-Header, DKIM-Canonicalized-Body (OPTIONAL
+if the message was signed by DKIM)</t>
+</li>
+<li><t>SPF-DNS (REQUIRED)</t>
+</li>
+</ul></li>
+<li><t>The &quot;Identity-Alignment&quot; field is defined to contain a comma-
+separated list of authentication mechanism names that produced an
+aligned identity, or the keyword &quot;none&quot; if none did.  ABNF:</t>
+</li>
+</ol>
+
+<artwork>  id-align     = &quot;Identity-Alignment:&quot; [CFWS]
+                 ( &quot;none&quot; /
+                   dmarc-method *( [CFWS] &quot;,&quot; [CFWS] dmarc-method ) )
+                 [CFWS]
+
+  dmarc-method = ( &quot;dkim&quot; / &quot;spf&quot; )
+                 ; each may appear at most once in an id-align
+</artwork>
+
+<ol start="3">
+<li>Authentication Failure Type &quot;dmarc&quot; is defined, which is to be
+used when a failure report is generated because some or all of
+the authentication mechanisms failed to produce aligned
+identifiers.  Note that a failure report generator MAY also
+independently produce an AFRF message for any or all of the
+underlying authentication methods.</li>
+</ol>
+</section>
+
+<section anchor="verifying-external-destinations"><name>Verifying External Destinations</name>
+<t>The procedure described for aggragate reports
+<xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="2.1"/>
+applies to failure reports as well.</t>
+</section>
+
+<section anchor="transport"><name>Transport</name>
+<t>Email streams carrying DMARC failure reports SHOULD provide
+DMARC-based authentication, so as to produce "dmarc=pass".
+This requirement is
+a MUST in case the report is sent through a host having a DMARC record
+with a ruf= tag.
+Indeed, special care must be taken of authentication in that case, as
+failure to authenticate failure reports may result in mail loops.</t>
+
+<t>Reporters SHOULD rate limit the number of failure reports sent
+to any recipient to avoid overloading recipient systems.  Again, in case
+the reports being sent are in turn at risk of being reported for DMARC
+authentication failure, reporters MUST make sure that possible mail loop
+are stopped.
+</t>
+
+</section>
+
+</section>
+
+<section anchor="privacy-considerations"><name>Privacy Considerations</name>
+<t>This section discusses issues specific to private data that
+may be included in the DMARC reporting functions.</t>
+
+<section anchor="data-exposure-considerations"><name>Data Exposure Considerations</name>
+<t>Failed-message reporting provides message-specific details pertaining
+to authentication failures.  Individual reports can contain message
+content as well as trace header fields.  Domain Owners are able to
+analyze individual reports and attempt to determine root causes of
+authentication mechanism failures, gain insight into
+misconfigurations or other problems with email and network
+infrastructure, or inspect messages for insight into abusive
+practices.</t>
+<t>These reports may expose sender and recipient identifiers (e.g.,
+RFC5322.From addresses), and although the <xref target="RFC6591"></xref> format used for
+failed-message reporting supports redaction, failed-message reporting
+is capable of exposing the entire message to the report recipient.</t>
+<t>Domain Owners requesting reports will receive information about mail
+claiming to be from them, which includes mail that was not, in fact,
+from them.  Information about the final destination of mail where it
+might otherwise be obscured by intermediate systems will therefore be
+exposed.</t>
+<t>When message-forwarding arrangements exist, Domain Owners requesting
+reports will also receive information about mail forwarded to domains
+that were not originally part of their messages' recipient lists.
+This means that destination domains previously unknown to the Domain
+Owner may now become visible.</t>
+<t>Disclosure of information about the messages is being requested by
+the entity generating the email in the first place, i.e., the Domain
+Owner and not the Mail Receiver, so this may not fit squarely within
+existing privacy policy provisions.  For some providers,
+failed-message reporting is viewed as a function
+similar to complaint reporting about spamming or phishing and is
+treated similarly under the privacy policy.  Report generators (i.e.,
+Mail Receivers) are encouraged to review their reporting limitations
+under such policies before enabling DMARC reporting.</t>
+</section>
+
+<section anchor="report-recipients"><name>Report Recipients</name>
+<t>A DMARC record can specify that reports should be sent to an
+intermediary operating on behalf of the Domain Owner.  This is done
+when the Domain Owner contracts with an entity to monitor mail
+streams for abuse and performance issues.  Receipt by third parties
+of such data may or may not be permitted by the Mail Receiver's
+privacy policy, terms of use, or other similar governing document.
+Domain Owners and Mail Receivers should both review and understand if
+their own internal policies constrain the use and transmission of
+DMARC reporting.</t>
+<t>Some potential exists for report recipients to perform traffic
+analysis, making it possible to obtain metadata about the Receiver's
+traffic.  In addition to verifying compliance with policies,
+Receivers need to consider that before sending reports to a third
+party.</t>
+</section>
+</section>
+
+<section anchor="security-considerations"><name>Security Considerations</name>
+<t>Considerations discussed in <xref target="I-D.ietf-dmarc-dmarcbis" sectionFormat="of" section="11"/> apply.</t>
+
+<t>In addition, note that Organizational Domains are only an approximation
+to actual domain ownership.  Therefore, reports may be sent to someone
+unrelated to the actual sender or domain owner.  That makes considerations
+in <xref target="data-exposure-considerations"/> all the more relevant.</t>
+
+</section>
+
+</middle>
+
+<back>
+<references><name>Normative References</name>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/ -->
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/ -->
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6591.xml"/>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/ -->
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dmarc-dmarcbis.xml"/>
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dmarc-aggregate-reporting.xml"/>
+</references>
+<references><name>Informative References</name>
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2142.xml"/ -->
+<!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml"/ -->
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5965.xml"/>
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+</references>
+
+<section anchor="examples"><name>Examples</name>
+<t>This section presents some examples related to the use of DMARC
+reporting functions.</t>
+
+<section anchor="entire-domain-monitoring-only-per-message-reports"><name>Entire Domain, Monitoring Only, Per-Message Reports</name>
+<t>The owners of the domain "example.com" have deployed SPF and DKIM on
+their messaging infrastructure.  As described in,
+<xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="B.2.1"/>
+they have used the aggregate
+reporting to discover some messaging systems that had not yet
+implemented DKIM correctly.  However, they are still seeing periodic
+authentication failures.  In order to diagnose these intermittent
+problems, they wish to request per-message failure reports when
+authentication failures occur.</t>
+<t>Not all Receivers will honor such a request, but the Domain Owner
+feels that any reports it does receive will be helpful enough to
+justify publishing this record.  The default per-message report
+format (<xref target="RFC6591"></xref>) meets the Domain Owner's needs in this scenario.</t>
+<t>The Domain Owner accomplishes this by adding the following to its
+policy record:</t>
+
+<ul>
+<li>Per-message failure reports should be sent via email to the
+address &quot;auth-reports@example.com&quot;
+(&quot;ruf=mailto:auth-reports@example.com&quot;)</li>
+</ul>
+<t>The updated DMARC policy record might look like this when retrieved using a
+common command-line tool (the output shown would appear on a single
+line but is wrapped here for publication):</t>
+
+<artwork>  % dig +short TXT _dmarc.example.com.
+  &quot;v=DMARC1; p=none; rua=mailto:dmarc-feedback@example.com;
+   ruf=mailto:auth-reports@example.com&quot;
+</artwork>
+<t>To publish such a record, the DNS administrator for the Domain Owner
+might create an entry like the following in the appropriate zone file
+(following the conventional zone file format):</t>
+
+<artwork>  ; DMARC record for the domain example.com
+
+  _dmarc  IN TXT ( &quot;v=DMARC1; p=none; &quot;
+                    &quot;rua=mailto:dmarc-feedback@example.com; &quot;
+                    &quot;ruf=mailto:auth-reports@example.com&quot; )
+</artwork>
+</section>
+
+<section anchor="per-message-failure-reports-directed-to-third-party">
+<name>Per-Message Failure Reports Directed to Third Party</name>
+<t>The Domain Owner from the previous example is maintaining the same
+policy but now wishes to have a third party receive and process the
+per-message failure reports.  Again, not all Receivers will honor
+this request, but those that do may implement additional checks to
+validate that the third party wishes to receive the failure reports
+for this domain.</t>
+<t>The Domain Owner needs to alter its policy record from <xref target="entire-domain-monitoring-only-per-message-reports"></xref>
+as follows:</t>
+
+<ul>
+<li>Per-message failure reports should be sent via email to the
+address &quot;auth-reports@thirdparty.example.net&quot;
+(&quot;ruf=mailto:auth-reports@thirdparty.example.net&quot;)</li>
+</ul>
+<t>The DMARC policy record might look like this when retrieved using a
+common command-line tool (the output shown would appear on a single
+line but is wrapped here for publication):</t>
+
+<artwork>  % dig +short TXT _dmarc.example.com.
+  &quot;v=DMARC1; p=none; rua=mailto:dmarc-feedback@example.com;
+   ruf=mailto:auth-reports@thirdparty.example.net&quot;
+</artwork>
+<t>To publish such a record, the DNS administrator for the Domain Owner
+might create an entry like the following in the appropriate zone file
+(following the conventional zone file format):</t>
+
+<artwork>  ; DMARC record for the domain example.com
+
+  _dmarc IN TXT ( &quot;v=DMARC1; p=none; &quot;
+                  &quot;rua=mailto:dmarc-feedback@example.com; &quot;
+                  &quot;ruf=mailto:auth-reports@thirdparty.example.net&quot; )
+</artwork>
+<t>Because the address used in the &quot;ruf&quot; tag is outside the
+Organizational Domain in which this record is published, conforming
+Receivers will implement additional checks as described in
+<xref target="verifying-external-destinations"></xref> of this document.  In order to pass these additional
+checks, the third party will need to publish an additional DNS record
+as follows:</t>
+
+<ul>
+<li>Given the DMARC record published by the Domain Owner at
+&quot;_dmarc.example.com&quot;, the DNS administrator for the third party
+will need to publish a TXT resource record at
+&quot;example.com._report._dmarc.thirdparty.example.net&quot; with the value
+&quot;v=DMARC1;&quot;.</li>
+</ul>
+<t>The resulting DNS record might look like this when retrieved using a
+common command-line tool (the output shown would appear on a single
+line but is wrapped here for publication):</t>
+
+<artwork>  % dig +short TXT example.com._report._dmarc.thirdparty.example.net
+  &quot;v=DMARC1;&quot;
+</artwork>
+<t>To publish such a record, the DNS administrator for example.net might
+create an entry like the following in the appropriate zone file
+(following the conventional zone file format):</t>
+
+<artwork>  ; zone file for thirdparty.example.net
+  ; Accept DMARC failure reports on behalf of example.com
+
+  example.com._report._dmarc   IN   TXT    &quot;v=DMARC1;&quot;
+</artwork>
+<t>Intermediaries and other third parties should refer to
+<xref target="verifying-external-destinations"></xref> for the full details of this
+mechanism.</t>
+</section>
+
+<section anchor="report-format-example">
+<name>Report Format Example</name>
+<t>This is the full content of a failure message</t>
+<figure>
+<sourcecode>
+Received: from generator.example (generator.example [192.0.2.1])
+  (TLS: TLS1.3,256bits,ECDHE_RSA_AES_256_GCM_SHA384)
+  by mail.consumer.example with ESMTPS
+  id 00000000005DC0DD.0000442E; Tue, 19 Jul 2022 07:57:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=generator.example; s=mail; t=1658210268;
+  bh=rCrh1aFDE8d/Fltt8wbcu48bLOu4OM23QXqphUZPAIM=;
+  h=From:To:Date:Subject:From;
+  b=IND9JkuwF9/5841kzxMbPeej0VYimVzNKozR2R89M8eYO2zOlCBblx507Gz0YK7mE
+   /h6pslWm0ODBVFzLlwY9CXv4Vu62QsN0RBIXHPjEXOkoM2VCD5zCd+5i5dtCFX7Mxh
+   LThb2ZJ3efklbSB9RQRwxcmRvCPV7z6lt/Ds9sucVE1RDODYHjx+iWnAUQrlos6ZQb
+   u/YOUGjf60LPpyljfPu3EpFwo80mSHyQlP/4S5KEykgPQMgCqLPPKvJwu1aAIDj+jG
+   q2ylO3fmc/ERDeDWACtR67YNabEKBWtjqCRLNxKttazViJTZ5drcLfpX0853KoougX
+   Rltp7zdoLdy4A==
+From: DMARC Filter &lt;DMARC@generator.example&gt;
+To: dmarcfail@consumer.example
+Date: Tue, 19 Jul 2022 00:57:48 -0500 (CDT)
+Subject: FW: This is the original subject
+Mime-Version: 1.0
+Content-Type: multipart/report; report-type=feedback-report;
+  boundary="=_mime_boundary_"
+Message-Id: &lt;20220719055748.4AE9D403CC@generator.example&gt;
+
+This is a MIME-formatted message.  If you see this text it means that
+your E-mail software does not support MIME-formatted messages.
+
+--=_mime_boundary_
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+This is an authentication failure report for an email message
+received from IP 192.0.2.2 on Tue, 19 Jul 2022 00:57:48 -0500.
+
+--=_mime_boundary_
+Content-Type: message/feedback-report
+Content-Transfer-Encoding: 7bit
+
+Feedback-Type: auth-failure
+Version: 1
+User-Agent: DMARC-Filter/1.2.3
+Auth-Failure: signature
+Authentication-Results: generator.example;
+  dmarc=fail header.from=consumer.example
+Original-Envelope-Id: 65E1A3F0A0
+Original-Mail-From: author=generator.example@forwarder.example
+Source-IP: 192.0.2.2
+Source-Port: 12345
+Reported-Domain: consumer.example
+
+--=_mime_boundary_
+Content-Type: text/rfc822-headers; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Authentication-Results: generator.example;
+  dkim=permerror header.d=forwarder.example header.b="EjCbN/c3";
+  dkim=temperror header.d=forwarder.example header.b="mQ8GEWPc";
+  dkim=permerror header.d=consumer.example header.b="hETrymCb";
+  dkim=neutral header.d=consumer.example header.b="C2nsAp3A";
+Received: from mail.forwarder.example (localhost [127.0.0.1])
+  by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
+  for &lt;x@generator.example&gt;; Tue, 19 Jul 2022 07:57:44 +0200
+ARC-Seal: i=1; a=rsa-sha256; d=mail.forwarder.example; s=arc-seal;
+  t=1658210264; cv=none; b=sSfVCVn/QzzyTAK1Abjx0pJdKy+oG2wSWj2y7yUn1
+  ZbcN3n/pQGkqDjlvLMGSr7cHo3uh4YV+w3U26RBg0F2PFtU3ByTHyfto6jxyOwhAor
+  JRs97J/0Dzp6GAtlixcYdYpY4HErzcjMhTIXeYvgfF/aQA7yK/ybXu1W20NecYRQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=mail.forwarder.example;
+  s=arc-seal; t=1658210264; c=relaxed/relaxed;
+  bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
+  h=DKIM-Signature:DKIM-Signature:X-Original-To:Received:X-purgate-ID:
+   X-purgate-size:X-purgate:X-purgate:X-purgate-Ad:X-purgate-type:
+   DKIM-Signature:DKIM-Signature:Author:Received:Message-ID:Date:
+   List-Id:List-Archive:List-Post:List-Help:List-Subscribe:
+   List-Unsubscribe:List-Owner:Precedence:MIME-Version:User-Agent:
+   Subject:Content-Language:To:References:From:In-Reply-To:
+   Content-Type:Content-Transfer-Encoding;
+   b=j+8tmq8gVfMqpknD/nJZJazQZ9YALEP497mp0dTt/4zUbYihxHl5eqZRTnWg8ZXG
+   cP8UhJnwfAH4EIYSJSRuzfrWLy2BDJAcrwMgsnjxsP3D1H4Y5zchdI/tdLw7gECjUt
+   hpPpRLfztihPnndPsZXrsz9F78KiFeD249eoKEKR4=
+ARC-Authentication-Results: i=1; mail.forwarder.example;
+   arc=none smtp.remote-ip=192.0.2.4; dkim=pass (512-bit key; secure)
+   header.d=consumer.example header.i=@consumer.example
+   header.a=ed25519-sha256 header.s=epsilon header.b=hETrymCb;
+   dkim=pass (1152-bit key; secure) header.d=consumer.example
+   header.i=@consumer.example header.a=rsa-sha256 header.s=delta
+   header.b=C2nsAp3A
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+  d=forwarder.example; s=dnswl-ed25519-59hs; t=1658210264;
+  x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
+  h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
+   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
+   References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+   autocrypt:cc:content-transfer-encoding:content-type:date:from:
+   in-reply-to:message-id:mime-version:openpgp:references:subject:to;
+  b=EjCbN/c3bTU4QkZH/zwTbYxBDp0k8kpmWSXh5h1M7T8J4vtRo+hvafJazT3ZRgq+7
+   +4dzEQwUhl+NOJYXXNUAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=forwarder.example; s=dnswl-rsa-wgJg; t=1658210264; x=1663210264;
+  bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
+  h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
+   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
+   References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+   autocrypt:cc:content-transfer-encoding:content-type:date:from:
+   in-reply-to:message-id:mime-version:openpgp:references:subject:to;
+  b=mQ8GEWPcVpBpeqQ88pcbXpGHBT0J/Rwi8Zd2WZTXWWneQGRCOJLRcbBJpjqnrwtqd
+   76IqawH86tihz4Z/12J1GBCdNx1gfazsoI3yaqfooRDYg0mSyZHrYhQBmodnPcqZj4
+   /25L5278sc/UNrYO9az2n7R/skbVZ0bvSo2eEiGU8fcpO8+a5SKNYskhaviAI4eGIB
+   iRMdEP7gP8dESdnZguNbY5HI32UMDpPPNqajzd/BgcqbveYpRrWCDOhcY47POV7GHM
+   i/KLHiZXtJsL3/Pr/4TL+HTjdX8EDSsy1K5/JCvJCFsJHnSvkEaJQGLn/2m03eW9r8
+   9w1bQ90aY+VCQ==
+X-Original-To: users@forwarder.example
+Received: from mail.consumer.example (mail.consumer.example [192.0.2.4])
+  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+   key-exchange ECDHE (P-256) server-signature ECDSA (P-384)
+   server-digest SHA384)
+  (Client did not present a certificate)
+  by mail.forwarder.example (Postfix) with ESMTPS id 4Ln7Qs55xmz4nP
+  for &lt;users@forwarder.example&gt;; Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
+Authentication-Results: mail.forwarder.example;
+  arc=none smtp.remote-ip=192.0.2.4
+Authentication-Results: mail.forwarder.example;
+  dkim=pass (512-bit key; secure) header.d=consumer.example
+   header.i=@consumer.example header.a=ed25519-sha256
+   header.s=epsilon header.b=hETrymCb;
+  dkim=pass (1152-bit key; secure) header.d=consumer.example
+   header.i=@consumer.example header.a=rsa-sha256
+   header.s=delta header.b=C2nsAp3A
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+  d=consumer.example; s=epsilon; t=1658210255;
+  bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
+  h=Date:Subject:To:References:From:In-Reply-To;
+  b=hETrymCbz6T1Dyo5dCG9dk8rPykKLdhJCPFeJ9TiiP/kaoN2afpUYtj+SrI+I83lp
+   p1F/FfYSGy7zz3Q3OdxBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=consumer.example; s=delta; t=1658210255;
+  bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
+  h=Date:To:References:From:In-Reply-To;
+  b=C2nsAp3AMNX33Nq7nN/StPo921xE3XGF8Ju3iAKdYB3EKhsril0N5IjWGlglJECst
+   jLNKSo7KWZZ2lkH/dVZ9Rs1GHT2uaKy1sc/xmNIC5rHdhrxammiwpTSo4PsT8disfc
+   3DVF6Q62n0EsdLFqcw1KY8A9inFqYKY2tqoo+y4zMtItqCYx3xjsj3I0IFLuX
+Author: Message Author &lt;author@consumer.example&gt;
+Received: from [192.0.2.8] (host-8-2-0-192.isp.example [192.0.2.8])
+  (AUTH: CRAM-MD5 uXDGrn@SYT0/k, TLS: TLS1.3,128bits,
+  ECDHE_RSA_AES_128_GCM_SHA256)
+  by mail.consumer.example with ESMTPSA
+  id 00000000005DC076.00004417; Tue, 19 Jul 2022 07:57:35 +0200
+Message-ID: &lt;2431dc66-b010-c9cc-4f2b-a1f889f8bdb4@consumer.example&gt;
+Date: Tue, 19 Jul 2022 07:57:33 +0200
+List-Id: &lt;users.forwarder.example&gt;
+List-Post: &lt;mailto:users@forwarder.example&gt;
+List-Help: &lt;mailto:users+help@forwarder.example&gt;
+List-Subscribe: &lt;mailto:users+subscribe@forwarder.example&gt;
+List-Unsubscribe: &lt;mailto:users+unsubscribe@forwarder.example&gt;
+List-Owner: &lt;mailto:users+owner@forwarder.example&gt;
+Precedence: list
+MIME-Version: 1.0
+Subject: This is the original subject
+Content-Language: en-US
+To: users@forwarder.example
+References: &lt;1807ec4e26e0c2224636c6f36ecfb15c@example.com&gt;
+ &lt;d7595c26-df0a-8629-042f-433e6e3896bd@example.org&gt;
+ &lt;c1f992551830e23b0b4c8b549d67d391@example.com&gt;
+ &lt;20220716085000.1176bafc.cel@example.com&gt;
+ &lt;f701f18c-5c7a-c79f-86e1-cba4f27d5434@consumer.example&gt;
+ &lt;20220716105332.3030bbe2.cel@example.com&gt;
+ &lt;0a8d2e3b2708d526b96fb81b0f6de9c2@example.com&gt;
+ &lt;bef070d8-b1fa-5f91-7e64-fc0839c2ca80@consumer.example&gt;
+ &lt;20220718102753.0f6d9dde.cel@example.com&gt;
+Authentication-Results: consumer.example; auth=pass (details omitted)
+From: Message Author &lt;author@consumer.example&gt;
+In-Reply-To: &lt;20220718102753.0f6d9dde.cel@example.com&gt;
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+--=_mime_boundary_--
+</sourcecode>
+</figure>
+</section>
+</section>
+
+<section anchor="change-log">
+<name>Change Log</name>
+<t>[RFC Editor: Please remove this section prior to publication.]</t>
+
+<dl newline="false" indent="4">
+	<dt>00 to 01</dt>
+	<dd>
+		<ul>
+			<li>Replace references to RFC7489 with references to I-D.ietf-dmarc-dmarcbis.</li>
+			<li>Replace the 2nd paragraph in the Introduction with the text proposed by Ned
+				for Ticket #55, which enjoys some consensus:<br/>
+				https://mailarchive.ietf.org/arch/msg/dmarc/HptVyJ9SgrfxWRbeGwORagPrhCw</li>
+			<li>Strike a spurious sentence about criticality of feedback, which was
+				meant for feedback in general, not failure reports.  In fact, failure
+				reports are not critical to establishing and maintaining accurate authentication
+				deployments.  Still attributable to Ticket #55.</li>
+			<li>Remove the content of section "Verifying External Destinations"
+				and refer to I-D.ietf-dmarc-aggregate-reporting.</li>
+			<li>Remove the content of section "Security Considerations"
+				and refer to I-D.ietf-dmarc-dmarcbis.</li>
+			<li>Slightly tweak the wording of the example in Appendix A.1
+				so that it makes sense standing alone.</li>
+			<li>Remove the sentence containing "must include any URI(s)",
+				as the issue arose <eref target="https://mailarchive.ietf.org/arch/msg/dmarc/mFk0qiTCy8tzghRvcxus01W_Blw"/>.</li>
+			<li>Add paragraph in Security Considerations, noting that
+				note that Organizational Domains are only an approximation...</li>
+			<li>Add a Transport section, mentioning DMARC conformance and
+				failure report mail loops (Ticket #28).</li>
+		</ul>
+	</dd>
+	<dt>01 to 02</dt>
+	<dd>
+		<ul>
+			<li>Add a sentence to make clear that counting failures is not the aim.</li>
+		</ul>
+	</dd>
+	<dt>02 to 03</dt>
+	<dd>
+		<ul>
+			<li>Updated references.</li>
+		</ul>
+	</dd>
+	<dt>03 to 04</dt>
+	<dd>
+		<ul>
+			<li>Add an example report.</li>
+			<li>Remove the old Acknowledgements section.</li>
+		</ul>
+	</dd>
+
+</dl>
+</section>
+
+</back>
+
+</rfc>
