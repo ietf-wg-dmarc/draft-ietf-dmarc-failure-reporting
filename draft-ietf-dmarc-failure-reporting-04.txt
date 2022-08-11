@@ -527,7 +527,7 @@ Internet-Draft           DMARC Failure Reporting             August 2022
 
 A.3.  Report Format Example
 
-   This is the full content of a failure message
+   This is the full content of a failure message, including the header.
 
    Received: from generator.example (generator.example [192.0.2.1])
      (TLS: TLS1.3,256bits,ECDHE_RSA_AES_256_GCM_SHA384)

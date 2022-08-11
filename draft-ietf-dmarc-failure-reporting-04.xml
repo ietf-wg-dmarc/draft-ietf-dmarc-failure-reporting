@@ -385,7 +385,7 @@ mechanism.</t>
 
 <section anchor="report-format-example">
 <name>Report Format Example</name>
-<t>This is the full content of a failure message</t>
+<t>This is the full content of a failure message, including the header.</t>
 <figure>
 <sourcecode>
 Received: from generator.example (generator.example [192.0.2.1])
