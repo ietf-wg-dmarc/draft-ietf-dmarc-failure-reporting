@@ -85,8 +85,8 @@ Table of Contents
      A.1.  Entire Domain, Monitoring Only, Per-Message Reports . . .   8
      A.2.  Per-Message Failure Reports Directed to Third Party . . .   9
      A.3.  Report Format Example . . . . . . . . . . . . . . . . . .  10
-   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  14
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
+   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  13
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
 
@@ -598,38 +598,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Received: from mail.forwarder.example (localhost [127.0.0.1])
      by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
      for <x@generator.example>; Tue, 19 Jul 2022 07:57:44 +0200
-   ARC-Seal: i=1; a=rsa-sha256; d=mail.forwarder.example; s=arc-seal;
-     t=1658210264; cv=none; b=sSfVCVn/QzzyTAK1Abjx0pJdKy+oG2wSWj2y7yUn1
-     ZbcN3n/pQGkqDjlvLMGSr7cHo3uh4YV+w3U26RBg0F2PFtU3ByTHyfto6jxyOwhAor
-     JRs97J/0Dzp6GAtlixcYdYpY4HErzcjMhTIXeYvgfF/aQA7yK/ybXu1W20NecYRQ=
-   ARC-Message-Signature: i=1; a=rsa-sha256; d=mail.forwarder.example;
-     s=arc-seal; t=1658210264; c=relaxed/relaxed;
-     bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
-     h=DKIM-Signature:DKIM-Signature:X-Original-To:Received:X-purgate-ID:
-      X-purgate-size:X-purgate:X-purgate:X-purgate-Ad:X-purgate-type:
-      DKIM-Signature:DKIM-Signature:Author:Received:Message-ID:Date:
-      List-Id:List-Archive:List-Post:List-Help:List-Subscribe:
-      List-Unsubscribe:List-Owner:Precedence:MIME-Version:User-Agent:
-
-
-
-Jones & Vesely          Expires 12 February 2023               [Page 11]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
-      Subject:Content-Language:To:References:From:In-Reply-To:
-      Content-Type:Content-Transfer-Encoding;
-      b=j+8tmq8gVfMqpknD/nJZJazQZ9YALEP497mp0dTt/4zUbYihxHl5eqZRTnWg8ZXG
-      cP8UhJnwfAH4EIYSJSRuzfrWLy2BDJAcrwMgsnjxsP3D1H4Y5zchdI/tdLw7gECjUt
-      hpPpRLfztihPnndPsZXrsz9F78KiFeD249eoKEKR4=
-   ARC-Authentication-Results: i=1; mail.forwarder.example;
-      arc=none smtp.remote-ip=192.0.2.4; dkim=pass (512-bit key; secure)
-      header.d=consumer.example header.i=@consumer.example
-      header.a=ed25519-sha256 header.s=epsilon header.b=hETrymCb;
-      dkim=pass (1152-bit key; secure) header.d=consumer.example
-      header.i=@consumer.example header.a=rsa-sha256 header.s=delta
-      header.b=C2nsAp3A
    DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
      d=forwarder.example; s=dnswl-ed25519-59hs; t=1658210264;
      x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
@@ -642,6 +610,14 @@ Internet-Draft           DMARC Failure Reporting             August 2022
       +4dzEQwUhl+NOJYXXNUAA==
    DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
      d=forwarder.example; s=dnswl-rsa-wgJg; t=1658210264; x=1663210264;
+
+
+
+Jones & Vesely          Expires 12 February 2023               [Page 11]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
      bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
      h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
       List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
@@ -666,14 +642,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
      arc=none smtp.remote-ip=192.0.2.4
    Authentication-Results: mail.forwarder.example;
      dkim=pass (512-bit key; secure) header.d=consumer.example
-
-
-
-Jones & Vesely          Expires 12 February 2023               [Page 12]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
       header.i=@consumer.example header.a=ed25519-sha256
       header.s=epsilon header.b=hETrymCb;
      dkim=pass (1152-bit key; secure) header.d=consumer.example
@@ -698,6 +666,14 @@ Internet-Draft           DMARC Failure Reporting             August 2022
      ECDHE_RSA_AES_128_GCM_SHA256)
      by mail.consumer.example with ESMTPSA
      id 00000000005DC076.00004417; Tue, 19 Jul 2022 07:57:35 +0200
+
+
+
+Jones & Vesely          Expires 12 February 2023               [Page 12]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
    Message-ID: <2431dc66-b010-c9cc-4f2b-a1f889f8bdb4@consumer.example>
    Date: Tue, 19 Jul 2022 07:57:33 +0200
    List-Id: <users.forwarder.example>
@@ -711,25 +687,8 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Subject: This is the original subject
    Content-Language: en-US
    To: users@forwarder.example
-   References: <1807ec4e26e0c2224636c6f36ecfb15c@example.com>
-    <d7595c26-df0a-8629-042f-433e6e3896bd@example.org>
-    <c1f992551830e23b0b4c8b549d67d391@example.com>
-    <20220716085000.1176bafc.cel@example.com>
-    <f701f18c-5c7a-c79f-86e1-cba4f27d5434@consumer.example>
-    <20220716105332.3030bbe2.cel@example.com>
-    <0a8d2e3b2708d526b96fb81b0f6de9c2@example.com>
-    <bef070d8-b1fa-5f91-7e64-fc0839c2ca80@consumer.example>
-    <20220718102753.0f6d9dde.cel@example.com>
    Authentication-Results: consumer.example; auth=pass (details omitted)
    From: Message Author <author@consumer.example>
-
-
-
-Jones & Vesely          Expires 12 February 2023               [Page 13]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    In-Reply-To: <20220718102753.0f6d9dde.cel@example.com>
    Content-Type: text/plain; charset=UTF-8; format=flowed
    Content-Transfer-Encoding: 8bit
@@ -763,6 +722,14 @@ Appendix B.  Change Log
        *  Remove the content of section "Security Considerations"
           and refer to I-D.ietf-dmarc-dmarcbis.
 
+
+
+
+Jones & Vesely          Expires 12 February 2023               [Page 13]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
        *  Slightly tweak the wording of the example in
           Appendix A.1 so that it makes sense standing alone.
 
@@ -778,14 +745,6 @@ Appendix B.  Change Log
           and failure report mail loops (Ticket #28).
 
    01 to 02  *  Add a sentence to make clear that counting failures is
-
-
-
-Jones & Vesely          Expires 12 February 2023               [Page 14]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
           not the aim.
 
    02 to 03  *  Updated references.
@@ -822,19 +781,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jones & Vesely          Expires 12 February 2023               [Page 15]
+Jones & Vesely          Expires 12 February 2023               [Page 14]

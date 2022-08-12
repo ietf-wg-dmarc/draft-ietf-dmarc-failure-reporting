@@ -450,30 +450,6 @@ Authentication-Results: generator.example;
 Received: from mail.forwarder.example (localhost [127.0.0.1])
   by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
   for &lt;x@generator.example&gt;; Tue, 19 Jul 2022 07:57:44 +0200
-ARC-Seal: i=1; a=rsa-sha256; d=mail.forwarder.example; s=arc-seal;
-  t=1658210264; cv=none; b=sSfVCVn/QzzyTAK1Abjx0pJdKy+oG2wSWj2y7yUn1
-  ZbcN3n/pQGkqDjlvLMGSr7cHo3uh4YV+w3U26RBg0F2PFtU3ByTHyfto6jxyOwhAor
-  JRs97J/0Dzp6GAtlixcYdYpY4HErzcjMhTIXeYvgfF/aQA7yK/ybXu1W20NecYRQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=mail.forwarder.example;
-  s=arc-seal; t=1658210264; c=relaxed/relaxed;
-  bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
-  h=DKIM-Signature:DKIM-Signature:X-Original-To:Received:X-purgate-ID:
-   X-purgate-size:X-purgate:X-purgate:X-purgate-Ad:X-purgate-type:
-   DKIM-Signature:DKIM-Signature:Author:Received:Message-ID:Date:
-   List-Id:List-Archive:List-Post:List-Help:List-Subscribe:
-   List-Unsubscribe:List-Owner:Precedence:MIME-Version:User-Agent:
-   Subject:Content-Language:To:References:From:In-Reply-To:
-   Content-Type:Content-Transfer-Encoding;
-   b=j+8tmq8gVfMqpknD/nJZJazQZ9YALEP497mp0dTt/4zUbYihxHl5eqZRTnWg8ZXG
-   cP8UhJnwfAH4EIYSJSRuzfrWLy2BDJAcrwMgsnjxsP3D1H4Y5zchdI/tdLw7gECjUt
-   hpPpRLfztihPnndPsZXrsz9F78KiFeD249eoKEKR4=
-ARC-Authentication-Results: i=1; mail.forwarder.example;
-   arc=none smtp.remote-ip=192.0.2.4; dkim=pass (512-bit key; secure)
-   header.d=consumer.example header.i=@consumer.example
-   header.a=ed25519-sha256 header.s=epsilon header.b=hETrymCb;
-   dkim=pass (1152-bit key; secure) header.d=consumer.example
-   header.i=@consumer.example header.a=rsa-sha256 header.s=delta
-   header.b=C2nsAp3A
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
   d=forwarder.example; s=dnswl-ed25519-59hs; t=1658210264;
   x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
@@ -547,15 +523,6 @@ MIME-Version: 1.0
 Subject: This is the original subject
 Content-Language: en-US
 To: users@forwarder.example
-References: &lt;1807ec4e26e0c2224636c6f36ecfb15c@example.com&gt;
- &lt;d7595c26-df0a-8629-042f-433e6e3896bd@example.org&gt;
- &lt;c1f992551830e23b0b4c8b549d67d391@example.com&gt;
- &lt;20220716085000.1176bafc.cel@example.com&gt;
- &lt;f701f18c-5c7a-c79f-86e1-cba4f27d5434@consumer.example&gt;
- &lt;20220716105332.3030bbe2.cel@example.com&gt;
- &lt;0a8d2e3b2708d526b96fb81b0f6de9c2@example.com&gt;
- &lt;bef070d8-b1fa-5f91-7e64-fc0839c2ca80@consumer.example&gt;
- &lt;20220718102753.0f6d9dde.cel@example.com&gt;
 Authentication-Results: consumer.example; auth=pass (details omitted)
 From: Message Author &lt;author@consumer.example&gt;
 In-Reply-To: &lt;20220718102753.0f6d9dde.cel@example.com&gt;
