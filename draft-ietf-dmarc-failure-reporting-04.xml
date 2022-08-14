@@ -439,7 +439,7 @@ Source-Port: 12345
 Reported-Domain: consumer.example
 
 --=_mime_boundary_
-Content-Type: text/rfc822-headers; charset=utf-8
+Content-Type: message/rfc822; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
 Authentication-Results: generator.example;
@@ -451,7 +451,7 @@ Received: from mail.forwarder.example (localhost [127.0.0.1])
   by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
   for &lt;x@generator.example&gt;; Tue, 19 Jul 2022 07:57:44 +0200
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-  d=forwarder.example; s=dnswl-ed25519-59hs; t=1658210264;
+  d=forwarder.example; s=ed25519-59hs; t=1658210264;
   x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
   h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
    List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
@@ -461,7 +461,7 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
   b=EjCbN/c3bTU4QkZH/zwTbYxBDp0k8kpmWSXh5h1M7T8J4vtRo+hvafJazT3ZRgq+7
    +4dzEQwUhl+NOJYXXNUAA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=forwarder.example; s=dnswl-rsa-wgJg; t=1658210264; x=1663210264;
+  d=forwarder.example; s=rsa-wgJg; t=1658210264; x=1663210264;
   bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
   h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
    List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
@@ -529,9 +529,17 @@ In-Reply-To: &lt;20220718102753.0f6d9dde.cel@example.com&gt;
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+[ Message body was here ]
 --=_mime_boundary_--
 </sourcecode>
 </figure>
+
+<t>
+If the body of the message is not included, the last MIME entity
+would have Content-Type: text/rfc822-headers instead of message/rfc822.
+</t>
+
+
 </section>
 </section>
 
