@@ -9,7 +9,7 @@
 <author role="editor" initials="A." surname="Vesely" fullname="Alessandro Vesely"><organization>Tana</organization><address><postal><street></street>
 </postal><email>vesely@tana.it</email>
 </address></author>
-<date year="2022" month="August" day="11"></date>
+<date year="2022" month="August" day="16"></date>
 <area>Application</area>
 <workgroup>DMARC Working Group</workgroup>
 
@@ -84,30 +84,39 @@ and &quot;fo&quot; tags as defined in
 <xref target="I-D.ietf-dmarc-dmarcbis" sectionFormat="of" section="6.3"/>.</t>
 
 <t>Where multiple URIs are selected to receive failure reports, the
-report generator MUST make an attempt to deliver to each of them.</t>
+report generator MUST make an attempt to deliver to each of them.
+External destinations MUST be verified, see <xref target="verifying-external-destinations"/>.
+Report generators SHOULD NOT consider ruf= tags in records having a psd=y
+tag, unless there are specific agreements between the interested parties.
+</t>
 
 <t>An obvious consideration is the denial-of-service attack that can be
 perpetrated by an attacker who sends numerous messages purporting to
 be from the intended victim Domain Owner but that fail both SPF and
 DKIM; this would cause participating Mail Receivers to send failure
 reports to the Domain Owner or its delegate in potentially huge
-volumes.  Accordingly, participating Mail Receivers are encouraged to
+volumes.
+Accordingly, participating Mail Receivers are encouraged to
 aggregate these reports as much as is practical, using the Incidents
 field of the Abuse Reporting Format (<xref target="RFC5965"></xref>).
 Indeed, the aim is not to count each and every failure, but rather to
 report different failure paths.
-Various aggregation techniques are possible, including the following:</t>
+Various pruning techniques are possible, including the following:</t>
 
 <ul>
+<!-- that looks like the opposite of making an attempt to deliver to
+each recipient:
 <li><t>only send a report to the first recipient of multi-recipient
 messages;</t>
-</li>
+</li> -->
 <li><t>store reports for a period of time before sending them, allowing
 detection, collection, and reporting of like incidents;</t>
 </li>
 <li><t>apply rate limiting, such as a maximum number of reports per
-minute that will be generated (and the remainder discarded).</t>
+minute that will be generated (and the remainder discarded);</t>
 </li>
+<li><t>only consider messages explicitly marked for debugging, where
+such a marking convention is established.</t></li>
 </ul>
 
 <section anchor="reporting-format-update"><name>Reporting Format Update</name>
@@ -123,17 +132,22 @@ with the indicated normative requirement levels:</t>
 </li>
 <li><t>Delivery-Result (OPTIONAL)</t>
 </li>
-<li><t>DKIM-Domain, DKIM-Identity, DKIM-Selector (REQUIRED if the
-message was signed by DKIM)</t>
+<li><t>DKIM-Domain, DKIM-Identity, DKIM-Selector (REQUIRED for DKIM
+failures of an aligned identifier)</t>
 </li>
 <li><t>DKIM-Canonicalized-Header, DKIM-Canonicalized-Body (OPTIONAL
-if the message was signed by DKIM)</t>
+if reporting a DKIM failure)</t>
 </li>
-<li><t>SPF-DNS (REQUIRED)</t>
+<li><t>SPF-DNS (REQUIRED for SPF failure of an aligned identifier)</t>
+<t>The syntax of this field is changed, dropping the DNS RRTYPE used:</t>
+<figure><sourcecode>
+     spf-dns = "SPF-DNS:" [CFWS] domain [CFWS] ":"
+               [CFWS] quoted-string [CFWS] CRLF
+</sourcecode></figure>
 </li>
 </ul></li>
 <li><t>The &quot;Identity-Alignment&quot; field is defined to contain a comma-
-separated list of authentication mechanism names that produced an
+separated list of authentication mechanism names that failed to authenticate an
 aligned identity, or the keyword &quot;none&quot; if none did.  ABNF:</t>
 </li>
 </ol>
@@ -158,9 +172,14 @@ underlying authentication methods.</li>
 </section>
 
 <section anchor="verifying-external-destinations"><name>Verifying External Destinations</name>
-<t>The procedure described for aggragate reports
-<xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="2.1"/>
-applies to failure reports as well.</t>
+
+<t>
+If the target domain of a mailto address of a ruf= tag is not the same
+as the DMARC record domain where the tag was found, the report generator
+MUST verify that the target domain acknowledges sending those reports;
+the procedure is described in
+<xref target="I-D.ietf-dmarc-aggregate-reporting" sectionFormat="of" section="3"/>.
+</t>
 </section>
 
 <section anchor="transport"><name>Transport</name>
@@ -182,6 +201,115 @@ are stopped.
 </section>
 
 </section>
+
+<section anchor="iana-considerations"><name>IANA Considerations</name>
+<section><name>Feedback Report Header Fields Registry Update</name>
+
+   <t>The following entry of the "Feedback Report Header Fields"
+   registry has been modified to refer to this RFC:</t>
+
+   <dl>
+   <dt>Field Name:</dt>  <dd>Identity-Alignment</dd>
+
+   <dt>Description:</dt>  <dd>indicates whether the message about which a report is
+      being generated had any identifiers in alignment as defined in
+      <xref target="I-D.ietf-dmarc-dmarcbis"/></dd>
+
+   <dt>Multiple Appearances:</dt>  <dd>No</dd>
+
+   <dt>Related "Feedback-Type":</dt>  <dd>auth-failure</dd>
+
+   <dt>Reference:</dt>  <dd>[[this rfc]]</dd>
+
+   <dt>Status:</dt>  <dd>current</dd>
+   </dl>
+
+</section>
+
+<section><name>Authentication Failure Types</name>
+   <t>IANA has created the "Authentication Failure Types" registry.  This
+   registry contains defined email authentication failure types used in the
+   "Auth-Failure:" field of message/feedback-report.</t>
+   <t>New registrations and updates MUST contain the following information:</t>
+   <ol>
+   <li>Name</li>
+   <li>Description</li>
+   <li>Reference</li>
+   <li>Status</li>
+   </ol>
+
+   <t>The initial entries of this registry are set as follows:</t>
+
+   <table align="center">
+     <thead>
+       <tr>
+         <th align="left">Name</th>
+         <th align="left">Description</th>
+         <th align="left">Reference</th>
+         <th align="left">Status</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+          <td align="left">adsp</td>
+          <td align="left">The message did not conform to the author domain's published
+           <xref target="RFC5617"/>    
+      signing practices.  The DKIM-ADSP-DNS field MUST be
+      included in the report.</td>
+         <td align="left"><xref target="RFC6591"/></td>
+         <td align="left">historic</td>
+       </tr>
+       <tr>
+          <td align="left">bodyhash</td>
+          <td align="left">The body hash in the signature and the body hash computed
+      by the verifier did not match.  The DKIM-Canonicalized-Body field
+      SHOULD be included in the report
+      (see <xref target="RFC6591" sectionFormat="of" section="3.2.4"/>).</td>
+         <td align="left"><xref target="RFC6591"/></td>
+         <td align="left">current</td>
+       </tr>
+       <tr>
+          <td align="left">revoked</td>
+          <td align="left">The DKIM key referenced by the signature on the message has
+      been revoked.  The DKIM-Domain and DKIM-Selector fields MUST be
+      included in the report.</td>
+         <td align="left"><xref target="RFC6591"/></td>
+         <td align="left">current</td>
+       </tr>
+       <tr>
+          <td align="left">signature</td>
+          <td align="left">The DKIM signature on the message did not successfully
+      verify against the header hash and public key.  The DKIM-Domain
+      and DKIM-Selector fields MUST be included in the report, and the
+      DKIM-Canonicalized-Header field SHOULD be included in the report
+      (see <xref target="RFC6591" sectionFormat="of" section="3.2.4"/>).</td>
+         <td align="left"><xref target="RFC6591"/></td>
+         <td align="left">current</td>
+       </tr>
+       <tr>
+          <td align="left">spf</td>
+          <td align="left">The evaluation of the author domain's SPF record produced a
+      "none", "fail", "softfail", "temperror", or "permerror" result.
+      ("none" is not strictly a failure per <xref target="RFC7208"/>, but a service that
+      demands successful SPF evaluations of clients could treat it like
+      a failure.)</td>
+         <td align="left"><xref target="RFC6591"/></td>
+         <td align="left">current</td>
+       </tr>
+       <tr>
+          <td align="left">dmark</td>
+          <td align="left">Some or all of
+the authentication mechanisms failed to produce aligned
+identifiers.</td>
+         <td align="left">[[this rfc]]</td>
+         <td align="left">current</td>
+       </tr>
+     </tbody>
+   </table>
+
+</section>
+</section>
+
 
 <section anchor="privacy-considerations"><name>Privacy Considerations</name>
 <t>This section discusses issues specific to private data that
@@ -264,7 +392,9 @@ in <xref target="data-exposure-considerations"/> all the more relevant.</t>
 <references><name>Informative References</name>
 <!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2142.xml"/ -->
 <!-- xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml"/ -->
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5617.xml"/>
 <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5965.xml"/>
+<xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7208.xml"/>
 <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 </references>
 
@@ -429,9 +559,13 @@ Content-Transfer-Encoding: 7bit
 Feedback-Type: auth-failure
 Version: 1
 User-Agent: DMARC-Filter/1.2.3
-Auth-Failure: signature
+Auth-Failure: dmarc
 Authentication-Results: generator.example;
   dmarc=fail header.from=consumer.example
+Identity-Alignment: dkim
+DKIM-Domain: consumer.example
+DKIM-Identity: @consumer.example
+DKIM-Selector: epsilon
 Original-Envelope-Id: 65E1A3F0A0
 Original-Mail-From: author=generator.example@forwarder.example
 Source-IP: 192.0.2.2
@@ -447,6 +581,10 @@ Authentication-Results: generator.example;
   dkim=temperror header.d=forwarder.example header.b="mQ8GEWPc";
   dkim=permerror header.d=consumer.example header.b="hETrymCb";
   dkim=neutral header.d=consumer.example header.b="C2nsAp3A";
+Received: from mail.forwarder.example
+  (mail.forwarder.example [IPv6:2001:db8::23ac])
+  by mail.generator.example (Postfix) with ESMTP id 5E8B0C159826
+  for &lt;x@generator.example&gt;; Sun, 14 Aug 2022 07:58:29 -0700 (PDT)
 Received: from mail.forwarder.example (localhost [127.0.0.1])
   by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
   for &lt;x@generator.example&gt;; Tue, 19 Jul 2022 07:57:44 +0200
@@ -590,6 +728,7 @@ would have Content-Type: text/rfc822-headers instead of message/rfc822.
 		<ul>
 			<li>Add an example report.</li>
 			<li>Remove the old Acknowledgements section.</li>
+			<li>Add a IANA Consideration section</li>
 		</ul>
 	</dd>
 
