@@ -5,8 +5,9 @@
 DMARC Working Group                                     S. M. Jones, Ed.
 Internet-Draft                                                 DMARC.org
 Obsoletes: 7489 (if approved)                             A. Vesely, Ed.
-Intended status: Standards Track                                    Tana
-Expires: 18 February 2023                                 17 August 2022
+Updates: 6591 (if approved)                                         Tana
+Intended status: Standards Track                          17 August 2022
+Expires: 18 February 2023
 
 
 Domain-based Message Authentication, Reporting, and Conformance (DMARC)
@@ -44,12 +45,11 @@ Copyright Notice
    Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
-
-
-
-
-
-
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
 
 
 
@@ -58,11 +58,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 1]
 Internet-Draft           DMARC Failure Reporting             August 2022
 
 
-   This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents (https://trustee.ietf.org/
-   license-info) in effect on the date of publication of this document.
-   Please review these documents carefully, as they describe your rights
-   and restrictions with respect to this document.  Code Components
    extracted from this document must include Simplified BSD License text
    as described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Simplified BSD License.
@@ -76,12 +71,12 @@ Table of Contents
      3.2.  Verifying External Destinations . . . . . . . . . . . . .   5
      3.3.  Transport . . . . . . . . . . . . . . . . . . . . . . . .   5
    4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Feedback Report Header Fields Registry Update . . . . . .   6
+     4.1.  Feedback Report Header Fields Registry Update . . . . . .   5
      4.2.  Authentication Failure Types  . . . . . . . . . . . . . .   6
    5.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .   7
      5.1.  Data Exposure Considerations  . . . . . . . . . . . . . .   7
      5.2.  Report Recipients . . . . . . . . . . . . . . . . . . . .   8
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
    7.  Normative References  . . . . . . . . . . . . . . . . . . . .   9
    8.  Informative References  . . . . . . . . . . . . . . . . . . .   9
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  10
@@ -106,6 +101,11 @@ Table of Contents
    reason.  They are meant to aid in cases where a domain owner is
    unable to detect why failures reported in aggregate form did occur.
    It is important to note these reports can contain either the header
+   or the entire content of a failed message, which in turn may contain
+   personally identifiable information, which should be considered when
+   deciding whether to generate such reports.
+
+
 
 
 
@@ -113,10 +113,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 2]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-   or the entire content of a failed message, which in turn may contain
-   personally identifiable information, which should be considered when
-   deciding whether to generate such reports.
 
 2.  Terminology and Definitions
 
@@ -162,6 +158,10 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Where multiple URIs are selected to receive failure reports, the
    report generator MUST make an attempt to deliver to each of them.
    External destinations MUST be verified, see Section 3.2.  Report
+   generators SHOULD NOT consider ruf= tags in records having a psd=y
+   tag, unless there are specific agreements between the interested
+   parties.
+
 
 
 
@@ -169,10 +169,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 3]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-   generators SHOULD NOT consider ruf= tags in records having a psd=y
-   tag, unless there are specific agreements between the interested
-   parties.
 
    An obvious consideration is the denial-of-service attack that can be
    perpetrated by an attacker who sends numerous messages purporting to
@@ -215,6 +211,10 @@ Internet-Draft           DMARC Failure Reporting             August 2022
 
        *  SPF-DNS (REQUIRED for SPF failure of an aligned identifier)
 
+   2.  The "Identity-Alignment" field is defined to contain a comma-
+       separated list of authentication mechanism names that failed to
+       authenticate an aligned identity, or the keyword "none" if none
+       did.  ABNF:
 
 
 
@@ -225,11 +225,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 4]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-   2.  The "Identity-Alignment" field is defined to contain a comma-
-       separated list of authentication mechanism names that failed to
-       authenticate an aligned identity, or the keyword "none" if none
-       did.  ABNF:
 
      id-align     = "Identity-Alignment:" [CFWS]
                     ( "none" /
@@ -271,6 +266,11 @@ Internet-Draft           DMARC Failure Reporting             August 2022
 
 4.  IANA Considerations
 
+4.1.  Feedback Report Header Fields Registry Update
+
+   Entry Identity-Alignment in registry "Feedback Report Header Fields"
+   is changed to refer to this document.
+
 
 
 
@@ -281,11 +281,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 5]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-4.1.  Feedback Report Header Fields Registry Update
-
-   Entry Identity-Alignment in registry "Feedback Report Header Fields"
-   is changed to refer to this document.
 
 4.2.  Authentication Failure Types
 
@@ -330,6 +325,11 @@ Internet-Draft           DMARC Failure Reporting             August 2022
     |           | identifiers.                 |           |          |
     +-----------+------------------------------+-----------+----------+
     | revoked   | The DKIM key referenced by   | [RFC6591] | current  |
+    |           | the signature on the message |           |          |
+    |           | has been revoked.  The DKIM- |           |          |
+    |           | Domain and DKIM-Selector     |           |          |
+    |           | fields MUST be included in   |           |          |
+    |           | the report.                  |           |          |
 
 
 
@@ -338,11 +338,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 6]
 Internet-Draft           DMARC Failure Reporting             August 2022
 
 
-    |           | the signature on the message |           |          |
-    |           | has been revoked.  The DKIM- |           |          |
-    |           | Domain and DKIM-Selector     |           |          |
-    |           | fields MUST be included in   |           |          |
-    |           | the report.                  |           |          |
     +-----------+------------------------------+-----------+----------+
     | signature | The DKIM signature on the    | [RFC6591] | current  |
     |           | message did not successfully |           |          |
@@ -386,6 +381,11 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    infrastructure, or inspect messages for insight into abusive
    practices.
 
+   These reports may expose sender and recipient identifiers (e.g.,
+   RFC5322.From addresses), and although the [RFC6591] format used for
+   failed-message reporting supports redaction, failed-message reporting
+   is capable of exposing the entire message to the report recipient.
+
 
 
 
@@ -393,11 +393,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 7]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-   These reports may expose sender and recipient identifiers (e.g.,
-   RFC5322.From addresses), and although the [RFC6591] format used for
-   failed-message reporting supports redaction, failed-message reporting
-   is capable of exposing the entire message to the report recipient.
 
    Domain Owners requesting reports will receive information about mail
    claiming to be from them, which includes mail that was not, in fact,
@@ -439,6 +434,11 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Receivers need to consider that before sending reports to a third
    party.
 
+6.  Security Considerations
+
+   Considerations discussed in Section 11 of [I-D.ietf-dmarc-dmarcbis]
+   apply.
+
 
 
 
@@ -449,11 +449,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 8]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-6.  Security Considerations
-
-   Considerations discussed in Section 11 of [I-D.ietf-dmarc-dmarcbis]
-   apply.
 
    In addition, note that Organizational Domains are only an
    approximation to actual domain ownership.  Therefore, reports may be
@@ -497,6 +492,11 @@ Internet-Draft           DMARC Failure Reporting             August 2022
               DOI 10.17487/RFC5965, August 2010,
               <https://www.rfc-editor.org/info/rfc5965>.
 
+   [RFC7208]  Kitterman, S., "Sender Policy Framework (SPF) for
+              Authorizing Use of Domains in Email, Version 1", RFC 7208,
+              DOI 10.17487/RFC7208, April 2014,
+              <https://www.rfc-editor.org/info/rfc7208>.
+
 
 
 
@@ -505,11 +505,6 @@ Jones & Vesely          Expires 18 February 2023                [Page 9]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-   [RFC7208]  Kitterman, S., "Sender Policy Framework (SPF) for
-              Authorizing Use of Domains in Email, Version 1", RFC 7208,
-              DOI 10.17487/RFC7208, April 2014,
-              <https://www.rfc-editor.org/info/rfc7208>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -554,6 +549,11 @@ A.1.  Entire Domain, Monitoring Only, Per-Message Reports
    To publish such a record, the DNS administrator for the Domain Owner
    might create an entry like the following in the appropriate zone file
    (following the conventional zone file format):
+
+
+
+
+
 
 
 
