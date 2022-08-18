@@ -6,7 +6,7 @@ DMARC Working Group                                     S. M. Jones, Ed.
 Internet-Draft                                                 DMARC.org
 Obsoletes: 7489 (if approved)                             A. Vesely, Ed.
 Intended status: Standards Track                                    Tana
-Expires: 17 February 2023                                 16 August 2022
+Expires: 18 February 2023                                 17 August 2022
 
 
 Domain-based Message Authentication, Reporting, and Conformance (DMARC)
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 February 2023.
+   This Internet-Draft will expire on 18 February 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Jones & Vesely          Expires 17 February 2023                [Page 1]
+Jones & Vesely          Expires 18 February 2023                [Page 1]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
@@ -75,21 +75,21 @@ Table of Contents
      3.1.  Reporting Format Update . . . . . . . . . . . . . . . . .   4
      3.2.  Verifying External Destinations . . . . . . . . . . . . .   5
      3.3.  Transport . . . . . . . . . . . . . . . . . . . . . . . .   5
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
      4.1.  Feedback Report Header Fields Registry Update . . . . . .   6
      4.2.  Authentication Failure Types  . . . . . . . . . . . . . .   6
-   5.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .   8
-     5.1.  Data Exposure Considerations  . . . . . . . . . . . . . .   8
-     5.2.  Report Recipients . . . . . . . . . . . . . . . . . . . .   9
+   5.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .   7
+     5.1.  Data Exposure Considerations  . . . . . . . . . . . . . .   7
+     5.2.  Report Recipients . . . . . . . . . . . . . . . . . . . .   8
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
    7.  Normative References  . . . . . . . . . . . . . . . . . . . .   9
-   8.  Informative References  . . . . . . . . . . . . . . . . . . .  10
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .   9
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  10
      A.1.  Entire Domain, Monitoring Only, Per-Message Reports . . .  10
      A.2.  Per-Message Failure Reports Directed to Third Party . . .  11
      A.3.  Report Format Example . . . . . . . . . . . . . . . . . .  12
-   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  16
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  17
+   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  15
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 1.  Introduction
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jones & Vesely          Expires 17 February 2023                [Page 2]
+Jones & Vesely          Expires 18 February 2023                [Page 2]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
@@ -165,7 +165,7 @@ Internet-Draft           DMARC Failure Reporting             August 2022
 
 
 
-Jones & Vesely          Expires 17 February 2023                [Page 3]
+Jones & Vesely          Expires 18 February 2023                [Page 3]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
@@ -215,21 +215,16 @@ Internet-Draft           DMARC Failure Reporting             August 2022
 
        *  SPF-DNS (REQUIRED for SPF failure of an aligned identifier)
 
-          The syntax of this field is changed, dropping the DNS RRTYPE
-          used:
 
 
 
 
-Jones & Vesely          Expires 17 February 2023                [Page 4]
+
+
+Jones & Vesely          Expires 18 February 2023                [Page 4]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
-
-               spf-dns = "SPF-DNS:" [CFWS] domain [CFWS] ":"
-                         [CFWS] quoted-string [CFWS] CRLF
-
-                                     Figure 1
 
    2.  The "Identity-Alignment" field is defined to contain a comma-
        separated list of authentication mechanism names that failed to
@@ -248,7 +243,7 @@ Internet-Draft           DMARC Failure Reporting             August 2022
        used when a failure report is generated because some or all of
        the authentication mechanisms failed to produce aligned
        identifiers.  Note that a failure report generator MAY also
-       independently produce an AFRF message for any or all of the
+       independently produce an ARF message for any or all of the
        underlying authentication methods.
 
 3.2.  Verifying External Destinations
@@ -274,34 +269,23 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    authentication failure, reporters MUST make sure that possible mail
    loop are stopped.
 
+4.  IANA Considerations
 
 
 
-Jones & Vesely          Expires 17 February 2023                [Page 5]
+
+
+
+
+Jones & Vesely          Expires 18 February 2023                [Page 5]
 
 Internet-Draft           DMARC Failure Reporting             August 2022
 
 
-4.  IANA Considerations
-
 4.1.  Feedback Report Header Fields Registry Update
 
-   The following entry of the "Feedback Report Header Fields" registry
-   has been modified to refer to this RFC:
-
-   Field Name:  Identity-Alignment
-
-   Description:  indicates whether the message about which a report is
-      being generated had any identifiers in alignment as defined in
-      [I-D.ietf-dmarc-dmarcbis]
-
-   Multiple Appearances:  No
-
-   Related "Feedback-Type":  auth-failure
-
-   Reference:  [[this rfc]]
-
-   Status:  current
+   Entry Identity-Alignment in registry "Feedback Report Header Fields"
+   is changed to refer to this document.
 
 4.2.  Authentication Failure Types
 
@@ -330,14 +314,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
     |           | practices.  The DKIM-ADSP-   |           |          |
     |           | DNS field MUST be included   |           |          |
     |           | in the report.               |           |          |
-
-
-
-Jones & Vesely          Expires 17 February 2023                [Page 6]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
     +-----------+------------------------------+-----------+----------+
     | bodyhash  | The body hash in the         | [RFC6591] | current  |
     |           | signature and the body hash  |           |          |
@@ -348,7 +324,20 @@ Internet-Draft           DMARC Failure Reporting             August 2022
     |           | report (see Section 3.2.4 of |           |          |
     |           | [RFC6591]).                  |           |          |
     +-----------+------------------------------+-----------+----------+
+    | dmarc     | Some or all of the           | [[this    | current  |
+    |           | authentication mechanisms    | rfc]]     |          |
+    |           | failed to produce aligned    |           |          |
+    |           | identifiers.                 |           |          |
+    +-----------+------------------------------+-----------+----------+
     | revoked   | The DKIM key referenced by   | [RFC6591] | current  |
+
+
+
+Jones & Vesely          Expires 18 February 2023                [Page 6]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
     |           | the signature on the message |           |          |
     |           | has been revoked.  The DKIM- |           |          |
     |           | Domain and DKIM-Selector     |           |          |
@@ -378,21 +367,8 @@ Internet-Draft           DMARC Failure Reporting             August 2022
     |           | evaluations of clients could |           |          |
     |           | treat it like a failure.)    |           |          |
     +-----------+------------------------------+-----------+----------+
-    | dmark     | Some or all of the           | [[this    | current  |
-    |           | authentication mechanisms    | rfc]]     |          |
-    |           | failed to produce aligned    |           |          |
-    |           | identifiers.                 |           |          |
-    +-----------+------------------------------+-----------+----------+
 
                                   Table 1
-
-
-
-
-Jones & Vesely          Expires 17 February 2023                [Page 7]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
 
 5.  Privacy Considerations
 
@@ -409,6 +385,14 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    misconfigurations or other problems with email and network
    infrastructure, or inspect messages for insight into abusive
    practices.
+
+
+
+
+Jones & Vesely          Expires 18 February 2023                [Page 7]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
 
    These reports may expose sender and recipient identifiers (e.g.,
    RFC5322.From addresses), and although the [RFC6591] format used for
@@ -437,19 +421,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    encouraged to review their reporting limitations under such policies
    before enabling DMARC reporting.
 
-
-
-
-
-
-
-
-
-Jones & Vesely          Expires 17 February 2023                [Page 8]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
 5.2.  Report Recipients
 
    A DMARC record can specify that reports should be sent to an
@@ -467,6 +438,17 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    traffic.  In addition to verifying compliance with policies,
    Receivers need to consider that before sending reports to a third
    party.
+
+
+
+
+
+
+
+Jones & Vesely          Expires 18 February 2023                [Page 8]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
 
 6.  Security Considerations
 
@@ -496,16 +478,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
               28 July 2022, <https://www.ietf.org/archive/id/draft-ietf-
               dmarc-dmarcbis-15.txt>.
 
-
-
-
-
-
-Jones & Vesely          Expires 17 February 2023                [Page 9]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    [I-D.ietf-dmarc-aggregate-reporting]
               Brotman, A., "DMARC Aggregate Reporting", Work in
               Progress, Internet-Draft, draft-ietf-dmarc-aggregate-
@@ -524,6 +496,15 @@ Internet-Draft           DMARC Failure Reporting             August 2022
               Extensible Format for Email Feedback Reports", RFC 5965,
               DOI 10.17487/RFC5965, August 2010,
               <https://www.rfc-editor.org/info/rfc5965>.
+
+
+
+
+
+Jones & Vesely          Expires 18 February 2023                [Page 9]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
 
    [RFC7208]  Kitterman, S., "Sender Policy Framework (SPF) for
               Authorizing Use of Domains in Email, Version 1", RFC 7208,
@@ -555,13 +536,6 @@ A.1.  Entire Domain, Monitoring Only, Per-Message Reports
    justify publishing this record.  The default per-message report
    format ([RFC6591]) meets the Domain Owner's needs in this scenario.
 
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 10]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    The Domain Owner accomplishes this by adding the following to its
    policy record:
 
@@ -580,6 +554,13 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    To publish such a record, the DNS administrator for the Domain Owner
    might create an entry like the following in the appropriate zone file
    (following the conventional zone file format):
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 10]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
 
      ; DMARC record for the domain example.com
 
@@ -611,13 +592,6 @@ A.2.  Per-Message Failure Reports Directed to Third Party
      "v=DMARC1; p=none; rua=mailto:dmarc-feedback@example.com;
       ruf=mailto:auth-reports@thirdparty.example.net"
 
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 11]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    To publish such a record, the DNS administrator for the Domain Owner
    might create an entry like the following in the appropriate zone file
    (following the conventional zone file format):
@@ -634,6 +608,15 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Section 3.2 of this document.  In order to pass these additional
    checks, the third party will need to publish an additional DNS record
    as follows:
+
+
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 11]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
 
    *  Given the DMARC record published by the Domain Owner at
       "_dmarc.example.com", the DNS administrator for the third party
@@ -664,16 +647,6 @@ A.3.  Report Format Example
 
    This is the full content of a failure message, including the header.
 
-
-
-
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 12]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    Received: from generator.example (generator.example [192.0.2.1])
      (TLS: TLS1.3,256bits,ECDHE_RSA_AES_256_GCM_SHA384)
      by mail.consumer.example with ESMTPS
@@ -693,6 +666,14 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Date: Tue, 19 Jul 2022 00:57:48 -0500 (CDT)
    Subject: FW: This is the original subject
    Mime-Version: 1.0
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 12]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
    Content-Type: multipart/report; report-type=feedback-report;
      boundary="=_mime_boundary_"
    Message-Id: <20220719055748.4AE9D403CC@generator.example>
@@ -722,14 +703,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    DKIM-Domain: consumer.example
    DKIM-Identity: @consumer.example
    DKIM-Selector: epsilon
-
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 13]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    Original-Envelope-Id: 65E1A3F0A0
    Original-Mail-From: author=generator.example@forwarder.example
    Source-IP: 192.0.2.2
@@ -749,6 +722,14 @@ Internet-Draft           DMARC Failure Reporting             August 2022
      (mail.forwarder.example [IPv6:2001:db8::23ac])
      by mail.generator.example (Postfix) with ESMTP id 5E8B0C159826
      for <x@generator.example>; Sun, 14 Aug 2022 07:58:29 -0700 (PDT)
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 13]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
    Received: from mail.forwarder.example (localhost [127.0.0.1])
      by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
      for <x@generator.example>; Tue, 19 Jul 2022 07:57:44 +0200
@@ -778,14 +759,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
       9w1bQ90aY+VCQ==
    X-Original-To: users@forwarder.example
    Received: from mail.consumer.example (mail.consumer.example [192.0.2.4])
-
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 14]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
      (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
       key-exchange ECDHE (P-256) server-signature ECDSA (P-384)
       server-digest SHA384)
@@ -805,6 +778,14 @@ Internet-Draft           DMARC Failure Reporting             August 2022
      d=consumer.example; s=epsilon; t=1658210255;
      bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
      h=Date:Subject:To:References:From:In-Reply-To;
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 14]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
      b=hETrymCbz6T1Dyo5dCG9dk8rPykKLdhJCPFeJ9TiiP/kaoN2afpUYtj+SrI+I83lp
       p1F/FfYSGy7zz3Q3OdxBA==
    DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -834,14 +815,6 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Content-Language: en-US
    To: users@forwarder.example
    Authentication-Results: consumer.example; auth=pass (details omitted)
-
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 15]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
    From: Message Author <author@consumer.example>
    In-Reply-To: <20220718102753.0f6d9dde.cel@example.com>
    Content-Type: text/plain; charset=UTF-8; format=flowed
@@ -850,7 +823,7 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    [ Message body was here ]
    --=_mime_boundary_--
 
-                                  Figure 2
+                                  Figure 1
 
    If the body of the message is not included, the last MIME entity
    would have Content-Type: text/rfc822-headers instead of message/
@@ -861,6 +834,14 @@ Appendix B.  Change Log
    [RFC Editor: Please remove this section prior to publication.]
 
    00 to 01  *  Replace references to RFC7489 with references to I-
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 15]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
+
           D.ietf-dmarc-dmarcbis.
 
        *  Replace the 2nd paragraph in the Introduction with the
@@ -889,15 +870,6 @@ Appendix B.  Change Log
           https://mailarchive.ietf.org/arch/msg/dmarc/
           mFk0qiTCy8tzghRvcxus01W_Blw.
 
-
-
-
-
-Jones & Vesely          Expires 17 February 2023               [Page 16]
-
-Internet-Draft           DMARC Failure Reporting             August 2022
-
-
        *  Add paragraph in Security Considerations, noting that
           note that Organizational Domains are only an approximation...
 
@@ -916,6 +888,15 @@ Internet-Draft           DMARC Failure Reporting             August 2022
        *  Add a IANA Consideration section
 
 Authors' Addresses
+
+
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 16]
+
+Internet-Draft           DMARC Failure Reporting             August 2022
+
 
    Steven M Jones (editor)
    DMARC.org
@@ -949,4 +930,23 @@ Authors' Addresses
 
 
 
-Jones & Vesely          Expires 17 February 2023               [Page 17]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jones & Vesely          Expires 18 February 2023               [Page 17]

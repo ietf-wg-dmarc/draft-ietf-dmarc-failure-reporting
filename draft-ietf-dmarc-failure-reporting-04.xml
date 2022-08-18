@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rfc version="3" ipr="trust200902" docName="draft-ietf-dmarc-failure-reporting-04" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="7489" consensus="true">
+<rfc version="3" ipr="trust200902"
+  docName="draft-ietf-dmarc-failure-reporting-04"
+  submissionType="IETF" category="std"
+  xml:lang="en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  obsoletes="7489"
+  updates=""
+  consensus="true">
 
 <front>
 <title abbrev="DMARC Failure Reporting">Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting</title><seriesInfo value="draft-ietf-dmarc-failure-reporting-02" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
@@ -9,7 +16,7 @@
 <author role="editor" initials="A." surname="Vesely" fullname="Alessandro Vesely"><organization>Tana</organization><address><postal><street></street>
 </postal><email>vesely@tana.it</email>
 </address></author>
-<date year="2022" month="August" day="16"></date>
+<date year="2022" month="August" day="17"></date>
 <area>Application</area>
 <workgroup>DMARC Working Group</workgroup>
 
@@ -139,11 +146,6 @@ failures of an aligned identifier)</t>
 if reporting a DKIM failure)</t>
 </li>
 <li><t>SPF-DNS (REQUIRED for SPF failure of an aligned identifier)</t>
-<t>The syntax of this field is changed, dropping the DNS RRTYPE used:</t>
-<figure><sourcecode>
-     spf-dns = "SPF-DNS:" [CFWS] domain [CFWS] ":"
-               [CFWS] quoted-string [CFWS] CRLF
-</sourcecode></figure>
 </li>
 </ul></li>
 <li><t>The &quot;Identity-Alignment&quot; field is defined to contain a comma-
@@ -166,7 +168,7 @@ aligned identity, or the keyword &quot;none&quot; if none did.  ABNF:</t>
 used when a failure report is generated because some or all of
 the authentication mechanisms failed to produce aligned
 identifiers.  Note that a failure report generator MAY also
-independently produce an AFRF message for any or all of the
+independently produce an ARF message for any or all of the
 underlying authentication methods.</li>
 </ol>
 </section>
@@ -205,24 +207,8 @@ are stopped.
 <section anchor="iana-considerations"><name>IANA Considerations</name>
 <section><name>Feedback Report Header Fields Registry Update</name>
 
-   <t>The following entry of the "Feedback Report Header Fields"
-   registry has been modified to refer to this RFC:</t>
-
-   <dl>
-   <dt>Field Name:</dt>  <dd>Identity-Alignment</dd>
-
-   <dt>Description:</dt>  <dd>indicates whether the message about which a report is
-      being generated had any identifiers in alignment as defined in
-      <xref target="I-D.ietf-dmarc-dmarcbis"/></dd>
-
-   <dt>Multiple Appearances:</dt>  <dd>No</dd>
-
-   <dt>Related "Feedback-Type":</dt>  <dd>auth-failure</dd>
-
-   <dt>Reference:</dt>  <dd>[[this rfc]]</dd>
-
-   <dt>Status:</dt>  <dd>current</dd>
-   </dl>
+   <t>Entry Identity-Alignment in registry "Feedback Report Header Fields"
+   is changed to refer to this document.</t>
 
 </section>
 
@@ -269,6 +255,14 @@ are stopped.
          <td align="left">current</td>
        </tr>
        <tr>
+          <td align="left">dmarc</td>
+          <td align="left">Some or all of
+the authentication mechanisms failed to produce aligned
+identifiers.</td>
+         <td align="left">[[this rfc]]</td>
+         <td align="left">current</td>
+       </tr>
+       <tr>
           <td align="left">revoked</td>
           <td align="left">The DKIM key referenced by the signature on the message has
       been revoked.  The DKIM-Domain and DKIM-Selector fields MUST be
@@ -294,14 +288,6 @@ are stopped.
       demands successful SPF evaluations of clients could treat it like
       a failure.)</td>
          <td align="left"><xref target="RFC6591"/></td>
-         <td align="left">current</td>
-       </tr>
-       <tr>
-          <td align="left">dmark</td>
-          <td align="left">Some or all of
-the authentication mechanisms failed to produce aligned
-identifiers.</td>
-         <td align="left">[[this rfc]]</td>
          <td align="left">current</td>
        </tr>
      </tbody>
