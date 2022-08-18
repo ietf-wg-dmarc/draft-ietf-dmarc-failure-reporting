@@ -93,7 +93,7 @@ and &quot;fo&quot; tags as defined in
 <t>Where multiple URIs are selected to receive failure reports, the
 report generator MUST make an attempt to deliver to each of them.
 External destinations MUST be verified, see <xref target="verifying-external-destinations"/>.
-Report generators SHOULD NOT consider ruf= tags in records having a psd=y
+Report generators MUST NOT consider ruf= tags in records having a psd=y
 tag, unless there are specific agreements between the interested parties.
 </t>
 

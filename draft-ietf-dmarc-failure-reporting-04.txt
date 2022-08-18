@@ -158,9 +158,9 @@ Internet-Draft           DMARC Failure Reporting             August 2022
    Where multiple URIs are selected to receive failure reports, the
    report generator MUST make an attempt to deliver to each of them.
    External destinations MUST be verified, see Section 3.2.  Report
-   generators SHOULD NOT consider ruf= tags in records having a psd=y
-   tag, unless there are specific agreements between the interested
-   parties.
+   generators MUST NOT consider ruf= tags in records having a psd=y tag,
+   unless there are specific agreements between the interested parties.
+
 
 
 
