@@ -1,6 +1,8 @@
 %%%
 title = "Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting"
 abbrev = "DMARCfail"
+updates = [6591]
+obsoletes = [7489]
 docName = "@DOCNAME@"
 category = "std"
 ipr = "trust200902"
@@ -104,9 +106,6 @@ field of the Abuse Reporting Format [@!RFC5965].
 Indeed, the aim is not to count each and every failure, but rather to
 report different failure paths.
 Various pruning techniques are possible, including the following:
-
-* only send a report to the first recipient of multi-recipient
-messages;
 
 * store reports for a period of time before sending them, allowing
 detection, collection, and reporting of like incidents;
