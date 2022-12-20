@@ -227,6 +227,13 @@ traffic.  In addition to verifying compliance with policies,
 Receivers need to consider that before sending reports to a third
 party.
 
+Due to potential inclusion of personal information in failed-message reports,
+[@!I-D.ietf-dmarc-dmarcbis, section 10.2] precludes inclusion of the ruf= tag
+in DMARC records for multi-orginazational PSDs.  Prior to sending
+failed-message reports based on a PSD record (psd=y in DMARC record),
+receivers need to consider the associated risk of personal data exposure
+before sending reports to a PSD.
+
 # Security Considerations {#security-considerations}
 
 Considerations discussed in [@!I-D.ietf-dmarc-dmarcbis, section 11] apply.
