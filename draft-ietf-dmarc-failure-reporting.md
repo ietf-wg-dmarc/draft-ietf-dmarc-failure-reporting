@@ -25,6 +25,14 @@ fullname = "Steven M Jones"
   [author.address]
    email = "smj@dmarc.org"
 
+[[author]]
+initials = "A."
+surname = "Vesely (ed)"
+organization = "Tana"
+fullname = "Alessandro Vesely"
+  [author.address]
+   email = "vesely@tana.it"
+
 %%%
 
 .# Abstract
@@ -61,6 +69,15 @@ failed message, which in turn may contain personally identifiable
 information, which should be considered when deciding whether to
 generate such reports.
 
+## Terminology {#terminology}
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 [@!RFC2119] [@!RFC8174] when, and only when, they
+appear in all capitals, as shown here.
+
+
 # Failure Reports {#failure-reports}
 
 Failure reports can supply more detailed information
@@ -86,7 +103,7 @@ format described in [@!RFC6591]; this document updates that reporting
 format, as described in (#reporting-format-update).
 
 The destination(s) and nature of the reports are defined by the "ruf"
-and "fo" tags as defined in [@!I-D.ietf-dmarc-dmarcbis, section 6.3].
+and "fo" tags as defined in [@!I-D.ietf-dmarc-dmarcbis, section 5.3].
 
 Where multiple URIs are selected to receive failure reports, the
 report generator **MUST** make an attempt to deliver to each of them.
@@ -123,7 +140,7 @@ with the indicated normative requirement levels:
 
  * Identity-Alignment (REQUIRED; defined below)
 
- * Delivery-Result (OPTIONAL
+ * Delivery-Result (OPTIONAL)
 
  * DKIM-Domain, DKIM-Identity, DKIM-Selector (REQUIRED for DKIM failures of an aligned identifier)
 
@@ -227,12 +244,6 @@ traffic.  In addition to verifying compliance with policies,
 Receivers need to consider that before sending reports to a third
 party.
 
-Due to potential inclusion of personal information in failed-message reports,
-[@!I-D.ietf-dmarc-dmarcbis, section 10.2] precludes inclusion of the ruf= tag
-in DMARC records for multi-orginazational PSDs.  Prior to sending
-failed-message reports based on a PSD record (psd=y in DMARC record),
-receivers need to consider the associated risk of personal data exposure
-before sending reports to a PSD.
 
 # Security Considerations {#security-considerations}
 
@@ -253,10 +264,9 @@ reporting functions.
 ## Entire Domain, Monitoring Only, Per-Message Reports {#entire-domain-monitoring-only-per-message-reports}
 
 The owners of the domain "example.com" have deployed SPF and DKIM on
-their messaging infrastructure.  As described in,
-[@!I-D.ietf-dmarc-aggregate-reporting, section B.2.1]
-they have used the aggregate
-reporting to discover some messaging systems that had not yet
+their messaging infrastructure.  Reports like the one shown in
+[@!I-D.ietf-dmarc-aggregate-reporting, section B]
+allow them to discover some messaging systems that had not yet
 implemented DKIM correctly.  However, they are still seeing periodic
 authentication failures.  In order to diagnose these intermittent
 problems, they wish to request per-message failure reports when
@@ -264,13 +274,16 @@ authentication failures occur.
 
 Many Receivers will not honor such a request, but the Domain Owner
 feels that any reports it does receive will be helpful enough to
-justify publishing this record.
+justify publishing this request.
 
-The Domain Owner accomplishes this by adding the following to its
+The Domain Owner accomplishes this by adding the following tag to its
 policy record:
 
-Failure reports should be sent via email to the address "auth-reports@example.com"
-("ruf=mailto:auth-reports@example.com")
+```
+ruf=mailto:auth-reports@example.com
+```
+It means that failure reports should be sent via email to the address
+"auth-reports@example.com".
 
 The updated DMARC policy record might look like this when retrieved using a
 common command-line tool (the output shown would appear on a single
@@ -287,11 +300,11 @@ might create an entry like the following in the appropriate zone file
 (following the conventional zone file format):
 
 ```
- DMARC record for the domain example.com
+; DMARC record for the domain example.com
 
- _dmarc  IN TXT ( "v=DMARC1; p=none; "
-                  "rua=mailto:dmarc-feedback@example.com; "
-                  "ruf=mailto:auth-reports@example.com" )
+_dmarc  IN TXT ( "v=DMARC1; p=none; "
+                 "rua=mailto:dmarc-feedback@example.com; "
+                 "ruf=mailto:auth-reports@example.com" )
 ```
 
 ## Per-Message Failure Reports Directed to Third Party {#per-message-failure-reports-directed-to-third-party}
@@ -303,12 +316,15 @@ this request, but those that do may implement additional checks to
 validate that the third party wishes to receive the failure reports
 for this domain.
 
-The Domain Owner needs to alter its policy record from {#entire-domain-monitoring-only-per-message-reports}
+The Domain Owner needs to alter its ruf= tag from (#entire-domain-monitoring-only-per-message-reports)
 as follows:
 
-Per-message failure reports should be sent via email to the
-address "auth-reports@thirdparty.example.net"
-("ruf=mailto:auth-reports@thirdparty.example.net")
+```
+"ruf=mailto:auth-reports@thirdparty.example.net
+```
+
+It means that per-message failure reports should be sent via email to the
+address "auth-reports@thirdparty.example.net".
 
 The DMARC policy record might look like this when retrieved using a
 common command-line tool (the output shown would appear on a single
@@ -337,15 +353,14 @@ Organizational Domain in which this record is published, conforming
 Receivers will implement additional checks as described in
 (#verifying-external-destinations) of this document.  In order to pass these additional
 checks, the third party will need to publish an additional DNS record
-as follows:
+to mean as follows:
 
 Given the DMARC record published by the Domain Owner at
 "_dmarc.example.com", the DNS administrator for the third party
-will need to publish a TXT resource record at
-"example.com._report._dmarc.thirdparty.example.net" with the value
-"v=DMARC1;"
+agrees to receive the corresponding records by publishing a DMARC TXT resource record at
+"example.com._report._dmarc.thirdparty.example.net".
 
-The resulting DNS record might look like this when retrieved using a
+The resulting DNS record can be minimal, and might look like this when retrieved using a
 common command-line tool (the output shown would appear on a single
 line but is wrapped here for publication):
 
@@ -364,6 +379,9 @@ create an entry like the following in the appropriate zone file
 
 example.com._report._dmarc   IN   TXT    "v=DMARC1;"
 ```
+The third party can also publih a ruf= tag in order to override the
+specific address published by example.com with a different address in the
+same third party domain.
 Intermediaries and other third parties should refer to
 (#verifying-external-destinations) for the full details of this
 mechanism.
@@ -584,3 +602,20 @@ failure report mail loops (Ticket #28).
 * Convert to markdown
 
 * Remove irrelevant material.
+
+
+## 05 to 06 {#s05}
+
+*  A Vesely was incorrectly removed from list of document editors.
+   Corrected.
+
+*  Added Terminology section with recoomended boilerplate re:
+   RFC2119.
+
+## 06 to 07 {#s06}
+
+* Reduce Terminology section
+
+* minor nits
+
+
