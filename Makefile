@@ -1,7 +1,7 @@
 #
 # built using mmark 2.
 
-VERSION = 05
+VERSION = 06
 DOCNAME = draft-ietf-dmarc-failure-reporting
 #XMLFLAGS=-v
 
