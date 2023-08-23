@@ -41,7 +41,7 @@ Domain-based Message Authentication, Reporting, and Conformance
 (DMARC) is a scalable mechanism by which a domain owner can request
 feedback about email messages using their domain in the From: address
 field.  This document describes "failure reports," or "failed message
-reports," which provide details about individual messages that failed
+reports", which provide details about individual messages that failed
 to authenticate according to the DMARC mechanism.
 
 {mainmatter}
@@ -80,9 +80,9 @@ appear in all capitals, as shown here.
 
 # Failure Reports {#failure-reports}
 
-Failure reports can supply more detailed information
-about messages that failed to authenticate, enabling the Domain Owner
-to determine exactly what might be causing those specific failures.
+Besides the header or the entire content of a failed message, failure 
+reports supply details about transmission and DMARC authentication, 
+which may aid the Domain Owner in determining failure causes.
 
 Failure reports are normally generated and sent almost immediately
 after the Mail Receiver detects a DMARC failure.  Rather than waiting
@@ -178,8 +178,8 @@ the procedure is described in [@!I-D.ietf-dmarc-aggregate-reporting, section 3].
 
 ## Transport {#transport}
 
-Email streams carrying DMARC failure reports **SHOULD** provide
-be DMARC aligned.
+Email streams carrying DMARC failure reports **SHOULD** be DMARC 
+aligned.
 
 Reporters **MAY** rate limit the number of failure reports sent
 to any recipient to avoid overloading recipient systems.
@@ -618,4 +618,8 @@ failure report mail loops (Ticket #28).
 
 * minor nits
 
+## 07 to 08 {#s07}
 
+* Specify what detailed information a report contains, in the 1st paragraph of Section 2
+
+* A couple of typos
