@@ -78,7 +78,7 @@ described in BCP 14 [@!RFC2119] [@!RFC8174] when, and only when, they
 appear in all capitals, as shown here.
 
 
-# Failure Reports {#failure-reports}
+# DMARC Failure Reports {#failure-reports}
 
 Besides the header or the entire content of a failed message, failure 
 reports supply details about transmission and DMARC authentication, 
@@ -129,6 +129,14 @@ detection, collection, and reporting of like incidents;
 
 * apply rate limiting, such as a maximum number of reports per
 minute that will be generated (and the remainder discarded);
+
+# Other Failure Reports {#other-reports}
+
+This document only describes DMARC failure reports.  DKIM failure
+reports [@RFC6651] and SPF failure reports [@RFC6652] are described
+in their own documents.  A Report Generator issuing a DMARC failure
+report may or may not simultaneously issue also a failure report specific
+to the failed authentication mechanism, according to its policy.
 
 # Reporting Format Update {#reporting-format-update}
 
@@ -627,3 +635,7 @@ failure report mail loops (Ticket #28).
 ## 08 to 09 {#s08}
 
 * Replace &lt; with < and &gt; with > in Appendix B
+
+## 09 to 10 {#s09}
+
+* Add an informative section about other failure reports (DKIM, SPF)
