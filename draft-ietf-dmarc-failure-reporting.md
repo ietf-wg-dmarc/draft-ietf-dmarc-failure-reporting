@@ -405,14 +405,14 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
    u/YOUGjf60LPpyljfPu3EpFwo80mSHyQlP/4S5KEykgPQMgCqLPPKvJwu1aAIDj+jG
    q2ylO3fmc/ERDeDWACtR67YNabEKBWtjqCRLNxKttazViJTZ5drcLfpX0853KoougX
    Rltp7zdoLdy4A==
-From: DMARC Filter &lt;DMARC@gen.example&gt;
+From: DMARC Filter <DMARC@gen.example>;
 To: dmarcfail@consumer.example
 Date: Tue, 19 Jul 2022 00:57:48 -0500 (CDT)
 Subject: FW: This is the original subject
 Mime-Version: 1.0
 Content-Type: multipart/report; report-type=feedback-report;
   boundary="=_mime_boundary_"
-Message-Id: &lt;20220719055748.4AE9D403CC@gen.example&gt;
+Message-Id: <20220719055748.4AE9D403CC@gen.example>;
 
 This is a MIME-formatted message.  If you see this text it means that
 your E-mail software does not support MIME-formatted messages.
@@ -457,10 +457,10 @@ Authentication-Results: gen.example;
 Received: from mail.forwarder.example
   (mail.forwarder.example [IPv6:2001:db8::23ac])
   by mail.gen.example (Postfix) with ESMTP id 5E8B0C159826
-  for &lt;x@gen.example&gt;; Sun, 14 Aug 2022 07:58:29 -0700 (PDT)
+  for <x@gen.example>; Sun, 14 Aug 2022 07:58:29 -0700 (PDT)
 Received: from mail.forwarder.example (localhost [127.0.0.1])
   by mail.forwarder.example (Postfix) with ESMTP id 4Ln7Qw4fnvz6Bq
-  for &lt;x@gen.example&gt;; Tue, 19 Jul 2022 07:57:44 +0200
+  for <x@gen.example>; Tue, 19 Jul 2022 07:57:44 +0200
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
   d=forwarder.example; s=ed25519-59hs; t=1658210264;
   x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
@@ -492,7 +492,7 @@ Received: from mail.consumer.example (mail.consumer.example [192.0.2.4])
    server-digest SHA384)
   (Client did not present a certificate)
   by mail.forwarder.example (Postfix) with ESMTPS id 4Ln7Qs55xmz4nP
-  for &lt;users@forwarder.example&gt;; Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
+  for <users@forwarder.example>; Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
 Authentication-Results: mail.forwarder.example;
   arc=none smtp.remote-ip=192.0.2.4
 Authentication-Results: mail.forwarder.example;
@@ -515,28 +515,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   b=C2nsAp3AMNX33Nq7nN/StPo921xE3XGF8Ju3iAKdYB3EKhsril0N5IjWGlglJECst
    jLNKSo7KWZZ2lkH/dVZ9Rs1GHT2uaKy1sc/xmNIC5rHdhrxammiwpTSo4PsT8disfc
    3DVF6Q62n0EsdLFqcw1KY8A9inFqYKY2tqoo+y4zMtItqCYx3xjsj3I0IFLuX
-Author: Message Author &lt;author@consumer.example&gt;
+Author: Message Author <author@consumer.example>
 Received: from [192.0.2.8] (host-8-2-0-192.isp.example [192.0.2.8])
   (AUTH: CRAM-MD5 uXDGrn@SYT0/k, TLS: TLS1.3,128bits,
   ECDHE_RSA_AES_128_GCM_SHA256)
   by mail.consumer.example with ESMTPSA
   id 00000000005DC076.00004417; Tue, 19 Jul 2022 07:57:35 +0200
-Message-ID: &lt;2431dc66-b010-c9cc-4f2b-a1f889f8bdb4@consumer.example&gt;
+Message-ID: <2431dc66-b010-c9cc-4f2b-a1f889f8bdb4@consumer.example>
 Date: Tue, 19 Jul 2022 07:57:33 +0200
-List-Id: &lt;users.forwarder.example&gt;
-List-Post: &lt;mailto:users@forwarder.example&gt;
-List-Help: &lt;mailto:users+help@forwarder.example&gt;
-List-Subscribe: &lt;mailto:users+subscribe@forwarder.example&gt;
-List-Unsubscribe: &lt;mailto:users+unsubscribe@forwarder.example&gt;
-List-Owner: &lt;mailto:users+owner@forwarder.example&gt;
+List-Id: <users.forwarder.example>
+List-Post: <mailto:users@forwarder.example>
+List-Help: <mailto:users+help@forwarder.example>
+List-Subscribe: <mailto:users+subscribe@forwarder.example>
+List-Unsubscribe: <mailto:users+unsubscribe@forwarder.example>
+List-Owner: <mailto:users+owner@forwarder.example>
 Precedence: list
 MIME-Version: 1.0
 Subject: This is the original subject
 Content-Language: en-US
 To: users@forwarder.example
 Authentication-Results: consumer.example; auth=pass (details omitted)
-From: Message Author &lt;author@consumer.example&gt;
-In-Reply-To: &lt;20220718102753.0f6d9dde.cel@example.com&gt;
+From: Message Author <author@consumer.example>
+In-Reply-To: <20220718102753.0f6d9dde.cel@example.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
@@ -623,3 +623,7 @@ failure report mail loops (Ticket #28).
 * Specify what detailed information a report contains, in the 1st paragraph of Section 2
 
 * A couple of typos
+
+## 08 to 09 {#s08}
+
+* Replace &lt; with < and &gt; with > in Appendix B
