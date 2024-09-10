@@ -509,3 +509,7 @@ failure report mail loops (Ticket #28).
 ## 09 to 10 {#s09}
 
 * Add an informative section about other failure reports (DKIM, SPF)
+
+## 10 to 11 {#s10}
+
+* Remove appendix with redundant examples - pull request by Daniel K.
