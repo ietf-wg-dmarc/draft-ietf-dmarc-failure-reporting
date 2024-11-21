@@ -179,10 +179,24 @@ underlying authentication methods.
 
 # Verifying External Destinations {#verifying-external-destinations}
 
-If the target domain of a mailto address of a ruf= tag is not the same
-as the DMARC record domain where the tag was found, the report generator
-**MUST** verify that the target domain acknowledges sending those reports;
-the procedure is described in [@!I-D.ietf-dmarc-aggregate-reporting, section 3].
+It is possible to specify destinations for failure reports that are
+outside of the domain requesting the reports. These destinations are
+commonly referred to as "external destinations" and may represent a
+different domain controlled by the same organization, a contracted
+report processing service, or some other arrangement.
+
+Without this check, a bad actor could publish a DMARC policy record
+that requests that failure reports be sent to an external destination,
+then deliberately send messages that will generate failure reports as
+a form of abuse. Or, a domain owner could incorrectly publish a DMARC
+policy with an external destination for failure reports, forcing the
+external destination to deal with unwanted messages and potential
+privacy issues.
+
+Therefore a Mail Receiver who generates failure reports
+**MUST** use the Verifying External Destinations procedure described in
+[@!I-D.ietf-dmarc-aggregate-reporting, section 3], substituting the
+"ruf=" tag where the "rua=" tag appears in that procedure.
 
 ## Transport {#transport}
 
