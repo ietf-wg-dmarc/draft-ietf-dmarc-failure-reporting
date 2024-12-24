@@ -180,7 +180,8 @@ underlying authentication methods.
 # Verifying External Destinations {#verifying-external-destinations}
 
 It is possible to specify destinations for failure reports that are
-outside of the domain requesting the reports.  These destinations are
+outside of the Organizational Domain of the DMARC Policy Record that
+was requesting the reports.  These destinations are
 commonly referred to as "external destinations" and may represent a
 different domain controlled by the same organization, a contracted
 report processing service, or some other arrangement.
