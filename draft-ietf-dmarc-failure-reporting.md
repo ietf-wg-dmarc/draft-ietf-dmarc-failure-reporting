@@ -358,20 +358,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
   d=forwarder.example; s=ed25519-59hs; t=1658210264;
   x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
   h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
-   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
-   References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-   autocrypt:cc:content-transfer-encoding:content-type:date:from:
-   in-reply-to:message-id:mime-version:openpgp:references:subject:to;
+   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:
+   To:References:From:In-Reply-To:Content-Type:
+   Content-Transfer-Encoding:autocrypt:cc:content-transfer-encoding:
+   content-type:date:from:in-reply-to:message-id:mime-version:
+   openpgp:references:subject:to;
   b=EjCbN/c3bTU4QkZH/zwTbYxBDp0k8kpmWSXh5h1M7T8J4vtRo+hvafJazT3ZRgq+7
    +4dzEQwUhl+NOJYXXNUAA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=forwarder.example; s=rsa-wgJg; t=1658210264; x=1663210264;
   bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
   h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
-   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
-   References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-   autocrypt:cc:content-transfer-encoding:content-type:date:from:
-   in-reply-to:message-id:mime-version:openpgp:references:subject:to;
+   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:
+   To:References:From:In-Reply-To:Content-Type:
+   Content-Transfer-Encoding:autocrypt:cc:content-transfer-encoding:
+   content-type:date:from:in-reply-to:message-id:mime-version:
+   openpgp:references:subject:to;
   b=mQ8GEWPcVpBpeqQ88pcbXpGHBT0J/Rwi8Zd2WZTXWWneQGRCOJLRcbBJpjqnrwtqd
    76IqawH86tihz4Z/12J1GBCdNx1gfazsoI3yaqfooRDYg0mSyZHrYhQBmodnPcqZj4
    /25L5278sc/UNrYO9az2n7R/skbVZ0bvSo2eEiGU8fcpO8+a5SKNYskhaviAI4eGIB
@@ -379,13 +381,15 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
    i/KLHiZXtJsL3/Pr/4TL+HTjdX8EDSsy1K5/JCvJCFsJHnSvkEaJQGLn/2m03eW9r8
    9w1bQ90aY+VCQ==
 X-Original-To: users@forwarder.example
-Received: from mail.consumer.example (mail.consumer.example [192.0.2.4])
+Received: from mail.consumer.example
+  (mail.consumer.example [192.0.2.4])
   (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
    key-exchange ECDHE (P-256) server-signature ECDSA (P-384)
    server-digest SHA384)
   (Client did not present a certificate)
   by mail.forwarder.example (Postfix) with ESMTPS id 4Ln7Qs55xmz4nP
-  for <users@forwarder.example>; Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
+  for <users@forwarder.example>;
+  Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
 Authentication-Results: mail.forwarder.example;
   arc=none smtp.remote-ip=192.0.2.4
 Authentication-Results: mail.forwarder.example;
