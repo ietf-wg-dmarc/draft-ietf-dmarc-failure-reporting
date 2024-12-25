@@ -235,7 +235,7 @@ practices.
 These reports may expose sender and recipient identifiers (e.g.,
 RFC5322.From addresses), and although the [@!RFC6591] format used for
 failed-message reporting supports redaction, failed-message reporting
-is capable of exposing the entire message to the report recipient.
+is capable of exposing the entire message to the Report Consumer.
 
 Domain Owners requesting reports will receive information about mail
 claiming to be from them, which includes mail that was not, in fact,
