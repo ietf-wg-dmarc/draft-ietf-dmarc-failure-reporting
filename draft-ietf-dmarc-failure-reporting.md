@@ -38,7 +38,7 @@ fullname = "Alessandro Vesely"
 .# Abstract
 
 Domain-based Message Authentication, Reporting, and Conformance
-(DMARC) is a scalable mechanism by which a domain owner can request
+(DMARC) is a scalable mechanism by which a Domain Owner can request
 feedback about email messages using their domain in the From: address
 field.  This document describes "failure reports," or "failed message
 reports", which provide details about individual messages that failed
@@ -62,7 +62,7 @@ DMARC.
 
 Failure reports provide detailed information about the failure of a single
 message or a group of similar messages failing for the same reason. They
-are meant to aid in cases where a domain owner is unable to detect why
+are meant to aid in cases where a Domain Owner is unable to detect why
 failures reported in aggregate form did occur. It is important to note
 these reports can contain either the header or the entire content of a
 failed message, which in turn may contain personally identifiable
@@ -188,7 +188,7 @@ report processing service, or some other arrangement.
 Without this check, a bad actor could publish a DMARC Policy Record
 that requests that failure reports be sent to an external
 destination, then deliberately send messages that will generate
-failure reports as a form of abuse.  Or, a domain owner could
+failure reports as a form of abuse.  Or, a Domain Owner could
 incorrectly publish a DMARC Policy Record with an external destination for
 failure reports, forcing the external destination to deal with
 unwanted messages and potential privacy issues.
@@ -274,7 +274,7 @@ Considerations discussed in [@!I-D.ietf-dmarc-dmarcbis, section 11] apply.
 
 In addition, note that Organizational Domains are only an approximation
 to actual domain ownership.  Therefore, reports may be sent to someone
-unrelated to the actual sender or domain owner.  That makes considerations
+unrelated to the actual sender or Domain Owner.  That makes considerations
 in (#data-exposure-considerations) all the more relevant.
 
 {backmatter}
