@@ -108,7 +108,7 @@ and "fo" tags as defined in [@!I-D.ietf-dmarc-dmarcbis, section 5.3].
 Where multiple URIs are selected to receive failure reports, the
 report generator **MUST** make an attempt to deliver to each of them.
 External destinations **MUST** be verified, see (#verifying-external-destinations).
-Report generators **MUST NOT** consider ruf= tags in DMARC Policy Records having a "psd=y"
+Report generators **MUST NOT** consider "ruf" tags in DMARC Policy Records having a "psd=y"
 tag, unless there are specific agreements between the interested parties.
 
 An obvious consideration is the denial-of-service attack that can be
@@ -196,7 +196,7 @@ unwanted messages and potential privacy issues.
 Therefore, in case of external destinations, a Mail Receiver who 
 generates failure reports **MUST** use the Verifying External Destinations 
 procedure described in [@!I-D.ietf-dmarc-aggregate-reporting, section 3], 
-substituting the "ruf=" tag where the "rua=" tag appears in that procedure.`
+substituting the "ruf" tag where the "rua" tag appears in that procedure.`
 
 
 ## Transport {#transport}
