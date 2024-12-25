@@ -108,7 +108,7 @@ and "fo" tags as defined in [@!I-D.ietf-dmarc-dmarcbis, section 5.3].
 Where multiple URIs are selected to receive failure reports, the
 report generator **MUST** make an attempt to deliver to each of them.
 External destinations **MUST** be verified, see (#verifying-external-destinations).
-Report generators **MUST NOT** consider ruf= tags in records having a "psd=y"
+Report generators **MUST NOT** consider ruf= tags in DMARC Policy Records having a "psd=y"
 tag, unless there are specific agreements between the interested parties.
 
 An obvious consideration is the denial-of-service attack that can be
@@ -185,11 +185,11 @@ commonly referred to as "external destinations" and may represent a
 different domain controlled by the same organization, a contracted
 report processing service, or some other arrangement.
 
-Without this check, a bad actor could publish a DMARC policy record
+Without this check, a bad actor could publish a DMARC Policy Record
 that requests that failure reports be sent to an external
 destination, then deliberately send messages that will generate
 failure reports as a form of abuse.  Or, a domain owner could
-incorrectly publish a DMARC policy with an external destination for
+incorrectly publish a DMARC Policy Record with an external destination for
 failure reports, forcing the external destination to deal with
 unwanted messages and potential privacy issues.
 
@@ -251,7 +251,7 @@ Owner may now become visible.
 
 ## Report Recipients {#report-recipients}
 
-A DMARC record can specify that reports should be sent to an
+A DMARC Policy Record can specify that reports should be sent to an
 intermediary operating on behalf of the Domain Owner.  This is done
 when the Domain Owner contracts with an entity to monitor mail
 streams for abuse and performance issues.  Receipt by third parties
