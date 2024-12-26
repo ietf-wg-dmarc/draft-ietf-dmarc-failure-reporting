@@ -146,15 +146,15 @@ version of [@!RFC6591] as follows:
 1. A DMARC failure report includes the following ARF header fields,
 with the indicated normative requirement levels:
 
- * Identity-Alignment (REQUIRED; defined below)
+ * Identity-Alignment (**REQUIRED**; defined below)
 
- * Delivery-Result (OPTIONAL)
+ * Delivery-Result (**OPTIONAL**)
 
- * DKIM-Domain, DKIM-Identity, DKIM-Selector (REQUIRED for DKIM failures of an aligned identifier)
+ * DKIM-Domain, DKIM-Identity, DKIM-Selector (**REQUIRED** for DKIM failures of an aligned identifier)
 
- * DKIM-Canonicalized-Header, DKIM-Canonicalized-Body (OPTIONAL if reporting a DKIM failure)
+ * DKIM-Canonicalized-Header, DKIM-Canonicalized-Body (**OPTIONAL** if reporting a DKIM failure)
 
- * SPF-DNS (REQUIRED for SPF failure of an aligned identifier)
+ * SPF-DNS (**REQUIRED** for SPF failure of an aligned identifier)
 
 2. The "Identity-Alignment" field is defined to contain a comma-
 separated list of authentication mechanism names that failed to authenticate an
@@ -173,7 +173,7 @@ dmarc-method = ( "dkim" / "spf" )
 3. Authentication Failure Type "dmarc" is defined, which is to be
 used when a failure report is generated because some or all of
 the authentication mechanisms failed to produce aligned
-identifiers.  Note that a failure report generator MAY also
+identifiers.  Note that a failure report generator **MAY** also
 independently produce an ARF message for any or all of the
 underlying authentication methods.
 
