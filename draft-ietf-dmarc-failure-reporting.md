@@ -271,7 +271,11 @@ party.
 
 # Security Considerations {#security-considerations}
 
-Considerations discussed in [@!I-D.ietf-dmarc-dmarcbis, section 11] apply.
+While reviewing this document and its Security Considerations, it is ideal
+that the reader would also review Privacy Considerations above, as well as
+the Privacy Considerations and Security Considerations in section
+[@I-D.ietf-dmarc-dmarcbis, 9] and [@I-D.ietf-dmarc-dmarcbis, 10] of
+[@I-D.ietf-dmarc-dmarcbis].
 
 In addition, note that Organizational Domains are only an approximation
 to actual domain ownership.  Therefore, reports may be sent to someone
