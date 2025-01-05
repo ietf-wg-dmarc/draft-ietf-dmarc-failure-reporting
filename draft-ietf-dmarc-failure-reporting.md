@@ -1,6 +1,6 @@
 %%%
 title = "Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting"
-abbrev = "DMARCfail"
+abbrev = "DMARC Failure Reporting"
 updates = [6591]
 obsoletes = [7489]
 docName = "@DOCNAME@"
