@@ -1,6 +1,6 @@
 %%%
 title = "Domain-based Message Authentication, Reporting, and Conformance (DMARC) Failure Reporting"
-abbrev = "DMARCfail"
+abbrev = "DMARC Failure Reporting"
 updates = [6591]
 obsoletes = [7489]
 docName = "@DOCNAME@"
@@ -38,7 +38,7 @@ fullname = "Alessandro Vesely"
 .# Abstract
 
 Domain-based Message Authentication, Reporting, and Conformance
-(DMARC) is a scalable mechanism by which a domain owner can request
+(DMARC) is a scalable mechanism by which a Domain Owner can request
 feedback about email messages using their domain in the From: address
 field.  This document describes "failure reports," or "failed message
 reports", which provide details about individual messages that failed
@@ -62,7 +62,7 @@ DMARC.
 
 Failure reports provide detailed information about the failure of a single
 message or a group of similar messages failing for the same reason. They
-are meant to aid in cases where a domain owner is unable to detect why
+are meant to aid in cases where a Domain Owner is unable to detect why
 failures reported in aggregate form did occur. It is important to note
 these reports can contain either the header or the entire content of a
 failed message, which in turn may contain personally identifiable
@@ -108,7 +108,7 @@ and "fo" tags as defined in [@!I-D.ietf-dmarc-dmarcbis, section 5.3].
 Where multiple URIs are selected to receive failure reports, the
 report generator **MUST** make an attempt to deliver to each of them.
 External destinations **MUST** be verified, see (#verifying-external-destinations).
-Report generators **MUST NOT** consider ruf= tags in records having a "psd=y"
+Report generators **MUST NOT** consider "ruf" tags in DMARC Policy Records having a "psd=y"
 tag, unless there are specific agreements between the interested parties.
 
 An obvious consideration is the denial-of-service attack that can be
@@ -146,15 +146,15 @@ version of [@!RFC6591] as follows:
 1. A DMARC failure report includes the following ARF header fields,
 with the indicated normative requirement levels:
 
- * Identity-Alignment (REQUIRED; defined below)
+ * Identity-Alignment (**REQUIRED**; defined below)
 
- * Delivery-Result (OPTIONAL)
+ * Delivery-Result (**OPTIONAL**)
 
- * DKIM-Domain, DKIM-Identity, DKIM-Selector (REQUIRED for DKIM failures of an aligned identifier)
+ * DKIM-Domain, DKIM-Identity, DKIM-Selector (**REQUIRED** for DKIM failures of an aligned identifier)
 
- * DKIM-Canonicalized-Header, DKIM-Canonicalized-Body (OPTIONAL if reporting a DKIM failure)
+ * DKIM-Canonicalized-Header, DKIM-Canonicalized-Body (**OPTIONAL** if reporting a DKIM failure)
 
- * SPF-DNS (REQUIRED for SPF failure of an aligned identifier)
+ * SPF-DNS (**REQUIRED** for SPF failure of an aligned identifier)
 
 2. The "Identity-Alignment" field is defined to contain a comma-
 separated list of authentication mechanism names that failed to authenticate an
@@ -173,30 +173,31 @@ dmarc-method = ( "dkim" / "spf" )
 3. Authentication Failure Type "dmarc" is defined, which is to be
 used when a failure report is generated because some or all of
 the authentication mechanisms failed to produce aligned
-identifiers.  Note that a failure report generator MAY also
+identifiers.  Note that a failure report generator **MAY** also
 independently produce an ARF message for any or all of the
 underlying authentication methods.
 
 # Verifying External Destinations {#verifying-external-destinations}
 
 It is possible to specify destinations for failure reports that are
-outside of the domain requesting the reports.  These destinations are
+outside of the Organizational Domain of the DMARC Policy Record that
+was requesting the reports.  These destinations are
 commonly referred to as "external destinations" and may represent a
 different domain controlled by the same organization, a contracted
 report processing service, or some other arrangement.
 
-Without this check, a bad actor could publish a DMARC policy record
+Without this check, a bad actor could publish a DMARC Policy Record
 that requests that failure reports be sent to an external
 destination, then deliberately send messages that will generate
-failure reports as a form of abuse.  Or, a domain owner could
-incorrectly publish a DMARC policy with an external destination for
+failure reports as a form of abuse.  Or, a Domain Owner could
+incorrectly publish a DMARC Policy Record with an external destination for
 failure reports, forcing the external destination to deal with
 unwanted messages and potential privacy issues.
 
 Therefore, in case of external destinations, a Mail Receiver who 
 generates failure reports **MUST** use the Verifying External Destinations 
 procedure described in [@!I-D.ietf-dmarc-aggregate-reporting, section 3], 
-substituting the "ruf=" tag where the "rua=" tag appears in that procedure.`
+substituting the "ruf" tag where the "rua" tag appears in that procedure.`
 
 
 ## Transport {#transport}
@@ -235,7 +236,7 @@ practices.
 These reports may expose sender and recipient identifiers (e.g.,
 RFC5322.From addresses), and although the [@!RFC6591] format used for
 failed-message reporting supports redaction, failed-message reporting
-is capable of exposing the entire message to the report recipient.
+is capable of exposing the entire message to the Report Consumer.
 
 Domain Owners requesting reports will receive information about mail
 claiming to be from them, which includes mail that was not, in fact,
@@ -251,7 +252,7 @@ Owner may now become visible.
 
 ## Report Recipients {#report-recipients}
 
-A DMARC record can specify that reports should be sent to an
+A DMARC Policy Record can specify that reports should be sent to an
 intermediary operating on behalf of the Domain Owner.  This is done
 when the Domain Owner contracts with an entity to monitor mail
 streams for abuse and performance issues.  Receipt by third parties
@@ -270,11 +271,15 @@ party.
 
 # Security Considerations {#security-considerations}
 
-Considerations discussed in [@!I-D.ietf-dmarc-dmarcbis, section 11] apply.
+While reviewing this document and its Security Considerations, it is ideal
+that the reader would also review Privacy Considerations above, as well as
+the Privacy Considerations and Security Considerations in section
+[@I-D.ietf-dmarc-dmarcbis, 9] and [@I-D.ietf-dmarc-dmarcbis, 10] of
+[@I-D.ietf-dmarc-dmarcbis].
 
 In addition, note that Organizational Domains are only an approximation
 to actual domain ownership.  Therefore, reports may be sent to someone
-unrelated to the actual sender or domain owner.  That makes considerations
+unrelated to the actual sender or Domain Owner.  That makes considerations
 in (#data-exposure-considerations) all the more relevant.
 
 {backmatter}
@@ -358,20 +363,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
   d=forwarder.example; s=ed25519-59hs; t=1658210264;
   x=1663210264; bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
   h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
-   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
-   References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-   autocrypt:cc:content-transfer-encoding:content-type:date:from:
-   in-reply-to:message-id:mime-version:openpgp:references:subject:to;
+   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:
+   To:References:From:In-Reply-To:Content-Type:
+   Content-Transfer-Encoding:autocrypt:cc:content-transfer-encoding:
+   content-type:date:from:in-reply-to:message-id:mime-version:
+   openpgp:references:subject:to;
   b=EjCbN/c3bTU4QkZH/zwTbYxBDp0k8kpmWSXh5h1M7T8J4vtRo+hvafJazT3ZRgq+7
    +4dzEQwUhl+NOJYXXNUAA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=forwarder.example; s=rsa-wgJg; t=1658210264; x=1663210264;
   bh=KYH/g7ForvDbnyyDLYSjauMYMW6sEIqu75/9w3OIONg=;
   h=Message-ID:Date:List-Id:List-Archive:List-Post:List-Help:
-   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:To:
-   References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-   autocrypt:cc:content-transfer-encoding:content-type:date:from:
-   in-reply-to:message-id:mime-version:openpgp:references:subject:to;
+   List-Subscribe:List-Unsubscribe:List-Owner:MIME-Version:Subject:
+   To:References:From:In-Reply-To:Content-Type:
+   Content-Transfer-Encoding:autocrypt:cc:content-transfer-encoding:
+   content-type:date:from:in-reply-to:message-id:mime-version:
+   openpgp:references:subject:to;
   b=mQ8GEWPcVpBpeqQ88pcbXpGHBT0J/Rwi8Zd2WZTXWWneQGRCOJLRcbBJpjqnrwtqd
    76IqawH86tihz4Z/12J1GBCdNx1gfazsoI3yaqfooRDYg0mSyZHrYhQBmodnPcqZj4
    /25L5278sc/UNrYO9az2n7R/skbVZ0bvSo2eEiGU8fcpO8+a5SKNYskhaviAI4eGIB
@@ -379,13 +386,15 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
    i/KLHiZXtJsL3/Pr/4TL+HTjdX8EDSsy1K5/JCvJCFsJHnSvkEaJQGLn/2m03eW9r8
    9w1bQ90aY+VCQ==
 X-Original-To: users@forwarder.example
-Received: from mail.consumer.example (mail.consumer.example [192.0.2.4])
+Received: from mail.consumer.example
+  (mail.consumer.example [192.0.2.4])
   (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
    key-exchange ECDHE (P-256) server-signature ECDSA (P-384)
    server-digest SHA384)
   (Client did not present a certificate)
   by mail.forwarder.example (Postfix) with ESMTPS id 4Ln7Qs55xmz4nP
-  for <users@forwarder.example>; Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
+  for <users@forwarder.example>;
+  Tue, 19 Jul 2022 07:57:41 +0200 (CEST)
 Authentication-Results: mail.forwarder.example;
   arc=none smtp.remote-ip=192.0.2.4
 Authentication-Results: mail.forwarder.example;
