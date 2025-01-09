@@ -71,6 +71,10 @@ generate such reports.
 
 ## Terminology {#terminology}
 
+There are a number of terms defined in [@!I-D.ietf-dmarc-dmarcbis, 
+section 3.2] that are used within this document.  Understanding those 
+definitions will aid in reading this document.
+
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
 NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
 "MAY", and "OPTIONAL" in this document are to be interpreted as
