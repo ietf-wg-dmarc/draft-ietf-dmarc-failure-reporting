@@ -60,14 +60,17 @@ mail-receiving organization can use to improve mail handling. This
 document focuses on one type of reporting that can be requested under
 DMARC.
 
-Failure reports provide detailed information about the failure of a single
-message or a group of similar messages failing for the same reason. They
-are meant to aid in cases where a Domain Owner is unable to detect why
-failures reported in aggregate form did occur. It is important to note
-these reports can contain either the header or the entire content of a
-failed message, which in turn may contain personally identifiable
-information, which should be considered when deciding whether to
-generate such reports.
+Failure reports provide detailed information about the failure of a
+single message, or a group of similar messages failing for the same
+reason. They are meant to aid in cases where a Domain Owner is unable
+to detect why failures that were reported in aggregate form
+occurred. It is important to note that these reports can contain the
+header fields or sometimes the entire content of a failed message, which may
+contain personally identifiable information (PII). The potential
+disclosure of PII should be considered when deciding whether to
+request failure reports as a Domain Owner, or what information to
+include or redact in failure reports when creating them as a Mail Receiver,
+or whether to create failure reports at all.
 
 ## Terminology {#terminology}
 
@@ -84,9 +87,9 @@ appear in all capitals, as shown here.
 
 # DMARC Failure Reports {#failure-reports}
 
-Besides the header or the entire content of a failed message, failure 
+Besides the header fields or the entire contents of a failed message, failure 
 reports supply details about transmission and DMARC authentication, 
-which may aid the Domain Owner in determining failure causes.
+which may aid the Domain Owner in determining the cause of an authentication failure.
 
 Failure reports are normally generated and sent almost immediately
 after the Mail Receiver detects a DMARC failure.  Rather than waiting
@@ -96,7 +99,7 @@ Whether the failure is due to an infrastructure problem or the
 message is inauthentic, failure reports also provide more information
 about the failed message than is available in an aggregate report.
 
-These reports should include as much of the message header and body as
+These reports should include as much of the message header fields and body as
 possible, consistent with the reporting party's privacy policies, to
 enable the Domain Owner to diagnose the authentication failure.
 
@@ -106,40 +109,41 @@ reports, the Mail Receiver generates and sends a message using the
 format described in [@!RFC6591]; this document updates that reporting
 format, as described in (#reporting-format-update).
 
-The destination(s) and nature of the reports are defined by the "ruf"
-and "fo" tags as defined in [@!I-D.ietf-dmarc-dmarcbis, section 5.3].
+The destination(s) that failure reports are sent to, and options for when
+they will be sent, are defined by the "ruf" and "fo" tags as defined
+in [@!I-D.ietf-dmarc-dmarcbis, section 4.7].
 
-Where multiple URIs are selected to receive failure reports, the
+When multiple URIs are provided to receive failure reports, the
 report generator **MUST** make an attempt to deliver to each of them.
 External destinations **MUST** be verified, see (#verifying-external-destinations).
 Report generators **MUST NOT** consider "ruf" tags in DMARC Policy Records having a "psd=y"
 tag, unless there are specific agreements between the interested parties.
 
-An obvious consideration is the denial-of-service attack that can be
+Failure reports represent a possible denial-of-service attack that could be
 perpetrated by an attacker who sends numerous messages purporting to
-be from the intended victim Domain Owner but that fail both SPF and
+be from the intended victim Domain Owner but which fail both SPF and
 DKIM; this would cause participating Mail Receivers to send failure
-reports to the Domain Owner or its delegate in potentially huge
-volumes.
+reports to the Domain Owner or its delegate(s), potentially in large
+numbers.
 Accordingly, participating Mail Receivers are encouraged to
 aggregate these reports as much as is practical, using the Incidents
 field of the Abuse Reporting Format [@!RFC5965].
 Indeed, the aim is not to count each and every failure, but rather to
-report different failure paths.
+report different failure conditions.
 Various pruning techniques are possible, including the following:
 
 * store reports for a period of time before sending them, allowing
-detection, collection, and reporting of like incidents;
+detection, collection, and consolidation of like incidents;
 
 * apply rate limiting, such as a maximum number of reports per
-minute that will be generated (and the remainder discarded);
+minute that will be generated (and the remainder discarded)
 
 # Other Failure Reports {#other-reports}
 
 This document only describes DMARC failure reports.  DKIM failure
 reports [@RFC6651] and SPF failure reports [@RFC6652] are described
-in their own documents.  A Report Generator issuing a DMARC failure
-report may or may not simultaneously issue also a failure report specific
+in separate documents.  A Mail Receiver generating a DMARC failure
+report may or may not also issue a failure report specific
 to the failed authentication mechanism, according to its policy.
 
 # Reporting Format Update {#reporting-format-update}
@@ -200,7 +204,7 @@ unwanted messages and potential privacy issues.
 
 Therefore, in case of external destinations, a Mail Receiver who 
 generates failure reports **MUST** use the Verifying External Destinations 
-procedure described in [@!I-D.ietf-dmarc-aggregate-reporting, section 3], 
+procedure described in [@!I-D.ietf-dmarc-aggregate-reporting, section 4], 
 substituting the "ruf" tag where the "rua" tag appears in that procedure.`
 
 
@@ -228,58 +232,64 @@ may be included in the DMARC reporting functions.
 
 ## Data Exposure Considerations {#data-exposure-considerations}
 
-Failed-message reporting provides message-specific details pertaining
-to authentication failures.  Individual reports can contain message
-content as well as trace header fields.  Domain Owners are able to
-analyze individual reports and attempt to determine root causes of
-authentication mechanism failures, gain insight into
-misconfigurations or other problems with email and network
-infrastructure, or inspect messages for insight into abusive
-practices.
-
-These reports may expose sender and recipient identifiers (e.g.,
-RFC5322.From addresses), and although the [@!RFC6591] format used for
+Failure reports may include PII and non-public information (NPI) from
+messages that fail to authenticate, since these reports may contain
+message content as well as trace header fields. These reports may
+expose sender and recipient identifiers (e.g.  RFC5322.From
+addresses), and although the [@!RFC6591] format used for
 failed-message reporting supports redaction, failed-message reporting
 is capable of exposing the entire message to the Report Consumer.
 
 Domain Owners requesting reports will receive information about mail
-claiming to be from them, which includes mail that was not, in fact,
-from them.  Information about the final destination of mail where it
-might otherwise be obscured by intermediate systems will therefore be
-exposed.
+using their domain, but which they did not actually cause to be
+sent. This might provide valuable insight into content used in abusive
+messages, but it might also expose PII or NPI from messages mistakenly
+or accidentally using the wrong sending domain.
 
-When message-forwarding arrangements exist, Domain Owners requesting
-reports will also receive information about mail forwarded to domains
-that were not originally part of their messages' recipient lists.
-This means that destination domains previously unknown to the Domain
+Information about the final destination of mail, where it might
+otherwise be obscured by intermediate systems, may be exposed through
+a failure report. A commonly cited example is exposure of members of
+mailing lists when one list member sends messages to the list, and
+failure reports are generated when that message is delivered to other
+list members. Those failure reports would be sent to the Domain Owner
+of the list member posting the message, or their delegated Report
+Consumer(s).
+
+Similarly when message forwarding arrangements exist, Domain Owners
+requesting reports may receive information about mail forwarded to
+domains that were not originally part of their messages' recipient
+list.  This means that destinations previously unknown to the Domain
 Owner may now become visible.
 
 ## Report Recipients {#report-recipients}
 
-A DMARC Policy Record can specify that reports should be sent to an
-intermediary operating on behalf of the Domain Owner.  This is done
-when the Domain Owner contracts with an entity to monitor mail
-streams for abuse and performance issues.  Receipt by third parties
-of such data may or may not be permitted by the Mail Receiver's
-privacy policy, terms of use, or other similar governing document.
-Domain Owners and Mail Receivers should both review and understand if
-their own internal policies constrain the use and transmission of
-DMARC reporting.
+A DMARC Policy Record can specify that reports should be sent to a
+Report Consumer operating on behalf of the Domain Owner.  This might
+be done when the Domain Owner contracts with an entity to monitor mail
+streams for deliverability, performance issues, or abuse. Receipt of
+such data by third parties may or may not be permitted by the Mail
+Receiver's privacy policy, terms of use, et cetera.  Domain Owners and
+Mail Receivers should both review and understand whether their own
+internal policies constrain the use and transmission of DMARC
+reporting.
 
-Some potential exists for report recipients to perform traffic
-analysis, making it possible to obtain metadata about the Receiver's
+Some potential exists for Report Consumers to perform traffic
+analysis, making it possible to obtain metadata about the Mail Receiver's
 traffic.  In addition to verifying compliance with policies,
-Receivers need to consider that before sending reports to a third
+Mail Receivers need to consider that before sending reports to a third
 party.
 
 
 # Security Considerations {#security-considerations}
 
-While reviewing this document and its Security Considerations, it is ideal
-that the reader would also review Privacy Considerations above, as well as
-the Privacy Considerations and Security Considerations in section
-[@I-D.ietf-dmarc-dmarcbis, 9] and [@I-D.ietf-dmarc-dmarcbis, 10] of
-[@I-D.ietf-dmarc-dmarcbis].
+While reviewing this document and its Security Considerations, the
+reader should also review the Privacy Considerations above, as well as
+the Privacy Considerations and Security Considerations in sections
+[@!I-D.ietf-dmarc-dmarcbis, 10] and [@!I-D.ietf-dmarc-dmarcbis, 11] of
+[@!I-D.ietf-dmarc-dmarcbis]; and in sections
+[@!I-D.ietf-dmarc-aggregate-reporting, 7] and
+[@!I-D.ietf-dmarc-aggregate-reporting, 8] of
+[@!I-D.ietf-dmarc-aggregate-reporting].
 
 In addition, note that Organizational Domains are only an approximation
 to actual domain ownership.  Therefore, reports may be sent to someone
@@ -541,3 +551,14 @@ failure report mail loops (Ticket #28).
 ## 10 to 11 {#s10}
 
 * Remove appendix with redundant examples - pull request by Daniel K.
+
+## 11 to 12 {#s11}
+
+* Reference Terminology in [@!I-D.ietf-dmarc-dmarcbis]
+* Expand the Verifying External Destinations section and reference [@!I-D.ietf-dmarc-aggregate-reporting]
+
+## 12 to 13 {#s12}
+
+* Update references to numbered sections of [@!I-D.ietf-dmarc-dmarcbis] and [@!I-D.ietf-dmarc-aggregate-reporting]
+* Clarify potential information disclosures when failure reports are sent
+* Minor edits for readability and clarity
