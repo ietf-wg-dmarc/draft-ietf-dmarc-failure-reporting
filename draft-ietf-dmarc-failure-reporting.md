@@ -65,7 +65,7 @@ single message, or a group of similar messages failing for the same
 reason. They are meant to aid in cases where a Domain Owner is unable
 to detect why failures that were reported in aggregate form
 occurred. It is important to note that these reports can contain the
-headers or sometimes the entire content of a failed message, which may
+header fields or sometimes the entire content of a failed message, which may
 contain personally identifiable information (PII). The potential
 disclosure of PII should be considered when deciding whether to
 request failure reports as a Domain Owner, or what information to
@@ -87,7 +87,7 @@ appear in all capitals, as shown here.
 
 # DMARC Failure Reports {#failure-reports}
 
-Besides the headers or the entire contents of a failed message, failure 
+Besides the header fields or the entire contents of a failed message, failure 
 reports supply details about transmission and DMARC authentication, 
 which may aid the Domain Owner in determining the cause of an authentication failure.
 
@@ -99,7 +99,7 @@ Whether the failure is due to an infrastructure problem or the
 message is inauthentic, failure reports also provide more information
 about the failed message than is available in an aggregate report.
 
-These reports should include as much of the message headers and body as
+These reports should include as much of the message header fields and body as
 possible, consistent with the reporting party's privacy policies, to
 enable the Domain Owner to diagnose the authentication failure.
 
