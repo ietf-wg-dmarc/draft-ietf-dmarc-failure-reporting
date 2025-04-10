@@ -166,7 +166,7 @@ with the indicated normative requirement levels:
 
 2. The "Identity-Alignment" field is defined to contain a comma-
 separated list of authentication mechanism names that failed to authenticate an
-aligned identity, or the keyword "none" if none did.  ABNF:
+aligned identity, or the keyword "none" if none did.  ABNF ([@!RFC5234]):
 
 ``` ABNF
 id-align     = "Identity-Alignment:" [CFWS]
@@ -460,8 +460,11 @@ Content-Transfer-Encoding: 8bit
 --=_mime_boundary_--
 ```
 
+The Source-Port field definition is given by [@!RFC6692]
+
 If the body of the message is not included, the last MIME entity
 would have "Content-Type: text/rfc822-headers" instead of message/rfc822.
+
 
 # Change Log {change-log}
 
