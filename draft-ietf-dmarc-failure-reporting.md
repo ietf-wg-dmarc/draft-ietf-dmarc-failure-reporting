@@ -60,17 +60,19 @@ mail-receiving organization can use to improve mail handling. This
 document focuses on one type of reporting that can be requested under
 DMARC.
 
-Failure reports provide detailed information about the failure of a
-single message, or a group of similar messages failing for the same
-reason. They are meant to aid in cases where a Domain Owner is unable
-to detect why failures that were reported in aggregate form
-occurred. It is important to note that these reports can contain the
-header fields or sometimes the entire content of a failed message, which may
-contain personally identifiable information (PII). The potential
-disclosure of PII should be considered when deciding whether to
-request failure reports as a Domain Owner, or what information to
-include or redact in failure reports when creating them as a Mail Receiver,
-or whether to create failure reports at all.
+Failure reports provide detailed information about the failure of a 
+single message, or a group of similar messages failing for the same 
+reason. Their purpose is twofold.  On the one hand they are meant to 
+aid in cases where a Domain Owner is unable to detect why failures that 
+were reported in aggregate form occurred.  On the other hand, they can 
+allow the Sender domain to quickly identify and address harmful 
+messages involving direct domain abuse.  It is important to note that 
+these reports can contain the header fields or sometimes the entire 
+content of a failed message, which may contain personally identifiable 
+information (PII). The potential disclosure of PII should be considered 
+when deciding whether to request failure reports as a Domain Owner, or 
+what information to include or redact in failure reports when creating 
+them as a Mail Receiver, or whether to create failure reports at all.
 
 ## Terminology {#terminology}
 
