@@ -93,13 +93,15 @@ Besides the header fields or the entire contents of a failed message, failure
 reports supply details about transmission and DMARC authentication, 
 which may aid the Domain Owner in determining the cause of an authentication failure.
 
-Failure reports are normally generated and sent almost immediately
-after the Mail Receiver detects a DMARC failure.  Rather than waiting
-for an aggregate report, these reports are useful for quickly
-notifying the Domain Owners when there is an authentication failure.
-Whether the failure is due to an infrastructure problem or the
-message is inauthentic, failure reports also provide more information
-about the failed message than is available in an aggregate report.
+Failure reports are normally generated and sent almost immediately 
+after the Mail Receiver detects a DMARC failure.  Rather than waiting 
+for an aggregate report, these reports are useful for quickly notifying 
+the Domain Owners when there is an authentication failure. Failure 
+reports also provide more information about the failed message than is 
+available in an aggregate report.  This allows the failure report 
+consumer to better determine whether the failure is of a message that 
+the domain owner intended to authenticate or one for which use of its 
+domain was not authorized.
 
 These reports should include as much of the message header fields and body as
 possible, consistent with the reporting party's privacy policies, to
