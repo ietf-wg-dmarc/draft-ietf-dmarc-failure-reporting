@@ -569,3 +569,8 @@ failure report mail loops (Ticket #28).
 * Update references to numbered sections of [@!I-D.ietf-dmarc-dmarcbis] and [@!I-D.ietf-dmarc-aggregate-reporting]
 * Clarify potential information disclosures when failure reports are sent
 * Minor edits for readability and clarity
+
+## 13 to 14 {#s13}
+
+* In the introduction (last paragraph) mention that the purpose is twofold, debug and anti-abuse.
+* In Section 2 (2nd paragraph) clarify that failure reports allow better determining the failure reason.
