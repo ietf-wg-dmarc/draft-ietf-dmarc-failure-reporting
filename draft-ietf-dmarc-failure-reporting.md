@@ -140,7 +140,7 @@ Various pruning techniques are possible, including the following:
 detection, collection, and consolidation of like incidents;
 
 * apply rate limiting, such as a maximum number of reports per
-minute that will be generated (and the remainder discarded)
+minute that will be generated (and the remainder discarded.)
 
 # Other Failure Reports {#other-reports}
 
@@ -226,62 +226,134 @@ cause mail loops.
 
 ## Feedback Report Header Fields Registry Update
 
-IANA is requested to change the  "Identity-Alignment" entry in the "Feedback Report Header Fields"
-registry to refer to this document.
+IANA is requested to change the  "Identity-Alignment" entry in the 
+"Feedback Report Header Fields" registry to refer to this document.
+
+## Status of DKIM-ADSP-DNS
+
+IANA is requested to change the Status of the "DKIM-ADSP-DNS" feedback 
+report header field to "historic".
+
+## Authentication Failure Types
+
+IANA is requested to add a registry with the possible values of the 
+Auth-Failure field.  The initial values for this are as follows:
+
+Auth-Failure value | Description | Reference | Status
+-------------------|-------------|-----------|-------
+adsp | message did not conform to the ADSP signing practices | RFC 6591  | historic
+bodyhash | Body hash mismatch | RFC 6591  | current
+revoked | The DKIM key was revoked | RFC 6591  | current
+signature | The DKIM signature did not verify | RFC 6591 | current
+spf | SPF result was not "pass" | RFC 6591  | current
+dmarc | some or all of the authentication mechanisms failed to produce aligned identifiers | This document | current
+
 
 # Privacy Considerations {#privacy-considerations}
 
-This section discusses issues specific to private data that
-may be included in the DMARC reporting functions.
+The generation and transmission of DMARC failure reports (sometimes 
+referred to as "forensic reports") raise significant privacy concerns 
+that must be carefully considered before deployment.
 
-## Data Exposure Considerations {#data-exposure-considerations}
+Given these factors, many large-scale providers limit or entirely 
+disable the generation of failure reports, preferring to rely on 
+aggregate reports, which provide statistical visibility without 
+exposing sensitive content. Operators that choose to enable failure 
+reporting are strongly encouraged to:
 
-Failure reports may include PII and non-public information (NPI) from
-messages that fail to authenticate, since these reports may contain
-message content as well as trace header fields. These reports may
-expose sender and recipient identifiers (e.g.  RFC5322.From
-addresses), and although the [@!RFC6591] format used for
-failed-message reporting supports redaction, failed-message reporting
-is capable of exposing the entire message to the Report Consumer.
+* Limit the scope and duration of use to targeted diagnostic activities.
+* Ensure that reporting URIs are carefully controlled and validated.
+* Apply minimization techniques, such as redaction of message bodies 
+  and header fields, to reduce sensitive data exposure.
+* Always transmit reports only over secure channels.
 
-Domain Owners requesting reports will receive information about mail
-using their domain, but which they did not actually cause to be
-sent. This might provide valuable insight into content used in abusive
-messages, but it might also expose PII or NPI from messages mistakenly
-or accidentally using the wrong sending domain.
+In summary, while DMARC failure reports can offer diagnostic value, the 
+associated privacy concerns have led many operators to restrict their 
+use.  Aggregate reports remain the recommended mechanism for gaining 
+visibility into authentication results while preserving the 
+confidentiality of end-user communications.
 
-Information about the final destination of mail, where it might
-otherwise be obscured by intermediate systems, may be exposed through
-a failure report. A commonly cited example is exposure of members of
-mailing lists when one list member sends messages to the list, and
-failure reports are generated when that message is delivered to other
-list members. Those failure reports would be sent to the Domain Owner
-of the list member posting the message, or their delegated Report
+Particular privacy-specific issues are explored below.
+
+## Data Exposure Considerations
+
+Failure reports may include PII and non-public information (NPI) from 
+messages that fail to authenticate, since these reports may contain 
+message content as well as trace header fields. These reports may 
+expose sender and recipient identifiers (e.g. RFC5322.From addresses), 
+and although the [@!RFC6591] format used for failed-message reporting 
+supports redaction, failed-message reporting is capable of exposing the 
+entire message to the Report Consumer.  They may also expose PII, 
+sensitive business data, or other confidential communications to 
+unintended recipients. Such exposure can create regulatory, legal, and 
+operational risks for both senders and receivers.  Examples include 
+product launches, termination notices for employees, or calendar data.  
+Even innocuous-seeming failures (such as malformed or "broken" calendar 
+invitations) can result in the leakage of private communications.
+
+Domain Owners requesting reports will receive information about mail 
+using their domain, but which they did not actually cause to be sent. 
+This might provide valuable insight into content used in abusive 
+messages, but it might also expose PII or NPI from messages mistakenly 
+or accidentally using the wrong sending path.
+
+Information about the final destination of mail, where it might 
+otherwise be obscured by intermediate systems, may be exposed through a 
+failure report. A commonly cited example is exposure of members of 
+mailing lists when one list member sends messages to the list, and 
+failure reports are generated when that message is delivered to other 
+list members. Those failure reports would be sent to the Domain Owner 
+of the list member posting the message, or their delegated Report 
 Consumer(s).
 
-Similarly when message forwarding arrangements exist, Domain Owners
-requesting reports may receive information about mail forwarded to
-domains that were not originally part of their messages' recipient
-list.  This means that destinations previously unknown to the Domain
+Similarly, when message forwarding arrangements exist, Domain Owners 
+requesting reports may receive information about mail forwarded to 
+domains that were not originally part of their messages' recipient 
+list. This means that destinations previously unknown to the Domain 
 Owner may now become visible.
 
-## Report Recipients {#report-recipients}
+## Report Recipients
 
-A DMARC Policy Record can specify that reports should be sent to a
-Report Consumer operating on behalf of the Domain Owner.  This might
-be done when the Domain Owner contracts with an entity to monitor mail
-streams for deliverability, performance issues, or abuse. Receipt of
-such data by third parties may or may not be permitted by the Mail
-Receiver's privacy policy, terms of use, et cetera.  Domain Owners and
-Mail Receivers should both review and understand whether their own
-internal policies constrain the use and transmission of DMARC
+A DMARC Policy Record can specify that reports should be sent to a 
+Report Consumer operating on behalf of the Domain Owner. This might be 
+done when the Domain Owner sends reports to an entity to monitor mail 
+streams for deliverability, performance issues, or abuse. Receipt of 
+such data by third parties may or may not be permitted by the Mail 
+Receiver's privacy policy, terms of use, et cetera. Domain Owners and 
+Mail Receivers should both review and understand whether their own 
+internal policies constrain the use and transmission of DMARC 
 reporting.
 
-Some potential exists for Report Consumers to perform traffic
-analysis, making it possible to obtain metadata about the Mail Receiver's
-traffic.  In addition to verifying compliance with policies,
-Mail Receivers need to consider that before sending reports to a third
+Some potential exists for Report Consumers to perform traffic analysis, 
+making it possible to obtain metadata about the Mail Receiver's 
+traffic. In addition to verifying compliance with policies, Mail 
+Receivers need to consider that before sending reports to a third 
 party.
+
+## Additional Damage
+
+The risks associated with failure reports are compounded by volume and 
+content distribution concerns. Partially or unredacted reports may 
+propagate large amounts of spam, phishing, or malware content, all of 
+which may require special handling by Report Consumers or other 
+recipients to avoid incidents. This underscores the need to avoid 
+misconfiguration of the destinations in the "ruf=" reporting URIs, and 
+the suggestions for redaction in this document. And all of these 
+concerns are heightened for high-volume domains. To mitigate such 
+concerns, the following steps should be considered:
+
+By report generators:
+
+* defang urls by substituting hxxp for http;
+* remove malicious attachments such as word documents or pdfs.
+
+By report consumers:
+
+* isolate mx servers receiving reports from receiving other mail streams;
+* use sandboxes in evaluating failure reports;
+* use network segmentation;
+* limit access to failure reports to authorized individuals with 
+  appropriate security training.
 
 
 # Security Considerations {#security-considerations}
@@ -574,3 +646,9 @@ failure report mail loops (Ticket #28).
 
 * In the introduction (last paragraph) mention that the purpose is twofold, debug and anti-abuse.
 * In Section 2 (2nd paragraph) clarify that failure reports allow better determining the failure reason.
+
+## 14 to 15 {#s14}
+
+* Expanded Privacy Considerations section as discussed on list.
+* Add tentative IANA Consideration subsections.
+
