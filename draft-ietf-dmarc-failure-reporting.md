@@ -182,12 +182,12 @@ dmarc-method = ( "dkim" / "spf" )
                  ; each may appear at most once in an id-align
 ```
 
-3. Authentication Failure Type "dmarc" is defined, which is to be
-used when a failure report is generated because some or all of
-the authentication mechanisms failed to produce aligned
-identifiers.  Note that a failure report generator **MAY** also
-independently produce an ARF message for any or all of the
-underlying authentication methods.
+3. Authentication Failure Type "dmarc" is defined for the Auth-Failure 
+field, which is to be used when a failure report is generated because 
+some or all of the authentication mechanisms failed to produce aligned 
+identifiers.  Note that a failure report generator **MAY** also 
+independently produce an ARF message for any or all of the underlying 
+authentication methods.
 
 # Verifying External Destinations {#verifying-external-destinations}
 
@@ -281,8 +281,8 @@ Failure reports may include PII and non-public information (NPI) from
 messages that fail to authenticate, since these reports may contain 
 message content as well as trace header fields. These reports may 
 expose sender and recipient identifiers (e.g. RFC5322.From addresses), 
-and although the [@!RFC6591] format used for failed-message reporting 
-supports redaction, failed-message reporting is capable of exposing the 
+and although the [@!RFC5965] format used for failed-message reporting 
+supports redaction [@!RFC6590], failed-message reporting is capable of exposing the 
 entire message to the Report Consumer.  They may also expose PII, 
 sensitive business data, or other confidential communications to 
 unintended recipients. Such exposure can create regulatory, legal, and 
@@ -338,9 +338,10 @@ propagate large amounts of spam, phishing, or malware content, all of
 which may require special handling by Report Consumers or other 
 recipients to avoid incidents. This underscores the need to avoid 
 misconfiguration of the destinations in the "ruf=" reporting URIs, and 
-the suggestions for redaction in this document. And all of these 
-concerns are heightened for high-volume domains. To mitigate such 
-concerns, the following steps should be considered:
+the suggestions for redaction in this document, for example using the 
+method described in [@!RFC6590]. And all of these concerns are 
+heightened for high-volume domains. To mitigate such concerns, the 
+following steps should be considered:
 
 By report generators:
 
@@ -652,3 +653,7 @@ failure report mail loops (Ticket #28).
 * Expanded Privacy Considerations section as discussed on list.
 * Add tentative IANA Consideration subsections.
 
+## 15 to 16 {#s15}
+
+* Spell "Auth-Failure" at bullet 3 of Section 4.
+* Cite RFC 6590 when mentioning redaction
