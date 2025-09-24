@@ -144,11 +144,20 @@ minute that will be generated (and the remainder discarded.)
 
 # Other Failure Reports {#other-reports}
 
-This document only describes DMARC failure reports.  DKIM failure
-reports [@RFC6651] and SPF failure reports [@RFC6652] are described
-in separate documents.  A Mail Receiver generating a DMARC failure
-report may or may not also issue a failure report specific
-to the failed authentication mechanism, according to its policy.
+This document describes only DMARC failure reports. DKIM failure 
+reports and SPF failure reports are described in [@!RFC6591].  A Mail 
+Receiver generating DMARC failure reports **MAY** issue failure reports 
+specific to the failed authentication mechanism instead of, or in 
+addition to, DMARC failure reports, based on its own policy, the 
+failure in question, and the content of the fo= tag in the retrieved 
+DMARC Policy Record.
+
+Note that DKIM failure reports and SPF failure reports can also be 
+requested using the methods described in [@RFC6651] and [@RFC6652] 
+respectively.  Report Generators are free to follow any of the 
+specifications.  Report Consumers are **RECOMMENDED** to consolidate 
+their requirements into a single DMARC Policy Record.
+
 
 # Reporting Format Update {#reporting-format-update}
 
@@ -229,25 +238,6 @@ cause mail loops.
 IANA is requested to change the  "Identity-Alignment" entry in the 
 "Feedback Report Header Fields" registry to refer to this document.
 
-## Status of DKIM-ADSP-DNS
-
-IANA is requested to change the Status of the "DKIM-ADSP-DNS" feedback 
-report header field to "historic".
-
-## Authentication Failure Types
-
-IANA is requested to add a registry with the possible values of the 
-Auth-Failure field.  The initial values for this are as follows:
-
-Auth-Failure value | Description | Reference | Status
--------------------|-------------|-----------|-------
-adsp | message did not conform to the ADSP signing practices | RFC 6591  | historic
-bodyhash | Body hash mismatch | RFC 6591  | current
-revoked | The DKIM key was revoked | RFC 6591  | current
-signature | The DKIM signature did not verify | RFC 6591 | current
-spf | SPF result was not "pass" | RFC 6591  | current
-dmarc | some or all of the authentication mechanisms failed to produce aligned identifiers | This document | current
-
 
 # Privacy Considerations {#privacy-considerations}
 
@@ -282,20 +272,21 @@ messages that fail to authenticate, since these reports may contain
 message content as well as trace header fields. These reports may 
 expose sender and recipient identifiers (e.g. RFC5322.From addresses), 
 and although the [@!RFC5965] format used for failed-message reporting 
-supports redaction [@!RFC6590], failed-message reporting is capable of exposing the 
-entire message to the Report Consumer.  They may also expose PII, 
-sensitive business data, or other confidential communications to 
-unintended recipients. Such exposure can create regulatory, legal, and 
-operational risks for both senders and receivers.  Examples include 
-product launches, termination notices for employees, or calendar data.  
-Even innocuous-seeming failures (such as malformed or "broken" calendar 
-invitations) can result in the leakage of private communications.
+supports redaction [@!RFC6590], failed-message reporting is capable of 
+exposing the entire message to the Report Consumer.  They may also 
+expose PII, sensitive business data, or other confidential 
+communications to unintended recipients. Such exposure can create 
+regulatory, legal, and operational risks for both senders and 
+receivers.  Examples include product launches, termination notices for 
+employees, or calendar data. Even innocuous-seeming failures (such as 
+malformed or "broken" calendar invitations) can result in the leakage 
+of private communications.
 
 Domain Owners requesting reports will receive information about mail 
 using their domain, but which they did not actually cause to be sent. 
 This might provide valuable insight into content used in abusive 
-messages, but it might also expose PII or NPI from messages mistakenly 
-or accidentally using the wrong sending path.
+messages, but it might also expose PII or NPI from legitimate messages 
+mistakenly or accidentally failing authentication.
 
 Information about the final destination of mail, where it might 
 otherwise be obscured by intermediate systems, may be exposed through a 
@@ -655,5 +646,8 @@ failure report mail loops (Ticket #28).
 
 ## 15 to 16 {#s15}
 
+* Qualification of RFCs 6651/2 in Section 3.
 * Spell "Auth-Failure" at bullet 3 of Section 4.
-* Cite RFC 6590 when mentioning redaction
+* Cite RFC 6590 when mentioning redaction.
+* s/using the wrong sending path/failing authentication/.
+* Remove unnecessary IANA Considerations.
