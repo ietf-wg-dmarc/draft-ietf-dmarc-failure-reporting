@@ -272,7 +272,7 @@ messages that fail to authenticate, since these reports may contain
 message content as well as trace header fields. These reports may 
 expose sender and recipient identifiers (e.g. RFC5322.From addresses), 
 and although the [@!RFC5965] format used for failed-message reporting 
-supports redaction [@!RFC6590], failed-message reporting is capable of 
+supports redaction ([@!RFC6590]), failed-message reporting is capable of 
 exposing the entire message to the Report Consumer.  They may also 
 expose PII, sensitive business data, or other confidential 
 communications to unintended recipients. Such exposure can create 
@@ -358,11 +358,6 @@ the Privacy Considerations and Security Considerations in sections
 [@!I-D.ietf-dmarc-aggregate-reporting, 7] and
 [@!I-D.ietf-dmarc-aggregate-reporting, 8] of
 [@!I-D.ietf-dmarc-aggregate-reporting].
-
-In addition, note that Organizational Domains are only an approximation
-to actual domain ownership.  Therefore, reports may be sent to someone
-unrelated to the actual sender or Domain Owner.  That makes considerations
-in (#data-exposure-considerations) all the more relevant.
 
 {backmatter}
 
