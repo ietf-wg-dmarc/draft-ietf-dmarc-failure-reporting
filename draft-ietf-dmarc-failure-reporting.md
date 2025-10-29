@@ -63,8 +63,9 @@ DMARC.
 Failure reports provide detailed information about the failure of a 
 single message, or a group of similar messages failing for the same 
 reason. Their purpose is twofold.  On the one hand they are meant to 
-aid in cases where a Domain Owner is unable to detect why failures that 
-were reported in aggregate form occurred.  On the other hand, they can 
+aid in cases where a Domain Owner wishes to determine the cause of 
+failures that were part of aggregate reports (see 
+[@!I-D.ietf-dmarc-aggregate-reporting]).  On the other hand, they can 
 allow the Sender domain to quickly identify and address harmful 
 messages involving direct domain abuse.  It is important to note that 
 these reports can contain the header fields or sometimes the entire 
@@ -72,7 +73,8 @@ content of a failed message, which may contain personally identifiable
 information (PII). The potential disclosure of PII should be considered 
 when deciding whether to request failure reports as a Domain Owner, or 
 what information to include or redact in failure reports when creating 
-them as a Mail Receiver, or whether to create failure reports at all.
+them as a Mail Receiver, or whether to create failure reports at all; 
+see (#privacy-considerations).
 
 ## Terminology {#terminology}
 
@@ -113,7 +115,7 @@ reports, the Mail Receiver generates and sends a message using the
 format described in [@!RFC6591]; this document updates that reporting
 format, as described in (#reporting-format-update).
 
-The destination(s) that failure reports are sent to, and options for when
+The destination(s) to which failure reports are sent, and options for when
 they will be sent, are defined by the "ruf" and "fo" tags as defined
 in [@!I-D.ietf-dmarc-dmarcbis, section 4.7].
 
@@ -149,7 +151,7 @@ reports and SPF failure reports are described in [@!RFC6591].  A Mail
 Receiver generating DMARC failure reports **MAY** issue failure reports 
 specific to the failed authentication mechanism instead of, or in 
 addition to, DMARC failure reports, based on its own policy, the 
-failure in question, and the content of the fo= tag in the retrieved 
+failure in question, and the content of the "fo" tag in the retrieved 
 DMARC Policy Record.
 
 Note that DKIM failure reports and SPF failure reports can also be 
@@ -236,7 +238,8 @@ cause mail loops.
 ## Feedback Report Header Fields Registry Update
 
 IANA is requested to change the  "Identity-Alignment" entry in the 
-"Feedback Report Header Fields" registry to refer to this document.
+"Feedback Report Header Fields" registry, which is part of ""Messaging 
+Abuse Reporting Format" registry, to refer to this document.
 
 
 # Privacy Considerations {#privacy-considerations}
@@ -255,7 +258,7 @@ reporting are strongly encouraged to:
 * Ensure that reporting URIs are carefully controlled and validated.
 * Apply minimization techniques, such as redaction of message bodies 
   and header fields, to reduce sensitive data exposure.
-* Always transmit reports only over secure channels.
+* Always transmit reports over secure channels.
 
 In summary, while DMARC failure reports can offer diagnostic value, the 
 associated privacy concerns have led many operators to restrict their 
@@ -328,7 +331,7 @@ content distribution concerns. Partially or unredacted reports may
 propagate large amounts of spam, phishing, or malware content, all of 
 which may require special handling by Report Consumers or other 
 recipients to avoid incidents. This underscores the need to avoid 
-misconfiguration of the destinations in the "ruf=" reporting URIs, and 
+misconfiguration of the destinations in the "ruf" reporting URIs, and 
 the suggestions for redaction in this document, for example using the 
 method described in [@!RFC6590]. And all of these concerns are 
 heightened for high-volume domains. To mitigate such concerns, the 
@@ -336,12 +339,12 @@ following steps should be considered:
 
 By report generators:
 
-* defang urls by substituting hxxp for http;
+* defang URIs by substituting hxxp for http;
 * remove malicious attachments such as word documents or pdfs.
 
 By report consumers:
 
-* isolate mx servers receiving reports from receiving other mail streams;
+* isolate Mail eXchange (MX) servers receiving reports from receiving other mail streams;
 * use sandboxes in evaluating failure reports;
 * use network segmentation;
 * limit access to failure reports to authorized individuals with 
