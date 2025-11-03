@@ -38,7 +38,7 @@ fullname = "Alessandro Vesely"
 .# Abstract
 
 Domain-based Message Authentication, Reporting, and Conformance
-(DMARC) is a scalable mechanism by which a Domain Owner can request
+(DMARC) is a mechanism by which a Domain Owner can request
 feedback about email messages using their domain in the From: address
 field.  This document describes "failure reports," or "failed message
 reports", which provide details about individual messages that failed
@@ -53,7 +53,7 @@ The source for this draft is maintained in GitHub at:
 https://github.com/ietf-wg-dmarc/draft-ietf-dmarc-failure-reporting
 
 Domain-based Message Authentication, Reporting, and Conformance
-(DMARC) [@!I-D.ietf-dmarc-dmarcbis] is a scalable mechanism by which a
+(DMARC) [@!I-D.ietf-dmarc-dmarcbis] is a mechanism by which a
 mail-originating organization can express domain-level policies and
 preferences for message validation, disposition, and reporting, that a
 mail-receiving organization can use to improve mail handling. This
@@ -66,7 +66,7 @@ reason. Their purpose is twofold.  On the one hand they are meant to
 aid in cases where a Domain Owner wishes to determine the cause of 
 failures that were part of aggregate reports (see 
 [@!I-D.ietf-dmarc-aggregate-reporting]).  On the other hand, they can 
-allow the Sender domain to quickly identify and address harmful 
+allow the Domain Owner to quickly identify and address harmful 
 messages involving direct domain abuse.  It is important to note that 
 these reports can contain the header fields or sometimes the entire 
 content of a failed message, which may contain personally identifiable 
@@ -78,8 +78,9 @@ see (#privacy-considerations).
 
 ## Terminology {#terminology}
 
-There are a number of terms defined in [@!I-D.ietf-dmarc-dmarcbis, 
-section 3.2] that are used within this document.  Understanding those 
+There are a number of terms defined in
+[@!I-D.ietf-dmarc-dmarcbis, section 3.2]
+that are used within this document.  Understanding those 
 definitions will aid in reading this document.
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
@@ -244,9 +245,9 @@ Abuse Reporting Format" registry, to refer to this document.
 
 # Privacy Considerations {#privacy-considerations}
 
-The generation and transmission of DMARC failure reports (sometimes 
-referred to as "forensic reports") raise significant privacy concerns 
-that must be carefully considered before deployment.
+The generation and transmission of DMARC failure reports raise 
+significant privacy concerns that must be carefully considered before 
+deployment.
 
 Given these factors, many large-scale providers limit or entirely 
 disable the generation of failure reports, preferring to rely on 
@@ -322,7 +323,8 @@ Some potential exists for Report Consumers to perform traffic analysis,
 making it possible to obtain metadata about the Mail Receiver's 
 traffic. In addition to verifying compliance with policies, Mail 
 Receivers need to consider that before sending reports to a third 
-party.
+party.  On the other hand, a Domain Owner publishing an internal Report
+Consumer, can put a dot-forward at that mailbox.
 
 ## Additional Damage
 
@@ -527,6 +529,12 @@ Content-Transfer-Encoding: 8bit
 ```
 
 The Source-Port field definition is given by [@!RFC6692]
+
+In the final MIME entity, the local-parts of To and From addresses are 
+reported unredacted.  Since we know that the local parts are PII, we 
+can reduce the privacy risk by redacting them.  In the example, the 
+report generator could have replaced "users" with "lRLxexey" and 
+"author" with "RT47aVey" throughout the entity.
 
 If the body of the message is not included, the last MIME entity
 would have "Content-Type: text/rfc822-headers" instead of message/rfc822.
