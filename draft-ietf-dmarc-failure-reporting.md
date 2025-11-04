@@ -158,8 +158,7 @@ DMARC Policy Record.
 Note that DKIM failure reports and SPF failure reports can also be 
 requested using the methods described in [@RFC6651] and [@RFC6652] 
 respectively.  Report Generators are free to follow any of the 
-specifications.  Report Consumers are **RECOMMENDED** to consolidate 
-their requirements into a single DMARC Policy Record.
+specifications.
 
 
 # Reporting Format Update {#reporting-format-update}
