@@ -346,7 +346,7 @@ By report generators:
 
 By report consumers:
 
-* isolate Mail eXchange (MX) servers receiving reports from receiving other mail streams;
+* isolate report streams from other mail streams;
 * use sandboxes in evaluating failure reports;
 * use network segmentation;
 * limit access to failure reports to authorized individuals with 
@@ -657,3 +657,26 @@ failure report mail loops (Ticket #28).
 * Cite RFC 6590 when mentioning redaction.
 * s/using the wrong sending path/failing authentication/.
 * Remove unnecessary IANA Considerations.
+
+## 16 to 17 {#s16}
+
+* Remove the last paragraph of Secority Considerations.
+
+## 17 to 18 {#s17}
+
+* Reword the first purpose (Intro) and cite aggregate-reporting.
+* Forward reference to Privacy Consideration.
+* s/fo=/"fo"/, /ruf=/ruf/, /urls/URIs/.
+* Specify parent registry in IANA Considerations.
+
+## 18 to 19 {#s18}
+
+* Remove the term "scalable" from Abstract and Introduction.
+* s/Sender Domain/Domain Owner/.
+* Reference to dmarcbis, section 3.2 on its own line.
+* Remove the phrase (sometimes referred to as "forensic reports").
+* Note that Domain Owner can use dot-forward to not decalre consumer.
+* Mention we could have encrypted the example.
+* Don't mention MX.
+
+
