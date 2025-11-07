@@ -322,8 +322,10 @@ Some potential exists for Report Consumers to perform traffic analysis,
 making it possible to obtain metadata about the Mail Receiver's 
 traffic. In addition to verifying compliance with policies, Mail 
 Receivers need to consider that before sending reports to a third 
-party.  On the other hand, a Domain Owner publishing an internal Report
-Consumer, can put a dot-forward at that mailbox.
+party.  On the other hand, a Domain Owner may publish a destination 
+address that appears to be an Internal Report Consumer but is actually 
+a forwarding address; in this case, the final destination of a report 
+is not guaranteed.
 
 ## Additional Damage
 
