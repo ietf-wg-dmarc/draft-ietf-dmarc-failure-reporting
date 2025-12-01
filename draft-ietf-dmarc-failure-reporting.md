@@ -40,9 +40,12 @@ fullname = "Alessandro Vesely"
 Domain-based Message Authentication, Reporting, and Conformance
 (DMARC) is a mechanism by which a Domain Owner can request
 feedback about email messages using their domain in the From: address
-field.  This document describes "failure reports," or "failed message
+field.  This document describes "failure reports", or "failed message
 reports", which provide details about individual messages that failed
 to authenticate according to the DMARC mechanism.
+
+This document obsoletes the corresponding parts of RFC 7489 and
+updates RFC 6591.
 
 {mainmatter}
 
@@ -52,13 +55,12 @@ RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH BEFORE PUBLISHING:
 The source for this draft is maintained in GitHub at:
 https://github.com/ietf-wg-dmarc/draft-ietf-dmarc-failure-reporting
 
-Domain-based Message Authentication, Reporting, and Conformance
-(DMARC) [@!I-D.ietf-dmarc-dmarcbis] is a mechanism by which a
-mail-originating organization can express domain-level policies and
-preferences for message validation, disposition, and reporting, that a
-mail-receiving organization can use to improve mail handling. This
-document focuses on one type of reporting that can be requested under
-DMARC.
+Domain-based Message Authentication, Reporting, and Conformance (DMARC) 
+[@!I-D.ietf-dmarc-dmarcbis] is a mechanism by which a mail-originating 
+organization can express domain-level policies and preferences for 
+message validation, disposition, and reporting, that can be used by a 
+mail-receiving organization to improve mail handling. This document 
+focuses on one type of reporting that can be requested under DMARC.
 
 Failure reports provide detailed information about the failure of a 
 single message, or a group of similar messages failing for the same 
@@ -82,6 +84,10 @@ There are a number of terms defined in
 [@!I-D.ietf-dmarc-dmarcbis, section 3.2]
 that are used within this document.  Understanding those 
 definitions will aid in reading this document.
+
+The format of DMARC failure reports is derived from Authentication 
+Failure Reporting Using the Abuse Reporting Format ([@!RFC6591]) and 
+the terms defined there are used here.
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
 NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
@@ -126,24 +132,9 @@ External destinations **MUST** be verified, see (#verifying-external-destination
 Report generators **MUST NOT** consider "ruf" tags in DMARC Policy Records having a "psd=y"
 tag, unless there are specific agreements between the interested parties.
 
-Failure reports represent a possible denial-of-service attack that could be
-perpetrated by an attacker who sends numerous messages purporting to
-be from the intended victim Domain Owner but which fail both SPF and
-DKIM; this would cause participating Mail Receivers to send failure
-reports to the Domain Owner or its delegate(s), potentially in large
-numbers.
-Accordingly, participating Mail Receivers are encouraged to
-aggregate these reports as much as is practical, using the Incidents
-field of the Abuse Reporting Format [@!RFC5965].
-Indeed, the aim is not to count each and every failure, but rather to
-report different failure conditions.
-Various pruning techniques are possible, including the following:
-
-* store reports for a period of time before sending them, allowing
-detection, collection, and consolidation of like incidents;
-
-* apply rate limiting, such as a maximum number of reports per
-minute that will be generated (and the remainder discarded.)
+Report generators **MUST** ensure not to flood report consumers with
+excessive reports, which would allow denial of service,
+see (#dos-attacks)
 
 # Other Failure Reports {#other-reports}
 
@@ -156,7 +147,7 @@ failure in question, and the content of the "fo" tag in the retrieved
 DMARC Policy Record.
 
 Note that DKIM failure reports and SPF failure reports can also be 
-requested using the methods described in [@RFC6651] and [@RFC6652] 
+requested using the methods described in [@RFC6651] and [@RFC6652], 
 respectively.  Report Generators are free to follow any of the 
 specifications.
 
@@ -209,13 +200,15 @@ commonly referred to as "external destinations" and may represent a
 different domain controlled by the same organization, a contracted
 report processing service, or some other arrangement.
 
-Without this check, a bad actor could publish a DMARC Policy Record
-that requests that failure reports be sent to an external
-destination, then deliberately send messages that will generate
-failure reports as a form of abuse.  Or, a Domain Owner could
-incorrectly publish a DMARC Policy Record with an external destination for
-failure reports, forcing the external destination to deal with
-unwanted messages and potential privacy issues.
+Without checking and successfully verifying the authenticity, 
+trustworthiness, and aware participation of an external destination, a 
+bad actor could publish a DMARC Policy Record that requests that 
+failure reports be sent to an external destination, then deliberately 
+send messages that will generate failure reports as a form of abuse.  
+Or, a Domain Owner could incorrectly publish a DMARC Policy Record with 
+an external destination for failure reports, forcing the external 
+destination to deal with unwanted messages and potential privacy 
+issues.
 
 Therefore, in case of external destinations, a Mail Receiver who 
 generates failure reports **MUST** use the Verifying External Destinations 
@@ -238,8 +231,9 @@ cause mail loops.
 ## Feedback Report Header Fields Registry Update
 
 IANA is requested to change the  "Identity-Alignment" entry in the 
-"Feedback Report Header Fields" registry, which is part of ""Messaging 
-Abuse Reporting Format" registry, to refer to this document.
+"Feedback Report Header Fields" registry, which is part of the 
+"Messaging Abuse Reporting Format (MARF) Parameters" registry group, to 
+refer to this document.
 
 
 # Privacy Considerations {#privacy-considerations}
@@ -273,7 +267,7 @@ Particular privacy-specific issues are explored below.
 Failure reports may include PII and non-public information (NPI) from 
 messages that fail to authenticate, since these reports may contain 
 message content as well as trace header fields. These reports may 
-expose sender and recipient identifiers (e.g. RFC5322.From addresses), 
+expose sender and recipient identifiers (e.g., RFC5322.From addresses), 
 and although the [@!RFC5965] format used for failed-message reporting 
 supports redaction ([@!RFC6590]), failed-message reporting is capable of 
 exposing the entire message to the Report Consumer.  They may also 
@@ -336,7 +330,7 @@ which may require special handling by Report Consumers or other
 recipients to avoid incidents. This underscores the need to avoid 
 misconfiguration of the destinations in the "ruf" reporting URIs, and 
 the suggestions for redaction in this document, for example using the 
-method described in [@!RFC6590]. And all of these concerns are 
+method described in [@!RFC6590]. All of these concerns are 
 heightened for high-volume domains. To mitigate such concerns, the 
 following steps should be considered:
 
@@ -364,6 +358,29 @@ the Privacy Considerations and Security Considerations in sections
 [@!I-D.ietf-dmarc-aggregate-reporting, 7] and
 [@!I-D.ietf-dmarc-aggregate-reporting, 8] of
 [@!I-D.ietf-dmarc-aggregate-reporting].
+
+## Denial of Service {#dos-attacks}
+
+Failure reports represent a possible denial-of-service attack that could be
+perpetrated by an attacker who sends numerous messages purporting to
+be from the intended victim Domain Owner but which fail both SPF and
+DKIM; this would cause participating Mail Receivers to send failure
+reports to the Domain Owner or its delegate(s), potentially in large
+numbers.
+Accordingly, participating Mail Receivers are encouraged to
+aggregate these reports as much as is practical, using the Incidents
+field of the Abuse Reporting Format [@!RFC5965].
+Indeed, the aim is not to count each and every failure, but rather to
+report different failure conditions.
+Various pruning techniques are possible, including the following:
+
+* store reports for a period of time before sending them, allowing
+detection, collection, and consolidation of like incidents;
+
+* apply rate limiting, such as a maximum number of reports per
+minute that will be generated (and the remainder discarded.)
+
+
 
 {backmatter}
 
@@ -680,4 +697,14 @@ failure report mail loops (Ticket #28).
 * Mention we could have encrypted the example.
 * Don't mention MX.
 
+## 19 to 20 {#s19}
 
+* Replace "dot-forward" with a periphrasis to downplay final destination.
+
+## 20 to 21 {#s20}
+
+* Move the last paragraph of Section 2 to Security Considerations.
+* Explicitly say we obsolete 7489 and update 6591 in the abstract.
+* Reword "Without this check, a bad actor ..." in Section 5.
+* Fix IANA request.
+* Mention RFC 6591 in Terminology (Section 1.1).
