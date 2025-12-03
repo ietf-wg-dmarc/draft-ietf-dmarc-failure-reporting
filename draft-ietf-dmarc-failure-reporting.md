@@ -200,21 +200,18 @@ commonly referred to as "external destinations" and may represent a
 different domain controlled by the same organization, a contracted
 report processing service, or some other arrangement.
 
-Without checking and successfully verifying the authenticity, 
-trustworthiness, and aware participation of an external destination, a 
-bad actor could publish a DMARC Policy Record that requests that 
-failure reports be sent to an external destination, then deliberately 
-send messages that will generate failure reports as a form of abuse.  
-Or, a Domain Owner could incorrectly publish a DMARC Policy Record with 
-an external destination for failure reports, forcing the external 
-destination to deal with unwanted messages and potential privacy 
-issues.
-
-Therefore, in case of external destinations, a Mail Receiver who 
+In case of external destinations, a Mail Receiver who 
 generates failure reports **MUST** use the Verifying External Destinations 
 procedure described in [@!I-D.ietf-dmarc-aggregate-reporting, section 4], 
-substituting the "ruf" tag where the "rua" tag appears in that procedure.`
+substituting the "ruf" tag where the "rua" tag appears in that procedure.
 
+This prevents a bad actor from publishing a DMARC Policy Record 
+requesting failure reports to an external destination, and
+then deliberately sending messages that will generate failure reports 
+as a form of abuse. It also prevents a Domain Owner from unilaterally 
+publishing a DMARC Policy Record with an external destination for 
+failure reports, forcing the external destination to deal with unwanted 
+messages and potential privacy issues.
 
 ## Transport {#transport}
 
