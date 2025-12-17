@@ -44,9 +44,6 @@ field.  This document describes "failure reports", or "failed message
 reports", which provide details about individual messages that failed
 to authenticate according to the DMARC mechanism.
 
-This document obsoletes the corresponding parts of RFC 7489 and
-updates RFC 6591.
-
 {mainmatter}
 
 # Introduction {#introduction}
@@ -95,6 +92,11 @@ NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
 described in BCP 14 [@!RFC2119] [@!RFC8174] when, and only when, they
 appear in all capitals, as shown here.
 
+## Document Status
+
+This document, in part, along with DMARCbis [@!I-D.ietf-dmarc-dmarcbis]
+DMARCbis Aggregate Reporting [@!I-D.ietf-dmarc-aggregate-reporting],
+obsoletes and replaces [@RFC7489].
 
 # DMARC Failure Reports {#failure-reports}
 
@@ -705,3 +707,6 @@ failure report mail loops (Ticket #28).
 * Reword "Without this check, a bad actor ..." in Section 5.
 * Fix IANA request.
 * Mention RFC 6591 in Terminology (Section 1.1).
+
+## 21 to 22 {#s21}
+* Reword obsoleting sentence in the abstract and move it to Section 1.2.
