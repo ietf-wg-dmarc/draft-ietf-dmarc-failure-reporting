@@ -712,3 +712,7 @@ failure report mail loops (Ticket #28).
 
 ## 21 to 22 {#s21}
 * Reword obsoleting sentence in the abstract and move it to Section 1.2.
+
+## 22 to 23 {#s22}
+* Merge Med's pull request
+
