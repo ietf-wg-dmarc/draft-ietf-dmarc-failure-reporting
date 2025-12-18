@@ -44,6 +44,8 @@ field.  This document describes "failure reports", or "failed message
 reports", which provide details about individual messages that failed
 to authenticate according to the DMARC mechanism.
 
+This document updates RFC 6591 and obsoletes RFC 7489.
+
 {mainmatter}
 
 # Introduction {#introduction}
@@ -72,8 +74,8 @@ content of a failed message, which may contain personally identifiable
 information (PII). The potential disclosure of PII should be considered 
 when deciding whether to request failure reports as a Domain Owner, or 
 what information to include or redact in failure reports when creating 
-them as a Mail Receiver, or whether to create failure reports at all; 
-see (#privacy-considerations).
+them as a Mail Receiver, or whether to create failure reports at all. 
+Refer to (#privacy-considerations) for more discussion on privacy considerations.
 
 ## Terminology {#terminology}
 
@@ -102,7 +104,7 @@ obsoletes and replaces [@RFC7489].
 
 Besides the header fields or the entire contents of a failed message, failure 
 reports supply details about transmission and DMARC authentication, 
-which may aid the Domain Owner in determining the cause of an authentication failure.
+which may aid a Domain Owner in determining the cause of an authentication failure.
 
 Failure reports are normally generated and sent almost immediately 
 after the Mail Receiver detects a DMARC failure.  Rather than waiting 
@@ -135,8 +137,8 @@ Report generators **MUST NOT** consider "ruf" tags in DMARC Policy Records havin
 tag, unless there are specific agreements between the interested parties.
 
 Report generators **MUST** ensure not to flood report consumers with
-excessive reports, which would allow denial of service,
-see (#dos-attacks)
+excessive reports, which would allow denial-of-service,
+see (#dos-attacks).
 
 # Other Failure Reports {#other-reports}
 
@@ -385,7 +387,7 @@ minute that will be generated (and the remainder discarded.)
 
 # Example Failure Report {#report-format-example}
 
-This is the full content of a failure message, including the message header.
+This is the full content of a sample failure message, including the message header.
 
 ``` RFC5322
 Received: from gen.example (gen.example [192.0.2.1])
