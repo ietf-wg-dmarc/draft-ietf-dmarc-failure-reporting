@@ -127,7 +127,7 @@ format described in [@!RFC6591]; this document updates that reporting
 format, as described in (#reporting-format-update).
 
 The destination(s) to which failure reports are sent, and options for when
-they will be sent, are defined by the "ruf" and "fo" tags as defined
+they will be sent, are defined by the "ruf" and "fo" tags as provided
 in [@!I-D.ietf-dmarc-dmarcbis, section 4.7].
 
 When multiple URIs are provided to receive failure reports, the
@@ -136,9 +136,9 @@ External destinations **MUST** be verified, see (#verifying-external-destination
 Report generators **MUST NOT** consider "ruf" tags in DMARC Policy Records having a "psd=y"
 tag, unless there are specific agreements between the interested parties.
 
-Report generators **MUST** ensure not to flood report consumers with
-excessive reports, which would allow denial-of-service,
-see (#dos-attacks).
+Report generators **MUST** implement a rate-limit on outgoing reports
+so as not to flood report consumers with excessive reports, which would
+allow denial-of-service; see (#dos-attacks).
 
 # Other Failure Reports {#other-reports}
 
@@ -176,7 +176,8 @@ with the indicated normative requirement levels:
 
 2. The "Identity-Alignment" field is defined to contain a comma-
 separated list of authentication mechanism names that failed to authenticate an
-aligned identity, or the keyword "none" if none did.  ABNF ([@!RFC5234]):
+aligned identity, or the keyword "none" if none did.  ABNF ([@!RFC5234],
+importing CFWS from [@!RFC5322]):
 
 ``` ABNF
 id-align     = "Identity-Alignment:" [CFWS]
@@ -219,10 +220,10 @@ messages and potential privacy issues.
 
 ## Transport {#transport}
 
-Email streams carrying DMARC failure reports **SHOULD** be DMARC 
-aligned.
+Email streams carrying DMARC failure reports **SHOULD** be DMARC-aligned.
 
-Reporters **MAY** rate limit the number of failure reports sent
+We recommend that reporters set a reasonable rate-limit for the number
+of failure reports sent 
 to any recipient to avoid overloading recipient systems.
 Unaligned reports may in turn produce subsequent failure reports that could
 cause mail loops.
@@ -337,8 +338,8 @@ following steps should be considered:
 
 By report generators:
 
-* defang URIs by substituting hxxp for http;
-* remove malicious attachments such as word documents or pdfs.
+* Help prevent accidental access to potentially-malicious URIs by substituting hxxp for http;
+* remove attachments which could embed malicious payload.
 
 By report consumers:
 
@@ -716,3 +717,9 @@ failure report mail loops (Ticket #28).
 ## 22 to 23 {#s22}
 * Merge Med's pull request
 
+## 23 to 24 {#s23}
+* "Defang" issue.
+* Avoid using "defined by" twice (Section 2, paragraph 5).
+* Fix the normative part of rate-limiting (Section 2, paragraph 6).
+* Recommend (non-2119) to rate limit (Section 5.1, paragraph 2).
+* Reference RFC 5322 (Section 4, bullet 2).
