@@ -174,10 +174,11 @@ with the indicated normative requirement levels:
 
  * SPF-DNS (**REQUIRED** for SPF failure of an aligned identifier)
 
-2. The "Identity-Alignment" field is defined to contain a comma-
-separated list of authentication mechanism names that failed to authenticate an
-aligned identity, or the keyword "none" if none did.  ABNF ([@!RFC5234],
-importing CFWS from [@!RFC5322]):
+2. The "Identity-Alignment" field is defined to contain a 
+comma-separated list of authentication mechanism names that failed to 
+authenticate an aligned identity, or the keyword "none" if all of the 
+attempted methods were successful at authenticating an aligned 
+identity.  ABNF ([@!RFC5234], importing CFWS from [@!RFC5322]):
 
 ``` ABNF
 id-align     = "Identity-Alignment:" [CFWS]
@@ -232,10 +233,16 @@ cause mail loops.
 
 ## Feedback Report Header Fields Registry Update
 
-IANA is requested to change the  "Identity-Alignment" entry in the 
+IANA is requested to change the "Identity-Alignment" entry in the 
 "Feedback Report Header Fields" registry, which is part of the 
-"Messaging Abuse Reporting Format (MARF) Parameters" registry group, to 
-refer to this document.
+"Messaging Abuse Reporting Format (MARF) Parameters" registry group, as 
+follows:
+
+* "Reference" should change to this document
+
+* "Description" should change to "a list of authentication mechanism 
+names that failed to authenticate an aligned identity, or 'none' if all 
+were successful".
 
 
 # Privacy Considerations {#privacy-considerations}
